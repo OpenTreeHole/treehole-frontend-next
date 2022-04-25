@@ -1,0 +1,9 @@
+{
+  "singleQuote": true,
+  "endOfLine": "auto",
+  "semi": false,
+  "trailingComma": "none",
+  "printWidth": 180,
+  "singleAttributePerLine": true
+}
+
