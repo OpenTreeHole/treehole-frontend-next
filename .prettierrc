@@ -3,7 +3,6 @@
   "endOfLine": "auto",
   "semi": false,
   "trailingComma": "none",
-  "printWidth": 180,
+  "printWidth": 100,
   "singleAttributePerLine": true
 }
-
