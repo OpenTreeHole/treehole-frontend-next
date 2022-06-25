@@ -3,7 +3,6 @@
   lang="ts"
 >
 import { ref } from 'vue'
-import { NButton } from 'naive-ui'
 
 defineProps<{ msg: string }>()
 
@@ -12,7 +11,6 @@ const count = ref(0)
 
 <template>
   <h1 class="text-3xl font-bold underline">Hello Tailwind Cssy!</h1>
-  <n-button>test</n-button>
   <p>
     Recommended IDE setup:
     <a
