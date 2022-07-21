@@ -66,6 +66,12 @@
         </div>
       </div>
     </v-navigation-drawer>
+
+    <v-main>
+      <div class="pl-[calc(50%-40rem+180px)]">
+        <slot />
+      </div>
+    </v-main>
   </div>
 </template>
 

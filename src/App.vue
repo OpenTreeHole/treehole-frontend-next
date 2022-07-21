@@ -1,9 +1,7 @@
 <template>
   <v-app>
     <the-layout>
-      <v-main>
-        <router-view :key="route.fullPath"></router-view>
-      </v-main>
+      <router-view :key="route.fullPath"></router-view>
     </the-layout>
   </v-app>
 </template>

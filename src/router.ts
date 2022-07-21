@@ -21,6 +21,10 @@ const routes: RouteRecordRaw[] = [
     props: (route) => ({
       divisionId: parseInt(route.params.id as string)
     })
+  },
+  {
+    path: '/',
+    redirect: '/division/1'
   }
 ]
 
