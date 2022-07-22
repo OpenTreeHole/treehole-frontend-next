@@ -10,10 +10,19 @@
   setup
   lang="ts"
 >
-import { useRoute } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import TheLayout from './components/TheLayout.vue'
+import { listDivisions } from '@/apis'
+import { useStore } from '@/store'
 
 const route = useRoute()
+const store = useStore()
+
+onBeforeRouteUpdate(async () => {
+  // Get division data
+  const divisions = await listDivisions()
+  store.commit('setDivisions', { divisions })
+})
 </script>
 
 <style>
