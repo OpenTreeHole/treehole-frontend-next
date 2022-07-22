@@ -11,7 +11,10 @@
   "dependencies": {
     "@mdi/font": "^7.0.96",
     "@tailwindcss/typography": "^0.5.2",
+    "@types/js-cookie": "^3.0.2",
     "@types/node": "^18.0.6",
+    "axios": "^0.27.2",
+    "js-cookie": "^3.0.1",
     "katex": "^0.16.0",
     "lodash": "^4.17.21",
     "marked": "^4.0.17",

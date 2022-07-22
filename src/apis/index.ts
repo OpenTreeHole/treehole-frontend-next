@@ -1,18 +1,35 @@
 // noinspection DuplicatedCode
 
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import config from '@/config'
-import router from '@/router'
-import { camelizeKeys, snakifyKeys } from '@/utils/utils'
-import LocalStorageStore from '@/store/modules/LocalStorageStore'
-import { IPunishment, IUserAuth, IUserAuthData, Punishment, User, UserAuth } from '@/models/user'
-import { Division, IDivision, IDivisionAdd, IDivisionModify } from '@/models/division'
-import { DetailedFloor, IDetailedFloor, IFloorData } from '@/models/floor'
-import { Hole, IHole } from '@/models/hole'
-import { ITag, Tag } from '@/models/tag'
-import { IReport, IReportDeal, Report } from '@/models/report'
+import { router } from '@/router'
+import { camelizeKeys, snakifyKeys } from '@/utils'
 import JWTManager from '@/apis/jwt'
 import Cookies from 'js-cookie'
+import config from '@/config'
+import { factory as originalFactory, arrayFactory as originalArrayFactory } from '@/utils/reflect'
+import {
+  Punishment,
+  UserAuth,
+  User,
+  Division,
+  IUserAuthData,
+  IDivisionAdd,
+  DetailedFloor,
+  IFloorData,
+  Hole,
+  Tag,
+  Report,
+  IDivisionModify,
+  IReportDeal
+} from '@/types'
+
+const factory = <T>(TargetClass: new () => T, data: any, meta?: any): T => {
+  return originalFactory(TargetClass, camelizeKeys(data), meta)
+}
+
+const arrayFactory = <T>(TargetClass: new () => T, data: any[], meta?: any): T[] => {
+  return originalArrayFactory(TargetClass, camelizeKeys(data), meta)
+}
 
 const authAxios = axios.create()
 const refreshAxios = axios.create()
@@ -29,45 +46,22 @@ export class ApiError extends Error {
   }
 }
 
-// const refreshAuthLogic = async (failedRequest: AxiosError) => {
-//   try {
-//     const response = await refresh()
-//     if (response.refresh && response.access) {
-//       LocalStorageStore.setRefreshToken(response.refresh)
-//       LocalStorageStore.setToken(response.access)
-//       if (failedRequest.response?.config.headers) {
-//         failedRequest.response.config.headers.Authorization = 'Bearer ' + response.access
-//       }
-//       return
-//     }
-//   } catch (e: any) {
-//     LocalStorageStore.setToken('')
-//     LocalStorageStore.setRefreshToken('')
-//     localStorage.removeItem('token')
-//     localStorage.removeItem('refresh')
-//     if (router.currentRoute.name !== 'login') {
-//       await router.replace({
-//         name: 'login'
-//       })
-//       if (e.response.data.message) return Promise.reject(new ApiError(e, `${e.response.status}: ${e.response.data.message}`))
-//       else return Promise.reject(new ApiError(e, '会话已过期，请重新登录'))
-//     }
-//   }
-//   return Promise.reject(failedRequest)
-// }
-
-// createAuthRefreshInterceptor(axios, refreshAuthLogic)
-// createAuthRefreshInterceptor(authAxios, refreshAuthLogic)
 const jwt = new JWTManager(async () => (await refresh()).access)
-jwt.refreshErrorCallback = async (refreshError) => {
+jwt.refreshErrorCallback = async (refreshError: AxiosError<any, any>) => {
   if (refreshError.response?.status === 401) {
-    LocalStorageStore.setToken('')
-    LocalStorageStore.setRefreshToken('')
-    if (router.currentRoute.name !== 'login') {
+    Cookies.remove('access', { domain: config.cookieDomain, expires: 10 })
+    Cookies.remove('refresh', { domain: config.cookieDomain, expires: 10 })
+    if (router.currentRoute.value.name !== 'login') {
       await router.replace({
         name: 'login'
       })
-      if (refreshError.response?.data.message) return Promise.reject(new ApiError(refreshError, `${refreshError.response.status}: ${refreshError.response.data.message}`))
+      if (refreshError.response?.data.message)
+        return Promise.reject(
+          new ApiError(
+            refreshError,
+            `${refreshError.response.status}: ${refreshError.response.data.message}`
+          )
+        )
       else return Promise.reject(new ApiError(refreshError, '会话已过期，请重新登录'))
     }
   }
@@ -77,29 +71,44 @@ authAxios.interceptors.response.use((response) => response, jwt.responseErrorInt
 
 const requestInterceptor = (config: AxiosRequestConfig) => {
   const token = Cookies.get('access')
-  if (config.headers && !config.headers.Authorization && token) config.headers.Authorization = 'Bearer ' + token
+  if (config.headers && !config.headers.Authorization && token)
+    config.headers.Authorization = 'Bearer ' + token
   return config
 }
 
 const refreshRequestInterceptor = (config: AxiosRequestConfig) => {
   const token = Cookies.get('refresh')
-  if (config.headers && !config.headers.Authorization && token) config.headers.Authorization = 'Bearer ' + token
+  if (config.headers && !config.headers.Authorization && token)
+    config.headers.Authorization = 'Bearer ' + token
   return config
 }
 
-const errorInterceptor = async (error: AxiosError) => {
+const errorInterceptor = async (error: AxiosError<any, any>) => {
   if (error.response) {
     if (error.response.data.message) {
-      return Promise.reject(new ApiError(error, `${error.response.status}: ${error.response.data.message}`))
+      return Promise.reject(
+        new ApiError(error, `${error.response.status}: ${error.response.data.message}`)
+      )
     } else {
-      console.log('请点开以下错误（如果存在response字段则将其一并点开，反正能点开多少点多少），并将错误信息截图')
+      console.log(
+        '请点开以下错误（如果存在response字段则将其一并点开，反正能点开多少点多少），并将错误信息截图'
+      )
       console.log({ error })
-      return Promise.reject(new ApiError(error, `${error.response.status}: 未知错误，请按F12查看控制台以获得错误信息并发至站务分区`))
+      return Promise.reject(
+        new ApiError(
+          error,
+          `${error.response.status}: 未知错误，请按F12查看控制台以获得错误信息并发至站务分区`
+        )
+      )
     }
   } else {
-    console.log('请点开以下错误（如果存在response字段则将其一并点开，反正能点开多少点多少），并将错误信息截图')
+    console.log(
+      '请点开以下错误（如果存在response字段则将其一并点开，反正能点开多少点多少），并将错误信息截图'
+    )
     console.log({ error })
-    return Promise.reject(new ApiError(error, '未知axios错误，请按F12查看控制台以获得错误信息并发至站务分区，'))
+    return Promise.reject(
+      new ApiError(error, '未知axios错误，请按F12查看控制台以获得错误信息并发至站务分区，')
+    )
   }
 }
 
@@ -115,13 +124,16 @@ refreshAxios.interceptors.response.use((response) => response, errorInterceptor)
 
 // Auth-related apis.
 
-export const login = async (email: string, password: string): Promise<{ message: string; access: string; refresh: string }> => {
+export const login = async (
+  email: string,
+  password: string
+): Promise<{ message: string; access: string; refresh: string }> => {
   const response = await authAxios.post('/login', {
     email: email,
     password: password
   })
-  LocalStorageStore.setToken(response.data.access)
-  LocalStorageStore.setRefreshToken(response.data.refresh)
+  Cookies.set('access', response.data.access, { domain: config.cookieDomain, expires: 10 })
+  Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain, expires: 10 })
   return camelizeKeys(response.data)
 }
 
@@ -132,12 +144,14 @@ export const logout = async (): Promise<{ message: string }> => {
 
 export const refresh = async (): Promise<{ message: string; access: string; refresh: string }> => {
   const response = await refreshAxios.post('/refresh')
-  LocalStorageStore.setToken(response.data.access)
-  LocalStorageStore.setRefreshToken(response.data.refresh)
+  Cookies.set('access', response.data.access, { domain: config.cookieDomain, expires: 10 })
+  Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain, expires: 10 })
   return camelizeKeys(response.data)
 }
 
-export const verifyWithEmail = async (email: string): Promise<{ message: string; scope: string }> => {
+export const verifyWithEmail = async (
+  email: string
+): Promise<{ message: string; scope: string }> => {
   const response = await authAxios.get('/verify/email', {
     params: {
       email: email
@@ -146,51 +160,63 @@ export const verifyWithEmail = async (email: string): Promise<{ message: string;
   return camelizeKeys(response.data)
 }
 
-export const register = async (password: string, email: string, verification: string): Promise<{ message: string; access?: string; refresh?: string }> => {
+export const register = async (
+  password: string,
+  email: string,
+  verification: string
+): Promise<{ message: string; access?: string; refresh?: string }> => {
   const response = await authAxios.post('/register', {
     password: password,
     email: email,
     verification: verification
   })
-  LocalStorageStore.setToken(response.data.access)
-  LocalStorageStore.setRefreshToken(response.data.refresh)
+  Cookies.set('access', response.data.access, { domain: config.cookieDomain, expires: 10 })
+  Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain, expires: 10 })
   return camelizeKeys(response.data)
 }
 
-export const changePassword = async (password: string, email: string, verification: string): Promise<{ message: string; access?: string; refresh?: string }> => {
+export const changePassword = async (
+  password: string,
+  email: string,
+  verification: string
+): Promise<{ message: string; access?: string; refresh?: string }> => {
   const response = await authAxios.put('/register', {
     password: password,
     email: email,
     verification: verification
   })
-  LocalStorageStore.setToken(response.data.access)
-  LocalStorageStore.setRefreshToken(response.data.refresh)
+  Cookies.set('access', response.data.access, { domain: config.cookieDomain, expires: 10 })
+  Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain, expires: 10 })
   return camelizeKeys(response.data)
 }
 
 export const listPunishmentsByUser = async (userId: number) => {
   const response = await authAxios.get(`/users/${userId}/punishments`)
-  const data: IPunishment[] = camelizeKeys(response.data)
-  return data.map((v) => new Punishment(v))
+  return arrayFactory(Punishment, response.data)
 }
 
-export const addPunishment = async (userId: number, reason: string, days: number, scope: string) => {
+export const addPunishment = async (
+  userId: number,
+  reason: string,
+  days: number,
+  scope: string
+) => {
   const response = await authAxios.post(`/users/${userId}/punishments`, {
     reason: reason,
     days: days,
     scope: scope
   })
-  return new Punishment(camelizeKeys(response.data))
+  return factory(Punishment, response.data)
 }
 
 export const getPunishmentByUser = async (userId: number, id: number) => {
   const response = await authAxios.get(`/users/${userId}/punishments/${id}`)
-  return new Punishment(camelizeKeys(response.data))
+  return factory(Punishment, response.data)
 }
 
 export const getPunishmentById = async (id: number) => {
   const response = await authAxios.get(`/punishments/${id}`)
-  return new Punishment(camelizeKeys(response.data))
+  return factory(Punishment, response.data)
 }
 
 export const listPunishments = async (size: number, offset: number) => {
@@ -200,13 +226,12 @@ export const listPunishments = async (size: number, offset: number) => {
       offset: offset
     }
   })
-  const data: IPunishment[] = camelizeKeys(response.data)
-  return data.map((v) => new Punishment(v))
+  return arrayFactory(Punishment, response.data)
 }
 
 export const getCurrentUser = async () => {
   const response = await authAxios.get('/users/me')
-  return new UserAuth(camelizeKeys(response.data))
+  return factory(UserAuth, response.data)
 }
 
 export const deleteUser = async (password: string) => {
@@ -219,12 +244,12 @@ export const deleteUser = async (password: string) => {
 
 export const getUserById = async (userId: number) => {
   const response = await authAxios.get(`/users/${userId}`)
-  return new UserAuth(camelizeKeys(response.data))
+  return factory(UserAuth, response.data)
 }
 
 export const modifyUser = async (userId: number, userData: IUserAuthData) => {
   const response = await authAxios.put(`/users/${userId}`, snakifyKeys(userData))
-  return new UserAuth(camelizeKeys(response.data))
+  return factory(UserAuth, response.data)
 }
 
 export const listUsers = async (size: number, offset: number) => {
@@ -234,36 +259,34 @@ export const listUsers = async (size: number, offset: number) => {
       offset: offset
     }
   })
-  const data: IUserAuth[] = camelizeKeys(response.data)
-  return data.map((v) => new UserAuth(v))
+  return arrayFactory(UserAuth, response.data)
 }
 
 export const getUserProfile = async () => {
   const response = await axios.get('/users')
-  return new User(camelizeKeys(response.data))
+  return factory(User, response.data)
 }
 
 // OpenTreeHole-related apis.
 
 export const listDivisions = async () => {
   const response = await axios.get('/divisions')
-  const data: IDivision[] = camelizeKeys(response.data)
-  return data.map((v) => new Division(v))
+  return arrayFactory(Division, response.data)
 }
 
 export const addDivision = async (division: IDivisionAdd) => {
   const response = await axios.post('/divisions', snakifyKeys(division))
-  return new Division(camelizeKeys(response.data))
+  return factory(Division, response.data)
 }
 
 export const getDivision = async (id: number) => {
   const response = await axios.get(`/divisions/${id}`)
-  return new Division(camelizeKeys(response.data))
+  return factory(Division, response.data)
 }
 
 export const modifyDivision = async (id: number, division: IDivisionModify) => {
   const response = await axios.put(`/divisions/${id}`, snakifyKeys(division))
-  return new Division(camelizeKeys(response.data))
+  return factory(Division, response.data)
 }
 
 /**
@@ -281,7 +304,7 @@ export const deleteDivision = async (id: number, to: number) => {
 
 export const getFloor = async (id: number) => {
   const response = await axios.get(`/floors/${id}`)
-  return new DetailedFloor(camelizeKeys(response.data))
+  return factory(DetailedFloor, response.data)
 }
 
 export const listFloors = async (holeId: number, length: number, startFloor: number) => {
@@ -292,8 +315,7 @@ export const listFloors = async (holeId: number, length: number, startFloor: num
       start_floor: startFloor
     }
   })
-  const data: IDetailedFloor[] = camelizeKeys(response.data)
-  return data.map((v) => new DetailedFloor(v))
+  return arrayFactory(DetailedFloor, response.data)
 }
 
 export const searchFloors = async (s: string, length: number, startFloor: number) => {
@@ -304,42 +326,41 @@ export const searchFloors = async (s: string, length: number, startFloor: number
       start_floor: startFloor
     }
   })
-  const data: IDetailedFloor[] = camelizeKeys(response.data)
-  return data.map((v) => new DetailedFloor(v))
+  return arrayFactory(DetailedFloor, response.data)
 }
 
 export const addFloor = async (floor: IFloorData) => {
   const response = await axios.post('/floors', snakifyKeys(floor))
   const data = camelizeKeys(response.data)
-  return { message: data.message as string, floor: new DetailedFloor(data.data) }
+  return { message: data.message as string, floor: factory(DetailedFloor, data.data) }
 }
 
 export const modifyFloor = async (floorId: number, content: string) => {
   const response = await axios.put(`/floors/${floorId}`, {
     content: content
   })
-  return new DetailedFloor(camelizeKeys(response.data))
+  return factory(DetailedFloor, response.data)
 }
 
 export const addSpecialTag = async (floorId: number, specialTag: string) => {
   const response = await axios.put(`/floors/${floorId}`, {
     special_tag: specialTag
   })
-  return new DetailedFloor(camelizeKeys(response.data))
+  return factory(DetailedFloor, response.data)
 }
 
 export const foldFloor = async (floorId: number, foldReason: string) => {
   const response = await axios.put(`/floors/${floorId}`, {
     fold: [foldReason]
   })
-  return new DetailedFloor(camelizeKeys(response.data))
+  return factory(DetailedFloor, response.data)
 }
 
 export const modifyFloorAnonyname = async (floorId: number, anonyname: string) => {
   const response = await axios.put(`/floors/${floorId}`, {
     anonyname: anonyname
   })
-  return new DetailedFloor(camelizeKeys(response.data))
+  return factory(DetailedFloor, response.data)
 }
 
 /**
@@ -351,7 +372,7 @@ export const likeFloor = async (floorId: number, like: boolean) => {
   const response = await axios.put(`/floors/${floorId}`, {
     like: like ? 'add' : 'cancel'
   })
-  return new DetailedFloor(camelizeKeys(response.data))
+  return factory(DetailedFloor, response.data)
 }
 
 export const deleteFloor = async (floorId: number, deleteReason?: string) => {
@@ -360,7 +381,7 @@ export const deleteFloor = async (floorId: number, deleteReason?: string) => {
       delete_reason: deleteReason
     }
   })
-  return new DetailedFloor(camelizeKeys(response.data))
+  return factory(DetailedFloor, response.data)
 }
 
 // export const listHolesByDivision = async (divisionId: number, startTime: Date, length: number) => {
@@ -374,17 +395,31 @@ export const deleteFloor = async (floorId: number, deleteReason?: string) => {
 //   return data.map(v => new Hole(v))
 // }
 
-export const addHole = async (divisionId: number, content: string, tags: string[] | ITag[]): Promise<{ message: string; hole: Hole }> => {
+export const addHole = async (
+  divisionId: number,
+  content: string,
+  tags: string[] | Tag[]
+): Promise<{ message: string; hole: Hole }> => {
   const response = await axios.post('/holes', {
     division_id: divisionId,
     content: content,
-    tags: tags.length > 0 ? (typeof tags[0] === 'string' ? (tags as string[]).map((v) => ({ name: v })) : tags.map((v) => ({ name: (v as ITag).name }))) : []
+    tags:
+      tags.length > 0
+        ? typeof tags[0] === 'string'
+          ? (tags as string[]).map((v) => ({ name: v }))
+          : tags.map((v) => ({ name: (v as Tag).name }))
+        : []
   })
   const data = camelizeKeys(response.data)
-  return { message: data.message, hole: new Hole(data.data) }
+  return { message: data.message, hole: factory(Hole, data.data) }
 }
 
-export const listHoles = async (divisionId: number, startTime: Date, length: number, tag?: string | ITag) => {
+export const listHoles = async (
+  divisionId: number,
+  startTime: Date,
+  length: number,
+  tag?: string | Tag
+) => {
   const response = await axios.get('/holes', {
     params: {
       division_id: divisionId,
@@ -394,27 +429,31 @@ export const listHoles = async (divisionId: number, startTime: Date, length: num
       tag: tag ? (typeof tag === 'string' ? tag : tag.name) : undefined
     }
   })
-  const data: IHole[] = camelizeKeys(response.data)
-  return data.map((v) => new Hole(v))
+  return arrayFactory(Hole, response.data)
 }
 
-export const modifyHoleTag = async (id: number, tags: string[] | ITag[]) => {
+export const modifyHoleTag = async (id: number, tags: string[] | Tag[]) => {
   const response = await axios.put(`/holes/${id}`, {
-    tags: tags.length > 0 ? (typeof tags[0] === 'string' ? (tags as string[]).map((v) => ({ name: v })) : tags.map((v) => ({ name: (v as ITag).name }))) : []
+    tags:
+      tags.length > 0
+        ? typeof tags[0] === 'string'
+          ? (tags as string[]).map((v) => ({ name: v }))
+          : tags.map((v) => ({ name: (v as Tag).name }))
+        : []
   })
-  return new Hole(camelizeKeys(response.data))
+  return factory(Hole, response.data)
 }
 
 export const modifyHoleDivision = async (id: number, divisionId: number) => {
   const response = await axios.put(`/holes/${id}`, {
     division_id: divisionId
   })
-  return new Hole(camelizeKeys(response.data))
+  return factory(Hole, response.data)
 }
 
 export const getHole = async (id: number) => {
   const response = await axios.get(`/holes/${id}`)
-  return new Hole(camelizeKeys(response.data))
+  return factory(Hole, response.data)
 }
 
 export const updatePageViews = async (id: number) => {
@@ -423,27 +462,26 @@ export const updatePageViews = async (id: number) => {
 
 export const listTags = async () => {
   const response = await axios.get('/tags')
-  const data: ITag[] = camelizeKeys(response.data)
-  return data.map((v) => new Tag(v))
+  return arrayFactory(Tag, response.data)
 }
 
 export const getTag = async (id: number) => {
   const response = await axios.get(`/tags/${id}`)
-  return new Tag(camelizeKeys(response.data))
+  return factory(Tag, response.data)
 }
 
 export const addTag = async (name: string) => {
   const response = await axios.post('/tags', {
     name: name
   })
-  return new Tag(camelizeKeys(response.data))
+  return factory(Tag, response.data)
 }
 
 export const modifyTag = async (id: number, name: string) => {
   const response = await axios.put(`/tags/${id}`, {
     name: name
   })
-  return new Tag(camelizeKeys(response.data))
+  return factory(Tag, response.data)
 }
 
 export const deleteTag = async (id: number) => {
@@ -452,8 +490,7 @@ export const deleteTag = async (id: number) => {
 
 export const getFavorites = async () => {
   const response = await axios.get('/user/favorites')
-  const data: IHole[] = camelizeKeys(response.data)
-  return data.map((v) => new Hole(v))
+  return arrayFactory(Hole, response.data)
 }
 
 export const addFavorites = async (holeId: number): Promise<string> => {
@@ -481,13 +518,12 @@ export const deleteFavorites = async (holeId: number): Promise<string> => {
 
 export const listReports = async () => {
   const response = await axios.get('/reports?category=not_dealed')
-  const data: IReport[] = camelizeKeys(response.data)
-  return data.map((v) => new Report(v))
+  return arrayFactory(Report, response.data)
 }
 
 export const getReport = async (id: number) => {
   const response = await axios.get(`/reports/${id}`)
-  return new Report(camelizeKeys(response.data))
+  return factory(Report, response.data)
 }
 
 export const addReport = async (floorId: number, reason: string) => {
@@ -495,7 +531,7 @@ export const addReport = async (floorId: number, reason: string) => {
     floor_id: floorId,
     reason: reason
   })
-  return new Report(camelizeKeys(response.data))
+  return factory(Report, response.data)
 }
 
 export const dealReport = async (id: number, deal: IReportDeal): Promise<string> => {
@@ -508,10 +544,12 @@ export const addPenalty = async (floorId: number, penaltyLevel: number, division
     penalty_level: penaltyLevel,
     division_id: divisionId
   })
-  return new User(camelizeKeys(response.data))
+  return factory(User, response.data)
 }
 
-export const uploadImage = async (imageBase64: string): Promise<{ message: string; url: string; medium: string; thumb: string }> => {
+export const uploadImage = async (
+  imageBase64: string
+): Promise<{ message: string; url: string; medium: string; thumb: string }> => {
   const response = await axios.post('/images', {
     image: imageBase64
   })

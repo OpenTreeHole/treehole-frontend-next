@@ -11,6 +11,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
+    "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
     "paths": {
