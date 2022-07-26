@@ -1,6 +1,6 @@
 import * as pksjson from '../package.json'
 
-const baseUrl = process.env.BASE_URL
+const baseUrl = import.meta.env.BASE_URL
 
 const config = {
   // Basic info
