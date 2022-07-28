@@ -27,7 +27,7 @@ export class Floor {
   deleted: boolean
 
   @Field()
-  floorId: number
+  id: number
 
   @Field()
   storey: number
@@ -87,7 +87,7 @@ export class Hole {
   divisionId: number
 
   @Field()
-  holeId: number
+  id: number
 
   @Field({ factory: (v) => arrayFactory(Floor, v.prefetch) })
   floors: Floor[]
