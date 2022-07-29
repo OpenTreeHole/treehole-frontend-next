@@ -4,7 +4,7 @@
 >
 import { arrayFactory } from '@/utils/reflect'
 import { DetailedFloor } from '@/types'
-import { camelizeKeys } from '@/utils'
+import { mark, camelizeKeys, timeDifference } from '@/utils'
 
 const floors = arrayFactory(
   DetailedFloor,
@@ -12,7 +12,9 @@ const floors = arrayFactory(
     {
       anonyname: 'Dest1n1',
       content:
-        '现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。',
+        "将$X$每行各个数除以该行模长，使每行变为单位行向量，得到$X'$，则$AY=X'X'^TY$。\n" +
+        '\n' +
+        "直接算是$O(n^2k+nkd)$的，先算$X'^TY$则可变为$O(nkd)$。",
       deleted: false,
       fold: '',
       hole_id: 0,
@@ -46,11 +48,12 @@ console.log(floors)
             :key="index"
             class="pl-16 py-5 border-b-sm flex-col text-left"
           >
-            <div class="w-full">
-              {{ floor.content }}
-            </div>
+            <div
+              class="w-full"
+              v-html="mark(floor.content)"
+            />
             <div class="w-full flex justify-end mt-2 text-neutral-400 text-sm">
-              <span>发布于 2022/7/21</span>
+              <span>发布于 {{ timeDifference(floor.timeUpdated) }}</span>
             </div>
           </v-list-item>
         </v-list>
@@ -120,7 +123,7 @@ console.log(floors)
           <v-divider></v-divider>
 
           <v-card-actions>
-            <v-btn> Full Report </v-btn>
+            <v-btn> Full Report</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
