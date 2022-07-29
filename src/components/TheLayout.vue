@@ -110,10 +110,10 @@ export default defineComponent({
               this.input = '[[' + this.search.replace(/[\#']+/g, '') + ']]'
               break
             case '2': 
-              this.input = '#' + this.search.replace(/[\[\]']+/g,'')
+              this.input = '#' + this.search.replace(/[\[\]\#']+/g,'')
               break
             case '3': 
-              this.input = '##' + this.search.replace(/[\[\]']+/g,'')
+              this.input = '##' + this.search.replace(/[\[\]\#']+/g,'')
               break
             default:
               this.input = this.search.replace(/[\[\]\#']+/g,'')
