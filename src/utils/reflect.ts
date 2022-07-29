@@ -68,7 +68,7 @@ export const factory = <T>(TargetClass: Constructor<T>, data: any, meta?: any): 
           else if (field.map)
             obj[fieldName] = mapFactory(field.type, data[fieldName], field.meta || meta) as any
           else obj[fieldName] = factory(field.type, data[fieldName], field.meta || meta)
-        } else obj[fieldName] = data[fieldName] ? new field.type(data[fieldName]) : undefined
+        } else obj[fieldName] = fieldName in data ? new field.type(data[fieldName]) : undefined
       } else if (field.factory) obj[fieldName] = field.factory(data[fieldName], data, meta)
     }
   }

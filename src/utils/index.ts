@@ -114,7 +114,8 @@ export const convertKatex = (str: string) => {
     })
     .replace(/\$([^$]+)\$/g, (ignore, k) => {
       return katex.renderToString(k, {
-        displayMode: false
+        displayMode: false,
+        macros
       })
     })
 }
