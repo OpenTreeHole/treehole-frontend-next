@@ -10,7 +10,10 @@
             :src="Logo"
             max-width="199px"
           ></v-img>
-          <v-combobox
+          <v-autocomplete
+            v-model="input"
+            v-model:search="search"
+            v-on:keyup.enter="submitSearch"
             class="search-bar max-w-3xl ml-8"
             variant="outlined"
             color="white"
@@ -19,7 +22,11 @@
             hide-details
             prepend-inner-icon="mdi-magnify"
             placeholder="使用标签、帖子编号、楼层编号、或文本进行搜索（筛选）"
-          ></v-combobox>
+        >
+          <template v-slot:no-data>
+            <v-list density="compact" :items="items" @click:select="onClick"></v-list>
+          </template>
+        </v-autocomplete>
         </div>
       </v-app-bar-title>
     </v-app-bar>
@@ -76,10 +83,64 @@
 </template>
 
 <script
-  setup
   lang="ts"
 >
-import Logo from '@/assets/img.png'
+import { defineComponent } from "vue";
+import Logo from '@/assets/img.png';
+export default defineComponent({
+    name: "TheLayout",
+    data () {
+      return {
+        Logo: Logo,
+        input: '',
+        search: '',
+        items: [
+          { title: '搜索标签：[[tag]]', value: '1' },
+          { title: '搜索洞号：#hole', value: '2' },
+          { title: '搜索楼层：##floorid', value: '3' },
+          { title: '搜索文本：text', value: '4' },
+        ],
+      }
+    },
+    methods: {
+      onClick: function (value: any) {
+        if (value.value === true) {
+          switch(value.id) {
+            case '1': 
+              this.input = '[[' + this.search.replace(/[\#']+/g, '') + ']]'
+              break
+            case '2': 
+              this.input = '#' + this.search.replace(/[\[\]']+/g,'')
+              break
+            case '3': 
+              this.input = '##' + this.search.replace(/[\[\]']+/g,'')
+              break
+            default:
+              this.input = this.search.replace(/[\[\]\#']+/g,'')
+          }
+        } else {
+          switch(value.id) {
+            case '1': 
+              this.input = this.search.replace(/[\[\]']+/g,'')
+              break
+            case '2': 
+            case '3': 
+              this.input = this.search.replace(/[\#']+/g, '')
+              break
+            default:
+          }
+        }
+        this.search = this.input
+      },
+      submitSearch: function() {
+        if (this.search != '') { // todo: reg for checking whether search is valid
+          this.input = this.search
+          console.log('search ' + this.search)
+          // todo
+        }
+      }
+    }
+ })
 </script>
 
 <style lang="scss">
