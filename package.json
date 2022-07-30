@@ -6,7 +6,7 @@
     "dev": "vite --port 8080",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview --port 8080",
-    "lint": "eslint --fix ."
+    "lint": "eslint --ext .js --ext .ts --ext .vue --fix ."
   },
   "dependencies": {
     "@mdi/font": "^7.0.96",
