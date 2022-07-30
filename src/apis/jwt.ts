@@ -24,7 +24,8 @@ export default class JWTManager {
 
   constructor(
     refresh: () => Promise<string> = async () => '',
-    needRefresh: (originalError: AxiosError) => boolean = (originalError: AxiosError) => originalError.response?.status === 401,
+    needRefresh: (originalError: AxiosError) => boolean = (originalError: AxiosError) =>
+      originalError.response?.status === 401,
     refreshErrorCallback: (refreshError: AxiosError) => void = () => {}
   ) {
     this.refresh = refresh
@@ -65,7 +66,9 @@ export default class JWTManager {
       }
       // check if any request has failed.
       if (this.responseList[id]?.status === 'fulfilled') {
-        return Promise.resolve((this.responseList[id] as PromiseFulfilledResult<AxiosResponse<any>>).value)
+        return Promise.resolve(
+          (this.responseList[id] as PromiseFulfilledResult<AxiosResponse<any>>).value
+        )
       }
       return Promise.reject(e)
     }
