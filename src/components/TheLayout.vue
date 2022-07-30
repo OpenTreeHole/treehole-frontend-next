@@ -14,14 +14,13 @@
             v-model="searchBar.input"
             v-model:search="searchBar.search"
             v-on:keyup.enter="submitSearch"
-            @click:prepend="submitSearch"
             class="search-bar max-w-3xl ml-8"
             variant="outlined"
             color="white"
             density="compact"
             full-width
             hide-details
-            prepend-icon="mdi-magnify"
+            prepend-inner-icon="mdi-magnify"
             placeholder="使用标签、帖子编号、楼层编号、或文本进行搜索（筛选）"
         >
           <template v-slot:no-data>
