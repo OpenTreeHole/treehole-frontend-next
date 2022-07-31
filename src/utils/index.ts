@@ -1,8 +1,6 @@
 import { assign, camelCase, keys, pick, snakeCase } from 'lodash'
-import katex from 'katex'
 import { marked } from 'marked'
-
-const macros: any = []
+import { convertKatex } from '@/utils/katex'
 
 const colorList = [
   'red',
@@ -102,22 +100,6 @@ export const mark = (str: string) => {
 export const reduceKeys = (reduced: any, before: any): any => {
   assign(reduced, pick(before, keys(reduced)))
   return reduced
-}
-
-export const convertKatex = (str: string) => {
-  return str
-    .replace(/\$\$([^$]+)\$\$/g, (ignore, k) => {
-      return katex.renderToString(k, {
-        displayMode: true,
-        macros
-      })
-    })
-    .replace(/\$([^$]+)\$/g, (ignore, k) => {
-      return katex.renderToString(k, {
-        displayMode: false,
-        macros
-      })
-    })
 }
 
 /**

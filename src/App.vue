@@ -22,8 +22,8 @@ const router = useRouter()
 
 router.beforeEach(async () => {
   // Get division data
-  const divisions = await listDivisions()
-  store.commit('setDivisions', { divisions })
+  // const divisions = await listDivisions()
+  // store.commit('setDivisions', { divisions })
 })
 </script>
 

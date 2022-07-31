@@ -4,7 +4,10 @@
 >
 import { arrayFactory } from '@/utils/reflect'
 import { DetailedFloor } from '@/types'
-import { mark, camelizeKeys, timeDifference } from '@/utils'
+import { camelizeKeys, timeDifference } from '@/utils'
+import TyporaParser from 'typora-parser'
+import HighlightJsRenderer from 'typora-parser/build/src/plugins/HighlightJsRenderer'
+import { KatexRenderer } from '@/utils/katex'
 
 const floors = arrayFactory(
   DetailedFloor,
@@ -12,9 +15,13 @@ const floors = arrayFactory(
     {
       anonyname: 'Dest1n1',
       content:
-        "将$X$每行各个数除以该行模长，使每行变为单位行向量，得到$X'$，则$AY=X'X'^TY$。\n" +
-        '\n' +
-        "直接算是$O(n^2k+nkd)$的，先算$X'^TY$则可变为$O(nkd)$。",
+        '# Test\n' +
+        '## Test\n' +
+        '$$\n' +
+        'e^{\\pi i}+1=0\n' +
+        '$$\n' +
+        '\n\n' +
+        '$e^{\\pi i}+2=1$\n',
       deleted: false,
       fold: '',
       hole_id: 0,
@@ -31,7 +38,15 @@ const floors = arrayFactory(
   ])
 )
 
-console.log(floors)
+const parseToTypora = (markdown: string) => {
+  const parseResult = TyporaParser.parse(markdown)
+  return parseResult.renderHTML({
+    latexRenderer: new KatexRenderer(),
+    codeRenderer: new HighlightJsRenderer({
+      displayLineNumbers: true // display line numbers on code block, no effect when vanillaHTML: true
+    })
+  })
+}
 </script>
 
 <template>
@@ -49,8 +64,8 @@ console.log(floors)
             class="pl-16 py-5 border-b-sm flex-col text-left"
           >
             <div
-              class="w-full"
-              v-html="mark(floor.content)"
+              class="w-full markdown-viewer"
+              v-html="parseToTypora(floor.content)"
             />
             <div class="w-full flex justify-end mt-2 text-neutral-400 text-sm">
               <span>发布于 {{ timeDifference(floor.timeUpdated) }}</span>
