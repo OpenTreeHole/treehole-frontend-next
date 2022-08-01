@@ -1,5 +1,5 @@
 import { arrayFactory, factory, Field, Model } from '@/utils/reflect'
-import { parseTagColor } from '@/utils'
+import { generateColor } from '@/utils'
 
 export interface IFloorData {
   content: string
@@ -77,7 +77,7 @@ export class Tag {
   @Field()
   temperature: number
 
-  @Field({ factory: (v, parent) => parseTagColor(parent.name) })
+  @Field({ factory: (v, parent) => generateColor(parent.name) })
   color: string
 }
 

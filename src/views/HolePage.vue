@@ -4,7 +4,7 @@
 >
 import { arrayFactory } from '@/utils/reflect'
 import { DetailedFloor } from '@/types'
-import { camelizeKeys, timeDifference } from '@/utils'
+import { camelizeKeys, timeDifference, generateColor } from '@/utils'
 import TyporaParser from 'typora-parser'
 import HighlightJsRenderer from 'typora-parser/build/src/plugins/HighlightJsRenderer'
 import { KatexRenderer } from '@/utils/katex'
@@ -15,13 +15,10 @@ const floors = arrayFactory(
     {
       anonyname: 'Dest1n1',
       content:
-        '# Test\n' +
-        '## Test\n' +
-        '$$\n' +
-        'e^{\\pi i}+1=0\n' +
-        '$$\n' +
-        '\n\n' +
-        '$e^{\\pi i}+2=1$\n',
+        '下面我将演示如何使用Code Mirror搭建一个简易的代码编辑器，并对其常用配置简要介绍。\n' +
+        '\n' +
+        '首先要到CodeMirror官网下载此插件，然后在网页中引入即可。如下代码即实现了一个可以高亮显示Java代码的编辑器：\n' +
+        '\n',
       deleted: false,
       fold: '',
       hole_id: 0,
@@ -47,6 +44,8 @@ const parseToTypora = (markdown: string) => {
     })
   })
 }
+
+const computeColorClass = (str: string) => 'text-' + generateColor(str)
 </script>
 
 <template>
@@ -63,12 +62,24 @@ const parseToTypora = (markdown: string) => {
             :key="index"
             class="pl-16 py-5 border-b-sm flex-col text-left"
           >
+            <div class="w-full flex justify-start">
+              <span
+                class="border-r-2 pr-2"
+                :class="computeColorClass(floor.anonyname)"
+              >
+                {{ floor.anonyname }}
+              </span>
+              <span class="pl-2 text-neutral-400 text-sm self-center">
+                {{ timeDifference(floor.timeUpdated) }}
+              </span>
+            </div>
             <div
-              class="w-full markdown-viewer"
+              class="w-full markdown-viewer mt-2"
               v-html="parseToTypora(floor.content)"
             />
-            <div class="w-full flex justify-end mt-2 text-neutral-400 text-sm">
-              <span>发布于 {{ timeDifference(floor.timeUpdated) }}</span>
+            <div class="w-full justify-end mt-2">
+              <v-icon icon="md:thumb_up" />
+              <span>2</span>
             </div>
           </v-list-item>
         </v-list>

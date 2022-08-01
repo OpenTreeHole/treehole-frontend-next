@@ -103,16 +103,16 @@ export const reduceKeys = (reduced: any, before: any): any => {
 }
 
 /**
- * Randomly generate a specific color for a certain tag name.
- * @param tagName - the name of the tag.
+ * Randomly generate a specific color for a certain string.
+ * @param str - the name of the tag.
  * @return - the generated color.
  */
-export const parseTagColor = (tagName: string): string => {
-  if (tagName === null) return ''
-  if (tagName[0] === '*') return 'red'
+export const generateColor = (str: string): string => {
+  if (str === null) return ''
+  if (str[0] === '*') return 'red'
   let num = 0
-  for (let i = 0; i < tagName.length; i++) {
-    num += tagName.charCodeAt(i)
+  for (let i = 0; i < str.length; i++) {
+    num += str.charCodeAt(i)
   }
   num %= colorList.length
   return colorList[num]
