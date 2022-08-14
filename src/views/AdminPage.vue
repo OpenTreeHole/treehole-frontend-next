@@ -91,7 +91,6 @@
             <v-row
               align="center"
               hide-gutters
-              no-gutters
             >
               <v-col
                 class="text-h2"
@@ -147,7 +146,7 @@ export default defineComponent({
   name: 'AdminPage',
   data() {
     return {
-      tab: '1'
+      tab: 1 as number
     }
   }
 })
