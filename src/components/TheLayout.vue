@@ -32,7 +32,7 @@
     </v-app-bar>
     <v-navigation-drawer
       class="z-20 pt-4 pb-10 w-[calc(50%-40rem+180px)]"
-      :width="null"
+      width="null"
     >
       <div class="flex justify-end">
         <div class="w-[180px]">
@@ -100,13 +100,13 @@ export default {
         console.log("clicked")
         if (value.value) {
           switch(value.id) {
-            case '1': 
+            case '1':
               searchBar.value.input = '[[' + searchBar.value.search.replace(/[\#']+/g, '') + ']]'
               break
-            case '2': 
+            case '2':
               searchBar.value.input = '#' + searchBar.value.search.replace(/[\[\]\#']+/g,'')
               break
-            case '3': 
+            case '3':
               searchBar.value.input = '##' + searchBar.value.search.replace(/[\[\]\#']+/g,'')
               break
             default:
@@ -114,11 +114,11 @@ export default {
           }
         } else {
           switch(value.id) {
-            case '1': 
+            case '1':
               searchBar.value.input = searchBar.value.search.replace(/[\[\]']+/g,'')
               break
-            case '2': 
-            case '3': 
+            case '2':
+            case '3':
               searchBar.value.input = searchBar.value.search.replace(/[\#']+/g, '')
               break
             default:

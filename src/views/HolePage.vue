@@ -4,10 +4,8 @@
 >
 import { arrayFactory } from '@/utils/reflect'
 import { DetailedFloor } from '@/types'
-import { camelizeKeys, timeDifference, generateColor } from '@/utils'
-import TyporaParser from 'typora-parser'
-import HighlightJsRenderer from 'typora-parser/build/src/plugins/HighlightJsRenderer'
-import { KatexRenderer } from '@/utils/katex'
+import { camelizeKeys } from '@/utils'
+import FloorItem from '@/components/floor/FloorItem.vue'
 
 const floors = arrayFactory(
   DetailedFloor,
@@ -15,10 +13,9 @@ const floors = arrayFactory(
     {
       anonyname: 'Dest1n1',
       content:
-        '下面我将演示如何使用Code Mirror搭建一个简易的代码编辑器，并对其常用配置简要介绍。\n' +
+        '下面我将演示如何使用Code Mirror搭建一个简易的代码编辑器，并对其常用配置简要介绍。\n\n' +
         '\n' +
-        '首先要到CodeMirror官网下载此插件，然后在网页中引入即可。如下代码即实现了一个可以高亮显示Java代码的编辑器：\n' +
-        '\n',
+        '首先要到CodeMirror官网下载此插件，然后在网页中引入即可。如下代码即实现了一个可以高亮显示Java代码的编辑器：\n',
       deleted: false,
       fold: '',
       hole_id: 0,
@@ -34,18 +31,6 @@ const floors = arrayFactory(
     }
   ])
 )
-
-const parseToTypora = (markdown: string) => {
-  const parseResult = TyporaParser.parse(markdown)
-  return parseResult.renderHTML({
-    latexRenderer: new KatexRenderer(),
-    codeRenderer: new HighlightJsRenderer({
-      displayLineNumbers: true // display line numbers on code block, no effect when vanillaHTML: true
-    })
-  })
-}
-
-const computeColorClass = (str: string) => 'text-' + generateColor(str)
 </script>
 
 <template>
@@ -62,25 +47,7 @@ const computeColorClass = (str: string) => 'text-' + generateColor(str)
             :key="index"
             class="pl-16 py-5 border-b-sm flex-col text-left"
           >
-            <div class="w-full flex justify-start">
-              <span
-                class="border-r-2 pr-2"
-                :class="computeColorClass(floor.anonyname)"
-              >
-                {{ floor.anonyname }}
-              </span>
-              <span class="pl-2 text-neutral-400 text-sm self-center">
-                {{ timeDifference(floor.timeUpdated) }}
-              </span>
-            </div>
-            <div
-              class="w-full markdown-viewer mt-2"
-              v-html="parseToTypora(floor.content)"
-            />
-            <div class="w-full justify-end mt-2">
-              <v-icon icon="md:thumb_up" />
-              <span>2</span>
-            </div>
+            <FloorItem :floor="floor" />
           </v-list-item>
         </v-list>
       </v-col>
