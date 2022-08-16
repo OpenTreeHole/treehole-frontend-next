@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import DivisionPage from '@/views/DivisionPage.vue'
 import HolePage from '@/views/HolePage.vue'
+import AdminPage from '@/views/AdminPage.vue'
 
 declare module 'vue-router' {
   interface RouteMeta {
@@ -34,6 +35,15 @@ const routes: RouteRecordRaw[] = [
     props: (route) => ({
       holeId: parseInt(route.params.id as string)
     })
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    meta: {
+      title: '管理',
+      requiresAuth: true
+    },
+    component: AdminPage
   },
   {
     path: '/',
