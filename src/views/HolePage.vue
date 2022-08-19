@@ -3,9 +3,13 @@
   lang="ts"
 >
 import { arrayFactory } from '@/utils/reflect'
-import { DetailedFloor } from '@/types'
+import { DetailedFloor, Floor } from '@/types'
 import { camelizeKeys } from '@/utils'
 import FloorItem from '@/components/floor/FloorItem.vue'
+import Editor from '@/components/editor/Editor.vue'
+import { ref } from 'vue'
+import demoEditorData from '@/components/editor/demo-editor-data'
+import { parseMarkdownToEditorJs } from '@/utils/editor'
 
 const floors = arrayFactory(
   DetailedFloor,
@@ -13,9 +17,9 @@ const floors = arrayFactory(
     {
       anonyname: 'Dest1n1',
       content:
-        '下面我将演示如何使用Code Mirror搭建一个简易的代码编辑器，并对其常用配置简要介绍。\n\n' +
+        '现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
         '\n' +
-        '首先要到CodeMirror官网下载此插件，然后在网页中引入即可。如下代码即实现了一个可以高亮显示Java代码的编辑器：\n',
+        '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。',
       deleted: false,
       fold: '',
       hole_id: 0,
@@ -31,23 +35,45 @@ const floors = arrayFactory(
     }
   ])
 )
+
+const editorData = ref<{ blocks: any[] } | null>(null)
+
+const initEditor = (markdown: string) => {
+  editorData.value = {
+    blocks: parseMarkdownToEditorJs(markdown)
+  }
+}
 </script>
 
 <template>
   <v-container class="px-0">
     <div class="flex">
       <v-col class="max-w-[55%] px-0">
-        <v-list class="pt-0">
-          <div class="text-h4 border-b-sm px-10 pb-8 flex justify-between">
-            <div class="flex grow-0">#123123</div>
-            <v-btn>发表评论</v-btn>
+        <v-list class="pt-0 overflow-hidden">
+          <div class="border-b-sm">
+            <div class="text-h4 px-10 pb-8 flex justify-between">
+              <div class="flex grow-0">#123123</div>
+              <v-btn @click="initEditor('')">发表评论</v-btn>
+            </div>
+            <template v-if="editorData">
+              <v-divider class="mx-10 my-2" />
+              <Editor
+                :key="editorData"
+                :data="editorData"
+                @close="editorData = null"
+              ></Editor>
+            </template>
           </div>
+
           <v-list-item
             v-for="(floor, index) in floors"
             :key="index"
             class="pl-16 py-5 border-b-sm flex-col text-left"
           >
-            <FloorItem :floor="floor" />
+            <FloorItem
+              :floor="floor"
+              @edit="initEditor(floor.content)"
+            />
           </v-list-item>
         </v-list>
       </v-col>

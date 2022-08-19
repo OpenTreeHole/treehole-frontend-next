@@ -5,13 +5,13 @@ import katex from 'katex'
 const macros: any = []
 export const convertKatex = (str: string) => {
   return str
-    .replace(/\$\$([^$]+)\$\$/g, (ignore, k) => {
+    .replaceAll(/\$\$([^$]+)\$\$/g, (ignore, k) => {
       return katex.renderToString(k, {
         displayMode: true,
         macros
       })
     })
-    .replace(/\$([^$]+)\$/g, (ignore, k) => {
+    .replaceAll(/\$([^$]+)\$/g, (ignore, k) => {
       return katex.renderToString(k, {
         displayMode: false,
         macros
