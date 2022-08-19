@@ -4,7 +4,10 @@
       ref="editorDiv"
       class="text-left min-h-[300px]"
     ></div>
-    <div class="flex my-2 mx-10 justify-end">
+    <div
+      class="flex my-2 mx-10 justify-end transition-opacity"
+      :class="`opacity-${opacity}`"
+    >
       <v-btn
         class="mr-3"
         @click="$emit('close')"
@@ -43,6 +46,7 @@ defineEmits<{
 }>()
 
 const editorDiv = ref()
+const opacity = ref(0)
 
 onMounted(() => {
   const editor = new EditorJS({
@@ -152,6 +156,9 @@ onMounted(() => {
 
       const content = data.blocks
       const parsedData = parseEditorJsToMarkdown(content)
+    },
+    onReady: () => {
+      opacity.value = 100
     }
   })
 })
