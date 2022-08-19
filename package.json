@@ -31,7 +31,7 @@
     "typora-parser": "^1.0.3",
     "vue": "^3.2.25",
     "vue-router": "^4.1.1",
-    "vuetify": "3.0.0-beta.6",
+    "vuetify": "3.0.0-beta.7",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
