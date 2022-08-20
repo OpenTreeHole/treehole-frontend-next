@@ -108,7 +108,7 @@ export const reduceKeys = (reduced: any, before: any): any => {
  * @return - the generated color.
  */
 export const generateColor = (str: string): string => {
-  if (str === null) return ''
+  if (!str) return ''
   if (str[0] === '*') return 'red'
   let num = 0
   for (let i = 0; i < str.length; i++) {

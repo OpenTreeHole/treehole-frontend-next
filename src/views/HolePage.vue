@@ -20,7 +20,26 @@ const floors = arrayFactory(
         '\n' +
         '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。',
       deleted: false,
-      fold: '',
+      fold: [],
+      hole_id: 0,
+      id: 0,
+      is_me: false,
+      like: 0,
+      liked: 0,
+      mention: [],
+      special_tag: '测试用例',
+      storey: 0,
+      time_created: '2022-07-27T17:07:39.802Z',
+      time_updated: '2022-07-27T17:07:39.802Z'
+    },
+    {
+      anonyname: 'Dest1n1',
+      content:
+        '现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
+        '\n' +
+        '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。',
+      deleted: true,
+      fold: ['该内容寄了，已被折叠'],
       hole_id: 0,
       id: 0,
       is_me: false,
@@ -86,9 +105,12 @@ const { editorData, initEditor, clearEditor } = useEditor()
           <v-list-item
             v-for="(floor, index) in floors"
             :key="index"
-            class="pl-10 lg:pl-16 py-5 border-b-sm flex-col text-left"
+            class="px-0 py-5 border-b-sm flex-col text-left"
           >
-            <FloorItem :floor="floor" />
+            <FloorItem
+              class="pl-10 lg:pl-16"
+              :floor="floor"
+            />
           </v-list-item>
         </v-list>
       </v-col>
