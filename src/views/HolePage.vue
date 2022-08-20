@@ -3,13 +3,12 @@
   lang="ts"
 >
 import { arrayFactory } from '@/utils/reflect'
-import { DetailedFloor, Floor } from '@/types'
+import { DetailedFloor, Floor, Tag } from '@/types'
 import { camelizeKeys } from '@/utils'
 import FloorItem from '@/components/floor/FloorItem.vue'
 import Editor from '@/components/editor/Editor.vue'
-import { ref } from 'vue'
-import demoEditorData from '@/components/editor/demo-editor-data'
-import { parseMarkdownToEditorJs } from '@/utils/editor'
+import TagChip from '@/components/tag/TagChip.vue'
+import { useEditor } from '@/composables/editor'
 
 const floors = arrayFactory(
   DetailedFloor,
@@ -36,31 +35,50 @@ const floors = arrayFactory(
   ])
 )
 
-const editorData = ref<{ blocks: any[] } | null>(null)
+const tags = arrayFactory(
+  Tag,
+  camelizeKeys([
+    {
+      name: '树洞',
+      tag_id: 1,
+      temperature: 1
+    },
+    {
+      name: '提问',
+      tag_id: 1,
+      temperature: 1
+    }
+  ])
+)
 
-const initEditor = (markdown: string) => {
-  editorData.value = {
-    blocks: parseMarkdownToEditorJs(markdown)
-  }
-}
+const { editorData, initEditor, clearEditor } = useEditor()
 </script>
 
 <template>
   <v-container class="px-0">
     <div class="flex">
-      <v-col class="max-w-[55%] px-0">
-        <v-list class="pt-0 overflow-hidden">
+      <v-col class="max-w-full lg:max-w-[55%] px-0">
+        <v-list class="pt-0">
           <div class="border-b-sm">
-            <div class="text-h4 px-10 pb-8 flex justify-between">
+            <div class="text-h4 px-10 pb-2 flex justify-between">
               <div class="flex grow-0">#123123</div>
               <v-btn @click="initEditor('')">发表评论</v-btn>
+            </div>
+            <div class="px-10 pb-2 flex">
+              <TagChip
+                v-for="(tag, index) in tags"
+                :key="index"
+                class="mr-2"
+                :tag="tag"
+              ></TagChip>
             </div>
             <template v-if="editorData">
               <v-divider class="mx-10 my-2" />
               <Editor
                 :key="editorData"
+                class="mx-6"
                 :data="editorData"
-                @close="editorData = null"
+                @close="clearEditor"
               ></Editor>
             </template>
           </div>
@@ -68,82 +86,32 @@ const initEditor = (markdown: string) => {
           <v-list-item
             v-for="(floor, index) in floors"
             :key="index"
-            class="pl-16 py-5 border-b-sm flex-col text-left"
+            class="pl-10 lg:pl-16 py-5 border-b-sm flex-col text-left"
           >
-            <FloorItem
-              :floor="floor"
-              @edit="initEditor(floor.content)"
-            />
+            <FloorItem :floor="floor" />
           </v-list-item>
         </v-list>
       </v-col>
-      <v-col class="max-w-[25%] pl-5">
+      <v-col class="hidden lg:block max-w-[25%] pl-5">
         <v-card
           class="mx-auto"
           max-width="368"
         >
           <v-card-item>
-            <v-card-title class="text-h5">Florida</v-card-title>
-
-            <v-card-subtitle>
-              <v-icon
-                icon="mdi-alert"
-                size="18"
-                color="error"
-                class="mr-1 pb-1"
-              ></v-icon>
-
-              Extreme Weather Alert
-            </v-card-subtitle>
+            <v-card-title class="text-h5 text-left px-1 font-semibold">相关讨论</v-card-title>
           </v-card-item>
 
-          <v-card-text class="py-0">
-            <v-row
-              align="center"
-              hide-gutters
-              no-gutters
-            >
-              <v-col
-                class="text-h2"
-                cols="6"
-              >
-                64&deg;F
-              </v-col>
+          <v-divider />
 
-              <v-col
-                cols="6"
-                class="text-right"
-              >
-                <v-icon
-                  size="88"
-                  color="error"
-                  icon="mdi-weather-hurricane"
-                ></v-icon>
-              </v-col>
-            </v-row>
+          <v-card-text class="text-lg text-left">
+            <p class="px-1 py-2">
+              #123124
+              <TagChip
+                class="mx-2"
+                :tag="tags[0]"
+              ></TagChip>
+            </p>
           </v-card-text>
-
-          <v-list-item density="compact">
-            <v-list-item-avatar left>
-              <v-icon icon="mdi-weather-windy"></v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-subtitle>123 km/h</v-list-item-subtitle>
-          </v-list-item>
-
-          <v-list-item density="compact">
-            <v-list-item-avatar left>
-              <v-icon icon="mdi-weather-pouring"></v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-subtitle>48%</v-list-item-subtitle>
-          </v-list-item>
-
-          <v-divider></v-divider>
-
-          <v-card-actions>
-            <v-btn> Full Report</v-btn>
-          </v-card-actions>
         </v-card>
       </v-col>
     </div>

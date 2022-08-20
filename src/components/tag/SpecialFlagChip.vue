@@ -1,5 +1,6 @@
 <template>
   <v-chip
+    class="select-none"
     label
     :color="color"
   >

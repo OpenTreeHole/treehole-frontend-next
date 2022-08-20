@@ -2,19 +2,21 @@
   <div class="my-2">
     <div
       ref="editorDiv"
-      class="text-left min-h-[300px]"
+      class="text-left min-h-[100px] lg:min-h-[250px] ml-5"
     ></div>
     <div
-      class="flex my-2 mx-10 justify-end transition-opacity"
+      class="flex my-2 ml-5 justify-center transition-opacity"
       :class="`opacity-${opacity}`"
     >
-      <v-btn
-        class="mr-3"
-        @click="$emit('close')"
-      >
-        取消
-      </v-btn>
-      <v-btn class="text-white bg-blue-500">发送</v-btn>
+      <div class="max-w-[650px] flex-grow-1 flex justify-end">
+        <v-btn
+          class="mr-3"
+          @click="$emit('close')"
+        >
+          取消
+        </v-btn>
+        <v-btn class="text-white bg-blue-500">发送</v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -39,7 +41,7 @@ import Table from '@editorjs/table'
 import MathTex from 'editorjs-math'
 import { parseEditorJsToMarkdown } from '@/utils/editor'
 
-const props = defineProps<{ data: { blocks: any[] } }>()
+const { data = { blocks: [] } } = defineProps<{ data?: { blocks: any[] } }>()
 
 defineEmits<{
   (e: 'close'): void
@@ -60,7 +62,7 @@ onMounted(() => {
      */
     holder: editorDiv.value,
 
-    minHeight: 0,
+    minHeight: 50,
 
     placeholder: '说些什么...',
 
@@ -149,7 +151,7 @@ onMounted(() => {
     /**
      * Initial Editor data
      */
-    data: props.data,
+    data: data,
     onChange: async (api, event) => {
       console.log('something changed', event)
       const data = await api.saver.save()

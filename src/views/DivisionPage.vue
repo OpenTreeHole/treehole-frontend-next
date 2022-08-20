@@ -1,7 +1,7 @@
 <template>
   <v-container class="px-0">
     <div class="flex">
-      <v-col class="max-w-[55%] px-0">
+      <v-col class="max-w-full lg:max-w-[55%] px-0">
         <v-list class="pt-0">
           <div class="text-h4 border-b-sm px-10 pb-8 flex justify-between">
             <div class="flex grow-0">树洞</div>
@@ -66,7 +66,7 @@
           </v-list-item>
         </v-list>
       </v-col>
-      <v-col class="max-w-[25%] pl-5">
+      <v-col class="hidden lg:block max-w-[25%] pl-5">
         <v-card
           class="mx-auto"
           max-width="368"
