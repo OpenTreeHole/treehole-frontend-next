@@ -20,7 +20,7 @@ const floors = arrayFactory(
         '\n' +
         '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。',
       deleted: false,
-      fold: [],
+      fold: '',
       hole_id: 0,
       id: 0,
       is_me: false,
@@ -39,7 +39,7 @@ const floors = arrayFactory(
         '\n' +
         '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。',
       deleted: true,
-      fold: ['该内容寄了，已被折叠'],
+      fold: '该内容寄了，已被折叠',
       hole_id: 0,
       id: 0,
       is_me: false,

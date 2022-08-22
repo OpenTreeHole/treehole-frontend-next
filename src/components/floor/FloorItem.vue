@@ -32,7 +32,7 @@
         class="text-gray-600 hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition relative before:opacity-0 hover:before:transition-opacity hover:before:content-['expand\_more'] hover:before:md-icon-center hover:before:text-gray-400 hover:before:opacity-70"
         @click="folded = false"
       >
-        {{ floor.fold[0] }}
+        {{ floor.fold }}
       </div>
     </div>
     <template v-else>
@@ -229,12 +229,12 @@ const remove = () => {
   action.value = ActionType.Delete
 }
 
-const folded = ref(props.floor.fold.length > 0)
+const folded = ref(props.floor.fold !== '')
 
 const extraInfo = computed(() => {
   const ret: string[] = []
   if (props.floor.deleted) ret.push('已删除')
-  if (props.floor.fold.length > 0) ret.push('已折叠')
+  if (props.floor.fold) ret.push('已折叠')
   return ret.join('，')
 })
 </script>
