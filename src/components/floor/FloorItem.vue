@@ -84,6 +84,14 @@
         <span class="px-2">
           <span
             class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
+            @click="penalty"
+          >
+            <v-icon icon="md:person_off" />
+          </span>
+        </span>
+        <span class="px-2">
+          <span
+            class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
             @click="showHistory"
           >
             <v-icon icon="md:history" />
@@ -98,10 +106,7 @@
             class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
             @click="report"
           >
-            <v-icon
-              class="-mt-1"
-              icon="md:report"
-            />
+            <v-icon icon="md:report" />
           </span>
         </span>
       </div>
@@ -110,6 +115,20 @@
         class="mx-2 my-2"
       />
       <template v-if="action === ActionType.Reply || action === ActionType.Edit">
+        <div class="flex justify-center">
+          <div class="ml-5 mr-2 max-w-[650px] flex flex-grow-1">
+            <span class="self-center font-semibold text-orange-400">
+              特殊标签（留空则无特殊标签）：
+            </span>
+            <v-text-field
+              class="flex-grow-1 mr-2"
+              hide-details
+              variant="outlined"
+              autofocus
+              density="compact"
+            />
+          </div>
+        </div>
         <div class="flex justify-center">
           <p
             v-if="action === ActionType.Reply"
@@ -188,6 +207,34 @@
           </template>
         </div>
       </template>
+      <template v-else-if="action === ActionType.Penalty">
+        <div class="flex">
+          <span class="self-center font-semibold text-blue-600">请输入封禁等级：</span>
+          <v-select
+            class="flex-grow-1 mr-2"
+            :items="[1, 2, 3]"
+            hide-details
+            variant="outlined"
+            autofocus
+            density="compact"
+          />
+          <span class="px-1 self-center">
+            <span
+              class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1 p-1 transition cursor-pointer rounded-lg select-none transition text-green"
+            >
+              <v-icon icon="md:done" />
+            </span>
+          </span>
+          <span class="px-1 self-center">
+            <span
+              class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1 p-1 transition cursor-pointer rounded-lg select-none transition text-red"
+              @click="action = ActionType.None"
+            >
+              <v-icon icon="md:close" />
+            </span>
+          </span>
+        </div>
+      </template>
     </template>
   </div>
 </template>
@@ -243,7 +290,8 @@ enum ActionType {
   Reply,
   Report,
   Delete,
-  History
+  History,
+  Penalty
 }
 
 const computeColorClass = (str: string) => 'text-' + generateColor(str)
@@ -271,6 +319,10 @@ const report = () => {
 
 const remove = () => {
   toggleAction(ActionType.Delete)
+}
+
+const penalty = () => {
+  toggleAction(ActionType.Penalty)
 }
 
 const showHistory = () => {

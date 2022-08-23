@@ -93,6 +93,20 @@ const { editorData, initEditor, clearEditor } = useEditor()
             </div>
             <template v-if="editorData">
               <v-divider class="mx-10 my-2" />
+              <div class="flex justify-center">
+                <div class="ml-5 max-w-[650px] flex flex-grow-1">
+                  <span class="self-center font-semibold text-orange-400">
+                    特殊标签（留空则无特殊标签）：
+                  </span>
+                  <v-text-field
+                    class="flex-grow-1 mr-2"
+                    hide-details
+                    variant="outlined"
+                    autofocus
+                    density="compact"
+                  />
+                </div>
+              </div>
               <Editor
                 :key="editorData"
                 class="mx-6"
