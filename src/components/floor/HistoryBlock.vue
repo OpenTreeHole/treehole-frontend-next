@@ -5,14 +5,7 @@
         由 {{ history.userId }} 修改于 {{ timeDifference(history.timeUpdated) }}
       </span>
       <span class="flex-grow-1"></span>
-      <span class="px-2">
-        <span
-          class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
-          @click="restore"
-        >
-          <v-icon icon="md:settings_backup_restore" />
-        </span>
-      </span>
+      <IconBtn @click="restore"> md:settings_backup_restore </IconBtn>
     </div>
     <div
       class="w-full markdown-viewer mt-2 px-2"
@@ -28,22 +21,20 @@
           autofocus
           density="compact"
         />
-        <span class="px-1 self-center">
-          <span
-            class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1 p-1 transition cursor-pointer rounded-lg select-none transition text-green"
-            @click="$emit('restore')"
-          >
-            <v-icon icon="md:done" />
-          </span>
-        </span>
-        <span class="px-1 self-center">
-          <span
-            class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1 p-1 transition cursor-pointer rounded-lg select-none transition text-red"
-            @click="action = ActionType.None"
-          >
-            <v-icon icon="md:close" />
-          </span>
-        </span>
+        <IconBtn
+          class="self-center text-green"
+          small
+          @click="$emit('restore')"
+        >
+          md:done
+        </IconBtn>
+        <IconBtn
+          class="self-center text-red"
+          small
+          @click="action = ActionType.None"
+        >
+          md:close
+        </IconBtn>
       </div>
     </template>
   </div>
@@ -56,6 +47,7 @@
 import { FloorHistory } from '@/types'
 import { timeDifference, parseToTypora } from '@/utils'
 import { ref } from 'vue'
+import IconBtn from '@/components/button/IconBtn.vue'
 
 defineProps<{ history: FloorHistory }>()
 defineEmits<{

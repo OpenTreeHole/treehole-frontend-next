@@ -53,62 +53,20 @@
             <span class="pl-1 self-center">1</span>
           </span>
         </span>
-        <span class="px-2">
-          <span
-            class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
-            @click="reply"
-          >
-            <v-icon icon="md:chat" />
-          </span>
-        </span>
+        <IconBtn @click="reply">md:chat</IconBtn>
         <v-divider
           class="mx-1"
           vertical
         />
-        <span class="px-2">
-          <span
-            class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
-            @click="edit"
-          >
-            <v-icon icon="md:edit" />
-          </span>
-        </span>
-        <span class="px-2">
-          <span
-            class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
-            @click="remove"
-          >
-            <v-icon icon="md:delete" />
-          </span>
-        </span>
-        <span class="px-2">
-          <span
-            class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
-            @click="penalty"
-          >
-            <v-icon icon="md:person_off" />
-          </span>
-        </span>
-        <span class="px-2">
-          <span
-            class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
-            @click="showHistory"
-          >
-            <v-icon icon="md:history" />
-          </span>
-        </span>
+        <IconBtn @click="edit">md:edit</IconBtn>
+        <IconBtn @click="remove">md:delete</IconBtn>
+        <IconBtn @click="penalty">md:person_off</IconBtn>
+        <IconBtn @click="showHistory">md:history</IconBtn>
         <v-divider
           class="mx-1"
           vertical
         />
-        <span class="px-2">
-          <span
-            class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
-            @click="report"
-          >
-            <v-icon icon="md:report" />
-          </span>
-        </span>
+        <IconBtn @click="report">md:report</IconBtn>
       </div>
       <v-divider
         v-if="action !== ActionType.None"
@@ -156,41 +114,37 @@
             autofocus
             density="compact"
           />
-          <span class="px-1 self-center">
-            <span
-              class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1 p-1 transition cursor-pointer rounded-lg select-none transition text-green"
-            >
-              <v-icon icon="md:done" />
-            </span>
-          </span>
-          <span class="px-1 self-center">
-            <span
-              class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1 p-1 transition cursor-pointer rounded-lg select-none transition text-red"
-              @click="action = ActionType.None"
-            >
-              <v-icon icon="md:close" />
-            </span>
-          </span>
+          <IconBtn
+            class="self-center text-green"
+            small
+          >
+            md:done
+          </IconBtn>
+          <IconBtn
+            class="self-center text-red"
+            small
+            @click="action = ActionType.None"
+          >
+            md:close
+          </IconBtn>
         </div>
       </template>
       <template v-else-if="action === ActionType.Delete">
         <div class="flex mt-4">
           <span class="self-center font-semibold text-red flex-grow-1">确认删除？</span>
-          <span class="px-1 self-center">
-            <span
-              class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1 p-1 transition cursor-pointer rounded-lg select-none transition text-green"
-            >
-              <v-icon icon="md:done" />
-            </span>
-          </span>
-          <span class="px-1 self-center">
-            <span
-              class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1 p-1 transition cursor-pointer rounded-lg select-none transition text-red"
-              @click="action = ActionType.None"
-            >
-              <v-icon icon="md:close" />
-            </span>
-          </span>
+          <IconBtn
+            class="self-center text-green"
+            small
+          >
+            md:done
+          </IconBtn>
+          <IconBtn
+            class="self-center text-red"
+            small
+            @click="action = ActionType.None"
+          >
+            md:close
+          </IconBtn>
         </div>
       </template>
       <template v-else-if="action === ActionType.History">
@@ -218,21 +172,19 @@
             autofocus
             density="compact"
           />
-          <span class="px-1 self-center">
-            <span
-              class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1 p-1 transition cursor-pointer rounded-lg select-none transition text-green"
-            >
-              <v-icon icon="md:done" />
-            </span>
-          </span>
-          <span class="px-1 self-center">
-            <span
-              class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1 p-1 transition cursor-pointer rounded-lg select-none transition text-red"
-              @click="action = ActionType.None"
-            >
-              <v-icon icon="md:close" />
-            </span>
-          </span>
+          <IconBtn
+            class="self-center text-green"
+            small
+          >
+            md:done
+          </IconBtn>
+          <IconBtn
+            class="self-center text-red"
+            small
+            @click="action = ActionType.None"
+          >
+            md:close
+          </IconBtn>
         </div>
       </template>
     </template>
@@ -246,6 +198,7 @@
 import { Floor, FloorHistory } from '@/types'
 import { camelizeKeys, generateColor, timeDifference, parseToTypora } from '@/utils'
 import SpecialFlagChip from '@/components/tag/SpecialFlagChip.vue'
+import IconBtn from '@/components/button/IconBtn.vue'
 import { useEditor } from '@/composables/editor'
 import Editor from '@/components/editor/Editor.vue'
 import { computed, ref } from 'vue'

@@ -5,7 +5,7 @@
 import { arrayFactory } from '@/utils/reflect'
 import { DetailedFloor, Floor, Tag } from '@/types'
 import { camelizeKeys } from '@/utils'
-import FloorItem from '@/components/floor/FloorItem.vue'
+import FloorBlock from '@/components/floor/FloorBlock.vue'
 import Editor from '@/components/editor/Editor.vue'
 import TagChip from '@/components/tag/TagChip.vue'
 import { useEditor } from '@/composables/editor'
@@ -121,7 +121,7 @@ const { editorData, initEditor, clearEditor } = useEditor()
             :key="index"
             class="px-0 py-5 border-b-sm flex-col text-left"
           >
-            <FloorItem
+            <FloorBlock
               class="pl-10 lg:pl-16"
               :floor="floor"
             />
