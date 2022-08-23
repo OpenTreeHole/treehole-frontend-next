@@ -1,0 +1,84 @@
+<template>
+  <div>
+    <div class="w-full flex justify-start">
+      <span class="px-2 text-neutral-400 text-sm self-center flex-shrink-1 line-clamp-1">
+        由 {{ history.userId }} 修改于 {{ timeDifference(history.timeUpdated) }}
+      </span>
+      <span class="flex-grow-1"></span>
+      <span class="px-2">
+        <span
+          class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
+          @click="restore"
+        >
+          <v-icon icon="md:settings_backup_restore" />
+        </span>
+      </span>
+    </div>
+    <div
+      class="w-full markdown-viewer mt-2 px-2"
+      v-html="parseToTypora(history.content)"
+    />
+    <template v-if="action === ActionType.Restore">
+      <div class="flex mx-2">
+        <span class="self-center font-semibold text-blue-600">请输入恢复理由：</span>
+        <v-text-field
+          class="flex-grow-1 mr-2"
+          hide-details
+          variant="outlined"
+          autofocus
+          density="compact"
+        />
+        <span class="px-1 self-center">
+          <span
+            class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1 p-1 transition cursor-pointer rounded-lg select-none transition text-green"
+            @click="$emit('restore')"
+          >
+            <v-icon icon="md:done" />
+          </span>
+        </span>
+        <span class="px-1 self-center">
+          <span
+            class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1 p-1 transition cursor-pointer rounded-lg select-none transition text-red"
+            @click="action = ActionType.None"
+          >
+            <v-icon icon="md:close" />
+          </span>
+        </span>
+      </div>
+    </template>
+  </div>
+</template>
+
+<script
+  setup
+  lang="ts"
+>
+import { FloorHistory } from '@/types'
+import { timeDifference, parseToTypora } from '@/utils'
+import { ref } from 'vue'
+
+defineProps<{ history: FloorHistory }>()
+defineEmits<{
+  (e: 'restore'): void
+}>()
+
+enum ActionType {
+  None,
+  Restore
+}
+
+const action = ref<ActionType>(ActionType.None)
+
+const toggleAction = (type: ActionType) => {
+  action.value = action.value === type ? ActionType.None : type
+}
+
+const restore = () => {
+  toggleAction(ActionType.Restore)
+}
+</script>
+
+<style
+  lang="scss"
+  scoped
+></style>

@@ -81,6 +81,14 @@
             <v-icon icon="md:delete" />
           </span>
         </span>
+        <span class="px-2">
+          <span
+            class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
+            @click="showHistory"
+          >
+            <v-icon icon="md:history" />
+          </span>
+        </span>
         <v-divider
           class="mx-1"
           vertical
@@ -97,8 +105,11 @@
           </span>
         </span>
       </div>
+      <v-divider
+        v-if="action !== ActionType.None"
+        class="mx-2 my-2"
+      />
       <template v-if="action === ActionType.Reply || action === ActionType.Edit">
-        <v-divider class="mx-2 my-2" />
         <div class="flex justify-center">
           <p
             v-if="action === ActionType.Reply"
@@ -117,7 +128,6 @@
         ></Editor>
       </template>
       <template v-else-if="action === ActionType.Report">
-        <v-divider class="mx-2 my-2" />
         <div class="flex">
           <span class="self-center font-semibold text-blue-600">请输入举报理由：</span>
           <v-text-field
@@ -145,7 +155,6 @@
         </div>
       </template>
       <template v-else-if="action === ActionType.Delete">
-        <v-divider class="mx-2 my-2" />
         <div class="flex mt-4">
           <span class="self-center font-semibold text-red flex-grow-1">确认删除？</span>
           <span class="px-1 self-center">
@@ -165,6 +174,20 @@
           </span>
         </div>
       </template>
+      <template v-else-if="action === ActionType.History">
+        <div class="mt-4 ml-2 pl-2 border-l-2">
+          <template
+            v-for="(history, index) in histories"
+            :key="index"
+          >
+            <HistoryBlock :history="history" />
+            <v-divider
+              v-if="index !== histories.length - 1"
+              class="mt-2 mb-4 mx-2"
+            />
+          </template>
+        </div>
+      </template>
     </template>
   </div>
 </template>
@@ -173,60 +196,85 @@
   setup
   lang="ts"
 >
-import { Floor } from '@/types'
-import { generateColor, timeDifference } from '@/utils'
-import TyporaParser from 'typora-parser'
-import { KatexRenderer } from '@/utils/katex'
-import HighlightJsRenderer from 'typora-parser/build/src/plugins/HighlightJsRenderer'
+import { Floor, FloorHistory } from '@/types'
+import { camelizeKeys, generateColor, timeDifference, parseToTypora } from '@/utils'
 import SpecialFlagChip from '@/components/tag/SpecialFlagChip.vue'
 import { useEditor } from '@/composables/editor'
 import Editor from '@/components/editor/Editor.vue'
 import { computed, ref } from 'vue'
+import { arrayFactory } from '@/utils/reflect'
+import HistoryBlock from '@/components/floor/HistoryBlock.vue'
 
 const props = defineProps<{ floor: Floor }>()
-defineEmits<{
-  (e: 'edit'): void
-}>()
+
+const histories = arrayFactory(
+  FloorHistory,
+  camelizeKeys([
+    {
+      content:
+        '现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
+        '\n' +
+        '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。',
+      floor_id: 12321,
+      id: 0,
+      reason: '',
+      user_id: 123,
+      time_created: '2022-07-27T17:07:39.802Z',
+      time_updated: '2022-07-27T17:07:39.802Z'
+    },
+    {
+      content:
+        '现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
+        '\n' +
+        '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。',
+      floor_id: 12321,
+      id: 0,
+      reason: '',
+      user_id: 123,
+      time_created: '2022-07-27T17:07:39.802Z',
+      time_updated: '2022-07-27T17:07:39.802Z'
+    }
+  ])
+)
 
 enum ActionType {
   None,
   Edit,
   Reply,
   Report,
-  Delete
+  Delete,
+  History
 }
 
 const computeColorClass = (str: string) => 'text-' + generateColor(str)
-const parseToTypora = (markdown: string) => {
-  markdown = markdown.trim().replace('\n\n', '\n').replace('\n', '\n\n')
-  const parseResult = TyporaParser.parse(markdown)
-  return parseResult.renderHTML({
-    latexRenderer: new KatexRenderer(),
-    codeRenderer: new HighlightJsRenderer({
-      displayLineNumbers: true // display line numbers on code block, no effect when vanillaHTML: true
-    })
-  })
-}
 
 const { editorData, initEditor } = useEditor()
 const action = ref<ActionType>(ActionType.None)
 
+const toggleAction = (type: ActionType) => {
+  action.value = action.value === type ? ActionType.None : type
+}
+
 const edit = () => {
   initEditor(props.floor.content)
-  action.value = ActionType.Edit
+  toggleAction(ActionType.Edit)
 }
 
 const reply = () => {
   initEditor('')
-  action.value = ActionType.Reply
+  toggleAction(ActionType.Reply)
 }
 
 const report = () => {
-  action.value = ActionType.Report
+  toggleAction(ActionType.Report)
 }
 
 const remove = () => {
-  action.value = ActionType.Delete
+  toggleAction(ActionType.Delete)
+}
+
+const showHistory = () => {
+  toggleAction(ActionType.History)
 }
 
 const folded = ref(props.floor.fold !== '')

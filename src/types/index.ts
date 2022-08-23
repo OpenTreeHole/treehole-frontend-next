@@ -230,13 +230,14 @@ export class User {
   joinedTime: Date
 }
 
-export interface IUserAuthData {
+export interface UserAuthData {
   silent: any
   nickname: string
   offenseCount: number
   isAdmin: boolean
 }
 
+@Model
 export class UserAuth {
   @Field()
   id: number
@@ -255,4 +256,28 @@ export class UserAuth {
 
   @Field({ type: Date })
   joinedTime: Date
+}
+
+@Model
+export class FloorHistory {
+  @Field()
+  id: number
+
+  @Field()
+  content: string
+
+  @Field()
+  floorId: number
+
+  @Field()
+  reason: string
+
+  @Field()
+  userId: number
+
+  @Field({ type: Date })
+  timeCreated: Date
+
+  @Field({ type: Date })
+  timeUpdated: Date
 }

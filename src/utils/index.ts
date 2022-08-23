@@ -1,6 +1,8 @@
 import { assign, camelCase, keys, pick, snakeCase } from 'lodash'
 import { marked } from 'marked'
-import { convertKatex } from '@/utils/katex'
+import { convertKatex, KatexRenderer } from '@/utils/katex'
+import TyporaParser from 'typora-parser'
+import HighlightJsRenderer from 'typora-parser/build/src/plugins/HighlightJsRenderer'
 
 const colorList = [
   'red',
@@ -128,4 +130,15 @@ export const checkType = (object: any, keysOfType: string[]): boolean => {
     if (!(key in object)) return false
   }
   return true
+}
+
+export const parseToTypora = (markdown: string) => {
+  markdown = markdown.trim().replace('\n\n', '\n').replace('\n', '\n\n')
+  const parseResult = TyporaParser.parse(markdown)
+  return parseResult.renderHTML({
+    latexRenderer: new KatexRenderer(),
+    codeRenderer: new HighlightJsRenderer({
+      displayLineNumbers: true // display line numbers on code block, no effect when vanillaHTML: true
+    })
+  })
 }

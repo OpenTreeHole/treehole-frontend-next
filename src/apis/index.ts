@@ -12,7 +12,7 @@ import {
   UserAuth,
   User,
   Division,
-  IUserAuthData,
+  UserAuthData,
   IDivisionAdd,
   DetailedFloor,
   IFloorData,
@@ -247,7 +247,7 @@ export const getUserById = async (userId: number) => {
   return factory(UserAuth, response.data)
 }
 
-export const modifyUser = async (userId: number, userData: IUserAuthData) => {
+export const modifyUser = async (userId: number, userData: UserAuthData) => {
   const response = await authAxios.put(`/users/${userId}`, snakifyKeys(userData))
   return factory(UserAuth, response.data)
 }
