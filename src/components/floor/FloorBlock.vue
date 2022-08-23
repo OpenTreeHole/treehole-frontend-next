@@ -105,8 +105,10 @@
         ></Editor>
       </template>
       <template v-else-if="action === ActionType.Report">
-        <div class="flex">
-          <span class="self-center font-semibold text-blue-600">请输入举报理由：</span>
+        <QuestionAction
+          text="请输入举报理由："
+          text-class="text-blue-600"
+        >
           <v-text-field
             class="flex-grow-1 mr-2"
             hide-details
@@ -114,38 +116,14 @@
             autofocus
             density="compact"
           />
-          <IconBtn
-            class="self-center text-green"
-            small
-          >
-            md:done
-          </IconBtn>
-          <IconBtn
-            class="self-center text-red"
-            small
-            @click="action = ActionType.None"
-          >
-            md:close
-          </IconBtn>
-        </div>
+        </QuestionAction>
       </template>
       <template v-else-if="action === ActionType.Delete">
-        <div class="flex mt-4">
-          <span class="self-center font-semibold text-red flex-grow-1">确认删除？</span>
-          <IconBtn
-            class="self-center text-green"
-            small
-          >
-            md:done
-          </IconBtn>
-          <IconBtn
-            class="self-center text-red"
-            small
-            @click="action = ActionType.None"
-          >
-            md:close
-          </IconBtn>
-        </div>
+        <QuestionAction
+          class="mt-4"
+          text="确认删除？"
+          text-class="text-red"
+        />
       </template>
       <template v-else-if="action === ActionType.History">
         <div class="mt-4 ml-2 pl-2 border-l-2">
@@ -162,8 +140,10 @@
         </div>
       </template>
       <template v-else-if="action === ActionType.Penalty">
-        <div class="flex">
-          <span class="self-center font-semibold text-blue-600">请输入封禁等级：</span>
+        <QuestionAction
+          text="请输入封禁等级："
+          text-class="text-blue-600"
+        >
           <v-select
             class="flex-grow-1 mr-2"
             :items="[1, 2, 3]"
@@ -172,20 +152,7 @@
             autofocus
             density="compact"
           />
-          <IconBtn
-            class="self-center text-green"
-            small
-          >
-            md:done
-          </IconBtn>
-          <IconBtn
-            class="self-center text-red"
-            small
-            @click="action = ActionType.None"
-          >
-            md:close
-          </IconBtn>
-        </div>
+        </QuestionAction>
       </template>
     </template>
   </div>
@@ -204,6 +171,7 @@ import Editor from '@/components/editor/Editor.vue'
 import { computed, ref } from 'vue'
 import { arrayFactory } from '@/utils/reflect'
 import HistoryBlock from '@/components/floor/HistoryBlock.vue'
+import QuestionAction from '@/components/action/QuestionAction.vue'
 
 const props = defineProps<{ floor: Floor }>()
 

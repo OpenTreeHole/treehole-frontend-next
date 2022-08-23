@@ -12,8 +12,11 @@
       v-html="parseToTypora(history.content)"
     />
     <template v-if="action === ActionType.Restore">
-      <div class="flex mx-2">
-        <span class="self-center font-semibold text-blue-600">请输入恢复理由：</span>
+      <QuestionAction
+        class="mx-2"
+        text="请输入恢复理由："
+        text-class="text-blue-600"
+      >
         <v-text-field
           class="flex-grow-1 mr-2"
           hide-details
@@ -21,21 +24,7 @@
           autofocus
           density="compact"
         />
-        <IconBtn
-          class="self-center text-green"
-          small
-          @click="$emit('restore')"
-        >
-          md:done
-        </IconBtn>
-        <IconBtn
-          class="self-center text-red"
-          small
-          @click="action = ActionType.None"
-        >
-          md:close
-        </IconBtn>
-      </div>
+      </QuestionAction>
     </template>
   </div>
 </template>
@@ -48,6 +37,7 @@ import { FloorHistory } from '@/types'
 import { timeDifference, parseToTypora } from '@/utils'
 import { ref } from 'vue'
 import IconBtn from '@/components/button/IconBtn.vue'
+import QuestionAction from '@/components/action/QuestionAction.vue'
 
 defineProps<{ history: FloorHistory }>()
 defineEmits<{
