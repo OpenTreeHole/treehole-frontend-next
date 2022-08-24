@@ -16,7 +16,7 @@
       >
         {{ extraInfo }}
       </span>
-      <span class="flex-grow-1"></span>
+      <span class="grow"></span>
       <SpecialFlagChip
         v-if="floor.specialTag"
         class="mr-4"
@@ -59,14 +59,14 @@
           vertical
         />
         <IconBtn @click="edit">md:edit</IconBtn>
-        <IconBtn @click="remove">md:delete</IconBtn>
-        <IconBtn @click="penalty">md:person_off</IconBtn>
-        <IconBtn @click="showHistory">md:history</IconBtn>
+        <IconBtn @click="toggleAction(ActionType.Delete)">md:delete</IconBtn>
+        <IconBtn @click="toggleAction(ActionType.Penalty)">md:person_off</IconBtn>
+        <IconBtn @click="toggleAction(ActionType.History)">md:history</IconBtn>
         <v-divider
           class="mx-1"
           vertical
         />
-        <IconBtn @click="report">md:report</IconBtn>
+        <IconBtn @click="toggleAction(ActionType.Report)">md:report</IconBtn>
       </div>
       <v-divider
         v-if="action !== ActionType.None"
@@ -74,12 +74,12 @@
       />
       <template v-if="action === ActionType.Reply || action === ActionType.Edit">
         <div class="flex justify-center">
-          <div class="ml-5 mr-2 max-w-[650px] flex flex-grow-1">
+          <div class="ml-5 mr-2 max-w-[var(--editor-max-width)] flex grow">
             <span class="self-center font-semibold text-orange-400">
               特殊标签（留空则无特殊标签）：
             </span>
             <v-text-field
-              class="flex-grow-1 mr-2"
+              class="grow mr-2"
               hide-details
               variant="outlined"
               autofocus
@@ -90,7 +90,7 @@
         <div class="flex justify-center">
           <p
             v-if="action === ActionType.Reply"
-            class="line-clamp-1 ml-5 mr-2 max-w-[650px] flex-grow-1 mt-2"
+            class="line-clamp-1 ml-5 mr-2 max-w-[var(--editor-max-width)] grow mt-2"
           >
             回复
             <span :class="computeColorClass(floor.anonyname)"> {{ floor.anonyname }} </span>：
@@ -110,7 +110,7 @@
           text-class="text-blue-600"
         >
           <v-text-field
-            class="flex-grow-1 mr-2"
+            class="grow mr-2"
             hide-details
             variant="outlined"
             autofocus
@@ -145,7 +145,7 @@
           text-class="text-blue-600"
         >
           <v-select
-            class="flex-grow-1 mr-2"
+            class="grow mr-2"
             :items="[1, 2, 3]"
             hide-details
             variant="outlined"
@@ -212,7 +212,9 @@ enum ActionType {
   Report,
   Delete,
   History,
-  Penalty
+  Penalty,
+  Tag,
+  Division
 }
 
 const computeColorClass = (str: string) => 'text-' + generateColor(str)
@@ -232,22 +234,6 @@ const edit = () => {
 const reply = () => {
   initEditor('')
   toggleAction(ActionType.Reply)
-}
-
-const report = () => {
-  toggleAction(ActionType.Report)
-}
-
-const remove = () => {
-  toggleAction(ActionType.Delete)
-}
-
-const penalty = () => {
-  toggleAction(ActionType.Penalty)
-}
-
-const showHistory = () => {
-  toggleAction(ActionType.History)
 }
 
 const folded = ref(props.floor.fold !== '')

@@ -9,7 +9,7 @@
     <slot />
     <span
       v-if="!$slots['default']"
-      class="flex-grow-1"
+      class="grow"
     />
     <IconBtn
       class="self-center text-green"

@@ -3,7 +3,7 @@
   lang="ts"
 >
 import { arrayFactory } from '@/utils/reflect'
-import { DetailedFloor, Floor, Tag } from '@/types'
+import { DetailedFloor, Tag } from '@/types'
 import { camelizeKeys } from '@/utils'
 import FloorBlock from '@/components/floor/FloorBlock.vue'
 import Editor from '@/components/editor/Editor.vue'
@@ -75,15 +75,15 @@ const { editorData, initEditor, clearEditor } = useEditor()
 
 <template>
   <v-container class="px-0">
-    <div class="flex">
-      <v-col class="max-w-full lg:max-w-[55%] px-0">
+    <div class="flex lg:px-4">
+      <v-col class="max-w-full lg:max-w-[65%] 3xl:max-w-[55%] px-0">
         <v-list class="pt-0">
           <div class="border-b-sm">
-            <div class="text-h4 px-10 pb-2 flex justify-between">
+            <div class="text-3xl px-6 pb-2 flex justify-between">
               <div class="flex grow-0">#123123</div>
               <v-btn @click="initEditor('')">发表评论</v-btn>
             </div>
-            <div class="px-10 pb-2 flex">
+            <div class="px-6 pb-2 flex">
               <TagChip
                 v-for="(tag, index) in tags"
                 :key="index"
@@ -92,14 +92,14 @@ const { editorData, initEditor, clearEditor } = useEditor()
               ></TagChip>
             </div>
             <template v-if="editorData">
-              <v-divider class="mx-10 my-2" />
+              <v-divider class="mx-6 my-2" />
               <div class="flex justify-center">
-                <div class="ml-5 max-w-[650px] flex flex-grow-1">
+                <div class="ml-5 max-w-[var(--editor-max-width)] flex grow mr-6 ml-6 lg:ml-11">
                   <span class="self-center font-semibold text-orange-400">
                     特殊标签（留空则无特殊标签）：
                   </span>
                   <v-text-field
-                    class="flex-grow-1 mr-2"
+                    class="grow mr-2"
                     hide-details
                     variant="outlined"
                     autofocus
@@ -122,13 +122,13 @@ const { editorData, initEditor, clearEditor } = useEditor()
             class="px-0 py-5 border-b-sm flex-col text-left"
           >
             <FloorBlock
-              class="pl-10 lg:pl-16"
+              class="px-6"
               :floor="floor"
             />
           </v-list-item>
         </v-list>
       </v-col>
-      <v-col class="hidden lg:block max-w-[25%] pl-5">
+      <v-col class="hidden lg:block lg:max-w-[35%] xl:max-w-[30%] 3xl:max-w-[25%] pl-5">
         <v-card
           class="mx-auto"
           max-width="368"

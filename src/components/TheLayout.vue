@@ -5,7 +5,7 @@
       density="compact"
     >
       <v-app-bar-title>
-        <div class="max-w-7xl mx-auto flex">
+        <div class="max-w-[var(--page-width)] mx-auto flex">
           <v-img
             :src="Logo"
             max-width="199px"
@@ -35,7 +35,7 @@
       </v-app-bar-title>
     </v-app-bar>
     <v-navigation-drawer
-      class="z-20 pt-4 pb-10 w-[calc(50%-40rem+180px)]"
+      class="z-20 pt-4 pb-10 w-[calc(50%-var(--page-width)/2+180px)]"
       width="null"
     >
       <div class="flex justify-end">
@@ -85,7 +85,7 @@
     </v-navigation-drawer>
 
     <v-main>
-      <div class="pl-[calc(50%-40rem+180px)]">
+      <div class="pl-[calc(50%-var(--page-width)/2+180px)]">
         <slot />
       </div>
     </v-main>

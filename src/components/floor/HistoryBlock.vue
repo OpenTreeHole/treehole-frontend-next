@@ -4,7 +4,7 @@
       <span class="px-2 text-neutral-400 text-sm self-center flex-shrink-1 line-clamp-1">
         由 {{ history.userId }} 修改于 {{ timeDifference(history.timeUpdated) }}
       </span>
-      <span class="flex-grow-1"></span>
+      <span class="grow"></span>
       <IconBtn @click="restore"> md:settings_backup_restore </IconBtn>
     </div>
     <div
@@ -18,7 +18,7 @@
         text-class="text-blue-600"
       >
         <v-text-field
-          class="flex-grow-1 mr-2"
+          class="grow mr-2"
           hide-details
           variant="outlined"
           autofocus

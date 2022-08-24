@@ -2,13 +2,13 @@
   <div class="my-2">
     <div
       ref="editorDiv"
-      class="text-left min-h-[100px] lg:min-h-[250px] ml-5"
+      class="text-left min-h-[100px] lg:min-h-[250px] lg:ml-5"
     ></div>
     <div
-      class="flex my-2 ml-5 justify-center transition-opacity"
+      class="flex my-2 lg:ml-5 justify-center transition-opacity"
       :class="`opacity-${opacity}`"
     >
-      <div class="max-w-[650px] flex-grow-1 flex justify-end">
+      <div class="max-w-[var(--editor-max-width)] grow flex justify-end">
         <v-btn
           class="mr-3"
           @click="$emit('close')"
@@ -166,7 +166,9 @@ onMounted(() => {
 })
 </script>
 
-<style
-  lang="scss"
-  scoped
-></style>
+<style lang="scss">
+.ce-block__content,
+.ce-toolbar__content {
+  max-width: var(--editor-max-width); /* example value, adjust for your own use case */
+}
+</style>
