@@ -1998,10 +1998,10 @@ vue@^3.2.25:
     "@vue/server-renderer" "3.2.33"
     "@vue/shared" "3.2.33"
 
-vuetify@3.0.0-beta.7:
-  version "3.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.0.0-beta.7.tgz#9725dd07cda32e1e9928a3e80296fc32675d2892"
-  integrity sha512-tLgqYepicB4tz7i91IcvqB/qjCAGPTrIGDP1K412WxH2bvODF2S6cd/NYLBKcOgA4WqmgvzN8qAtHBbEIFXjnw==
+vuetify@3.0.0-beta.9:
+  version "3.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.0.0-beta.9.tgz#b04e4fc9b81d45d25933808e713d9df60348ee6c"
+  integrity sha512-UL30GE4HdzllkqfcEVThL2UF8AVsALRP7b7n7JqLHp4Pm24QZqiP534cp7A4aGDiX7HXhpjZA/ava0PSarQ+uQ==
 
 vuex@^4.0.2:
   version "4.0.2"
