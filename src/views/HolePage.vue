@@ -22,7 +22,7 @@ const floors = arrayFactory(
       deleted: false,
       fold: '',
       hole_id: 0,
-      id: 0,
+      id: 100001,
       is_me: false,
       like: 0,
       liked: 0,
@@ -41,7 +41,7 @@ const floors = arrayFactory(
       deleted: true,
       fold: '该内容寄了，已被折叠',
       hole_id: 0,
-      id: 0,
+      id: 100002,
       is_me: false,
       like: 0,
       liked: 0,
@@ -122,6 +122,7 @@ const { editorData, initEditor, clearEditor } = useEditor()
             class="px-0 py-5 border-b-sm flex-col text-left"
           >
             <FloorBlock
+              :id="floor.id"
               class="px-6"
               :floor="floor"
             />

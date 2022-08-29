@@ -41,6 +41,9 @@
         :class="floor.deleted ? 'markdown-gray' : ''"
         v-html="parseToTypora(floor.content)"
       />
+      <div class="w-full px-2 flex justify-end">
+        <span class="text-neutral-400 text-sm px-2">##{{ floor.id }}</span>
+      </div>
       <div class="w-full flex justify-end mt-2 px-2 overflow-visible">
         <span class="px-2">
           <span
@@ -108,6 +111,7 @@
         <QuestionAction
           text="请输入举报理由："
           text-class="text-blue-600"
+          @cancel="action = ActionType.None"
         >
           <v-text-field
             class="grow mr-2"
@@ -123,6 +127,7 @@
           class="mt-4"
           text="确认删除？"
           text-class="text-red"
+          @cancel="action = ActionType.None"
         />
       </template>
       <template v-else-if="action === ActionType.History">
@@ -143,6 +148,7 @@
         <QuestionAction
           text="请输入封禁等级："
           text-class="text-blue-600"
+          @cancel="action = ActionType.None"
         >
           <v-select
             class="grow mr-2"
