@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-end mt-2 px-2 overflow-visible">
+    <div class="flex justify-end mt-2 overflow-visible">
       <span class="px-2">
         <span
           class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
@@ -29,7 +29,7 @@
     </div>
     <v-divider
       v-if="action !== ActionType.None"
-      class="mx-2 my-2"
+      class="my-2"
     />
     <template v-if="action === ActionType.Reply || action === ActionType.Edit">
       <div class="flex justify-center">

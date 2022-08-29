@@ -41,7 +41,7 @@
         :class="floor.deleted ? 'markdown-gray' : ''"
         v-html="parseToTypora(floor.content)"
       />
-      <div class="w-full px-2 flex justify-end">
+      <div class="w-full flex justify-end">
         <span class="text-neutral-400 text-sm px-2">##{{ floor.id }}</span>
       </div>
     </template>
