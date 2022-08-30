@@ -31,9 +31,9 @@ import { parseToTypora } from '@/utils'
 import { ref } from 'vue'
 import { Floor } from '@/types'
 
-const props = defineProps<{ floor: Floor }>()
+const props = defineProps<{ floor: Floor; banFold?: boolean }>()
 
-const folded = ref(props.floor.fold !== '')
+const folded = ref(props.floor.fold !== '' && !props.banFold)
 </script>
 
 <style

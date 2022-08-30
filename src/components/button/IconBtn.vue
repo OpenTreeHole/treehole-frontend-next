@@ -5,7 +5,10 @@
       :class="small ? '-m-1 p-1' : '-m-1.5 p-1.5'"
       @click="$emit('click')"
     >
-      <v-icon :icon="icon" />
+      <v-icon
+        class="text-left"
+        :icon="icon"
+      />
     </span>
   </span>
 </template>

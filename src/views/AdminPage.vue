@@ -14,22 +14,16 @@
         </div>
         <v-window v-model="tab">
           <v-window-item value="1">
-            <v-list class="pt-0">
-              <v-list-item class="pl-16 py-5 border-b-sm flex-col text-left">
-                <div class="w-full">
-                  蓝图上的落差终归只是理念上的区分，在实践场域的分野也未必明晰。譬如当我们追寻心之所向时，在途中涉足权力的玉墀，这究竟是伴随着期望的泯灭还是期望的达成？在我们塑造生活的同时，生活也在浇铸我们。既不可否认原生的家庭性与社会性，又承认自己的图景有轻狂的失真，不妨让体验走在言语之前。用不被禁锢的头脑去体味切斯瓦夫·米沃什的大海与风帆，并效维特根斯坦之言，对无法言说之事保持沉默。
-                </div>
-                <div class="w-full flex justify-end mt-2 text-neutral-400 text-sm">
-                  <span>引起不适</span>
-                </div>
-              </v-list-item>
-              <v-list-item class="pl-16 py-5 border-b-sm flex-col text-left">
-                <div class="w-full">
-                  用在树上的生活方式体现个体的超越性，保持婞直却又不拘泥于所谓“遗世独立”的单向度形象。这便是卡尔维诺为我们提供的理想期望范式。生活在树上——始终热爱大地——升上天空。
-                </div>
-                <div class="w-full flex justify-end mt-2 text-neutral-400 text-sm">
-                  <span>约炮</span>
-                </div>
+            <v-list class="pt-0 lg:px-4">
+              <v-list-item
+                v-for="(report, i) in reports"
+                :key="i"
+                class="px-0 py-5 border-b-sm flex-col text-left"
+              >
+                <ReportBlock
+                  class="px-6"
+                  :report="report"
+                />
               </v-list-item>
             </v-list>
           </v-window-item>
@@ -67,89 +61,78 @@
           </v-window-item>
         </v-window>
       </v-col>
-      <v-col class="max-w-[25%] pl-5">
-        <v-card
-          class="mx-auto"
-          max-width="368"
-        >
-          <v-card-item>
-            <v-card-title class="text-h5">Florida</v-card-title>
-
-            <v-card-subtitle>
-              <v-icon
-                icon="mdi-alert"
-                size="18"
-                color="error"
-                class="mr-1 pb-1"
-              ></v-icon>
-
-              Extreme Weather Alert
-            </v-card-subtitle>
-          </v-card-item>
-
-          <v-card-text class="py-0">
-            <v-row
-              align="center"
-              hide-gutters
-            >
-              <v-col
-                class="text-h2"
-                cols="6"
-              >
-                64&deg;F
-              </v-col>
-
-              <v-col
-                cols="6"
-                class="text-right"
-              >
-                <v-icon
-                  size="88"
-                  color="error"
-                  icon="mdi-weather-hurricane"
-                ></v-icon>
-              </v-col>
-            </v-row>
-          </v-card-text>
-
-          <v-list-item density="compact">
-            <v-list-item-avatar left>
-              <v-icon icon="mdi-weather-windy"></v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-subtitle>123 km/h</v-list-item-subtitle>
-          </v-list-item>
-
-          <v-list-item density="compact">
-            <v-list-item-avatar left>
-              <v-icon icon="mdi-weather-pouring"></v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-subtitle>48%</v-list-item-subtitle>
-          </v-list-item>
-
-          <v-divider></v-divider>
-
-          <v-card-actions>
-            <v-btn> Full Report </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
     </div>
   </v-container>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script
+  setup
+  lang="ts"
+>
+import { ref } from 'vue'
+import ReportBlock from '@/components/floor/ReportBlock.vue'
+import { arrayFactory } from '@/utils/reflect'
+import { Report } from '@/types'
+import { camelizeKeys } from '@/utils'
 
-export default defineComponent({
-  name: 'AdminPage',
-  data() {
-    return {
-      tab: 1 as number
+const tab = ref('1')
+const reports = arrayFactory(
+  Report,
+  camelizeKeys([
+    {
+      dealt: false,
+      id: 1,
+      reason: '嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然',
+      floor: {
+        anonyname: 'Dest1n1',
+        content:
+          '现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
+          '\n' +
+          '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。',
+        deleted: false,
+        fold: '',
+        hole_id: 0,
+        id: 100001,
+        is_me: false,
+        like: 0,
+        liked: 0,
+        mention: [],
+        special_tag: '测试用例',
+        storey: 0,
+        time_created: '2022-07-27T17:07:39.802Z',
+        time_updated: '2022-07-27T17:07:39.802Z'
+      },
+      time_created: '2022-08-30T09:51:32.279Z',
+      time_updated: '2022-08-30T09:51:32.279Z'
+    },
+    {
+      dealt: false,
+      id: 2,
+      reason: '嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然',
+      floor: {
+        anonyname: 'Dest1n1',
+        content:
+          '现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
+          '\n' +
+          '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。',
+        deleted: true,
+        fold: '该内容寄了，已被折叠',
+        hole_id: 0,
+        id: 100002,
+        is_me: false,
+        like: 0,
+        liked: 0,
+        mention: [],
+        special_tag: '测试用例',
+        storey: 0,
+        time_created: '2022-07-27T17:07:39.802Z',
+        time_updated: '2022-07-27T17:07:39.802Z'
+      },
+      time_created: '2022-08-30T09:51:32.279Z',
+      time_updated: '2022-08-30T09:51:32.279Z'
     }
-  }
-})
+  ])
+)
 </script>
 
 <style scoped></style>
