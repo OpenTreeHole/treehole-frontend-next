@@ -5,7 +5,7 @@
       <IconBtn @click="toggleAction(ActionType.Penalty)">md:person_off</IconBtn>
       <v-divider
         class="mx-1"
-        vertical="true"
+        :vertical="true"
       />
       <IconBtn @click="toggleAction(ActionType.Deal)">mdi-check-outline</IconBtn>
     </div>

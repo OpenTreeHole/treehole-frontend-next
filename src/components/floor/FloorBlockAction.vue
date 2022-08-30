@@ -15,7 +15,7 @@
       <IconBtn @click="reply">md:chat</IconBtn>
       <v-divider
         class="mx-1"
-        vertical="true"
+        :vertical="true"
       />
       <IconBtn @click="edit">md:edit</IconBtn>
       <IconBtn @click="toggleAction(ActionType.Delete)">md:delete</IconBtn>
@@ -23,7 +23,7 @@
       <IconBtn @click="toggleAction(ActionType.History)">md:history</IconBtn>
       <v-divider
         class="mx-1"
-        vertical="true"
+        :vertical="true"
       />
       <IconBtn @click="toggleAction(ActionType.Report)">md:report</IconBtn>
     </div>
