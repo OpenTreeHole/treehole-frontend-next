@@ -114,22 +114,16 @@ export class Hole {
 @Model
 export class Report {
   @Field()
-  dealed: boolean
-
-  @Field()
-  dealedBy: number | null
+  dealt: boolean
 
   @Field({ type: Floor })
   floor: Floor
 
   @Field()
-  holeId: number
-
-  @Field()
   reason: string
 
   @Field()
-  reportId: number
+  id: number
 
   @Field({ type: Date })
   timeCreated: Date

@@ -12,11 +12,8 @@
 >
 import { useRoute, useRouter } from 'vue-router'
 import TheLayout from './components/TheLayout.vue'
-import { listDivisions } from '@/apis'
-import { useStore } from '@/store'
 
 const route = useRoute()
-const store = useStore()
 
 const router = useRouter()
 
