@@ -26,19 +26,19 @@
     "katex": "^0.16.0",
     "lodash": "^4.17.21",
     "marked": "^4.0.17",
+    "pinia": "^2.0.21",
     "reflect-metadata": "^0.1.13",
     "sass": "^1.53.0",
     "typora-parser": "^1.0.3",
     "vue": "^3.2.25",
     "vue-router": "^4.1.1",
-    "vuetify": "3.0.0-beta.9",
-    "vuex": "^4.0.2"
+    "vuetify": "3.0.0-beta.9"
   },
   "devDependencies": {
     "@editorjs/image": "^2.6.2",
     "@mdi/font": "^7.0.96",
-    "@tailwindcss/typography": "^0.5.2",
     "@tailwindcss/line-clamp": "^0.4.0",
+    "@tailwindcss/typography": "^0.5.2",
     "@types/js-cookie": "^3.0.2",
     "@types/katex": "^0.14.0",
     "@types/lodash": "^4.14.182",
