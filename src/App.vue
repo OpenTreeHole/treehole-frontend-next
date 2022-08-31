@@ -12,15 +12,29 @@
 >
 import { useRoute, useRouter } from 'vue-router'
 import TheLayout from './components/TheLayout.vue'
+import { useStore } from '@/store'
+import { listDivisions } from '@/apis'
 
 const route = useRoute()
 
 const router = useRouter()
 
+const store = useStore()
+
 router.beforeEach(async () => {
   // Get division data
-  // const divisions = await listDivisions()
-  // store.commit('setDivisions', { divisions })
+  const localDivisions = localStorage.getItem('divisions')
+  if (localDivisions) {
+    store.divisions = JSON.parse(localDivisions)
+    listDivisions().then((divisions) => {
+      store.divisions = divisions
+      localStorage.setItem('divisions', JSON.stringify(divisions))
+    })
+  } else {
+    const divisions = await listDivisions()
+    store.divisions = divisions
+    localStorage.setItem('divisions', JSON.stringify(divisions))
+  }
 })
 </script>
 

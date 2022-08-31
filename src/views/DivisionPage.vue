@@ -142,7 +142,20 @@
 <script
   setup
   lang="ts"
-></script>
+>
+import { watch } from 'vue'
+import { useStore } from '@/store'
+
+const props = defineProps<{ divisionId: number }>()
+const store = useStore()
+watch(
+  () => props.divisionId,
+  () => {
+    store.currentDivisionId = props.divisionId
+  },
+  { immediate: true }
+)
+</script>
 
 <style
   lang="scss"
