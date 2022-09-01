@@ -9,6 +9,7 @@ import FloorBlock from '@/components/floor/FloorBlock.vue'
 import Editor from '@/components/editor/Editor.vue'
 import TagChip from '@/components/tag/TagChip.vue'
 import { useEditor } from '@/composables/editor'
+import { useStore } from '@/store'
 
 const floors = arrayFactory(
   DetailedFloor,
@@ -69,6 +70,9 @@ const tags = arrayFactory(
     }
   ])
 )
+
+const store = useStore()
+store.currentDivisionId = 1
 
 const { editorData, initEditor, clearEditor } = useEditor()
 </script>

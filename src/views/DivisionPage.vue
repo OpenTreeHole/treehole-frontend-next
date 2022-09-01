@@ -232,8 +232,18 @@ import SpecialFlagChip from '@/components/tag/SpecialFlagChip.vue';
 import { arrayFactory } from '@/utils/reflect'
 import { camelizeKeys } from '@/utils'
 import { Tag, Floor } from '@/types';
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { useStore } from '@/store'
 
+const props = defineProps<{ divisionId: number }>()
+const store = useStore()
+watch(
+  () => props.divisionId,
+  () => {
+    store.currentDivisionId = props.divisionId
+  },
+  { immediate: true }
+)
 const mode = ref(1);
 const setMode = (num: number) => {
   mode.value = num;

@@ -3,9 +3,11 @@ import DivisionPage from '@/views/DivisionPage.vue'
 import HolePage from '@/views/HolePage.vue'
 import AdminPage from '@/views/AdminPage.vue'
 import SettingsPage from '@/views/SettingsPage.vue'
+import LicensePage from '@/views/LicensePage.vue'
 import ReportView from '@/views/admin/ReportView.vue'
 import UsersView from '@/views/admin/UsersView.vue'
 import AdminHistoryView from '@/views/admin/AdminHistoryView.vue'
+import { useStore } from '@/store'
 
 declare module 'vue-router' {
   interface RouteMeta {
@@ -48,7 +50,7 @@ export const adminRoutes: RouteRecordRaw[] = [
   }
 ]
 
-const routes: RouteRecordRaw[] = [
+export const routes: RouteRecordRaw[] = [
   {
     path: '/division/:id',
     name: 'division',
@@ -59,7 +61,11 @@ const routes: RouteRecordRaw[] = [
     component: DivisionPage,
     props: (route) => ({
       divisionId: parseInt(route.params.id as string)
-    })
+    }),
+    beforeEnter: (route) => {
+      const store = useStore()
+      store.currentDivisionId = parseInt(route.params.id as string)
+    }
   },
   {
     path: '/hole/:id',
@@ -92,6 +98,15 @@ const routes: RouteRecordRaw[] = [
       requiresAuth: true
     },
     component: SettingsPage
+  },
+  {
+    path: '/license',
+    name: 'license',
+    meta: {
+      title: '协议',
+      requiresAuth: false
+    },
+    component: LicensePage
   },
   {
     path: '/',

@@ -43,41 +43,42 @@
           <v-list>
             <v-list-subheader> 分区 </v-list-subheader>
             <v-list-item
-              value="树洞"
-              active-color="#03a9f4"
+              v-if="store.divisions.length === 0"
+              class="text-left pl-10"
             >
-              <v-list-item-title>树洞</v-list-item-title>
+              <span class="text-neutral-400">加载中...</span>
             </v-list-item>
             <v-list-item
-              value="圆桌"
-              active-color="#03a9f4"
+              v-for="(division, i) in store.divisions"
+              :key="i"
+              class="text-left pl-10 cursor-pointer select-none"
+              :class="
+                getNavItemClass(
+                  (route.name === 'division' || route.name === 'hole') &&
+                    store.currentDivisionId === division.id
+                )
+              "
+              @click="router.push(`/division/${division.id}`)"
             >
-              <v-list-item-title>圆桌</v-list-item-title>
+              <v-list-item-title>{{ division.name }}</v-list-item-title>
             </v-list-item>
+            <v-divider />
             <v-list-item
-              value="站务"
-              active-color="#03a9f4"
-            >
-              <v-list-item-title>站务</v-list-item-title>
-            </v-list-item>
-            <v-list-item
-              value="管理"
-              active-color="#03a9f4"
+              class="text-left pl-10 cursor-pointer select-none"
+              :class="getNavItemClass(route.path.startsWith('/admin'))"
+              @click="router.push('/admin')"
             >
               <v-list-item-title>管理</v-list-item-title>
             </v-list-item>
             <v-divider />
             <v-list-item
-              value="设置"
-              active-color="#03a9f4"
+              v-for="(r, i) in otherRoutes"
+              :key="i"
+              class="text-left pl-10 cursor-pointer select-none"
+              :class="getNavItemClass(route.path === r.path)"
+              @click="router.push(r.path)"
             >
-              <v-list-item-title>设置</v-list-item-title>
-            </v-list-item>
-            <v-list-item
-              value="协议"
-              active-color="#03a9f4"
-            >
-              <v-list-item-title>协议</v-list-item-title>
+              {{ r.meta.title }}
             </v-list-item>
           </v-list>
         </div>
@@ -92,62 +93,73 @@
   </div>
 </template>
 
-<script lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import Logo from '@/assets/img.png'
 import { ref } from 'vue'
-export default {
-  setup() {
-    const items = [
-      { title: '搜索标签：[[tag]]', value: '1' },
-      { title: '搜索洞号：#hole', value: '2' },
-      { title: '搜索楼层：##floorid', value: '3' },
-      { title: '搜索文本：text', value: '4' }
-    ]
-    const searchBar = ref({ input: '', search: '', tips: items })
-    const onClickSearchTip = (value: any) => {
-      console.log('clicked')
-      if (value.value) {
-        switch (value.id) {
-          case '1':
-            searchBar.value.input = '[[' + searchBar.value.search.replace(/[#']+/g, '') + ']]'
-            break
-          case '2':
-            searchBar.value.input = '#' + searchBar.value.search.replace(/[[\]#']+/g, '')
-            break
-          case '3':
-            searchBar.value.input = '##' + searchBar.value.search.replace(/[[\]#']+/g, '')
-            break
-          default:
-            searchBar.value.input = searchBar.value.search.replace(/[[\]#']+/g, '')
-        }
-      } else {
-        switch (value.id) {
-          case '1':
-            searchBar.value.input = searchBar.value.search.replace(/[[\]']+/g, '')
-            break
-          case '2':
-          case '3':
-            searchBar.value.input = searchBar.value.search.replace(/[#']+/g, '')
-            break
-          default:
-        }
-      }
-      searchBar.value.search = searchBar.value.input
+import { useStore } from '@/store'
+import { useRoute, useRouter } from 'vue-router'
+import { routes } from '@/router'
+
+const router = useRouter()
+const route = useRoute()
+const store = useStore()
+const navActiveItemClass = 'text-blue-500 bg-opacity-50 bg-gray-200'
+const navInactiveItemClass = 'hover:bg-opacity-30 hover:bg-gray-200'
+const getNavItemClass = (active: boolean) => {
+  return active ? navActiveItemClass : navInactiveItemClass
+}
+
+const otherRoutes = routes.filter(
+  (v) => v.name && ['/division', '/hole', '/admin'].every((u) => !v.path.startsWith(u))
+)
+console.log(otherRoutes)
+
+const items = [
+  { title: '搜索标签：[[tag]]', value: '1' },
+  { title: '搜索洞号：#hole', value: '2' },
+  { title: '搜索楼层：##floorid', value: '3' },
+  { title: '搜索文本：text', value: '4' }
+]
+const searchBar = ref({ input: '', search: '', tips: items })
+const onClickSearchTip = (value: any) => {
+  console.log('clicked')
+  if (value.value) {
+    switch (value.id) {
+      case '1':
+        searchBar.value.input = '[[' + searchBar.value.search.replace(/[#']+/g, '') + ']]'
+        break
+      case '2':
+        searchBar.value.input = '#' + searchBar.value.search.replace(/[[\]#']+/g, '')
+        break
+      case '3':
+        searchBar.value.input = '##' + searchBar.value.search.replace(/[[\]#']+/g, '')
+        break
+      default:
+        searchBar.value.input = searchBar.value.search.replace(/[[\]#']+/g, '')
     }
-    const submitSearch = () => {
-      if (searchBar.value.search != '') {
-        // todo: reg for checking whether search is valid
-        searchBar.value.input = searchBar.value.search
-        console.log('search ' + searchBar.value.search)
-        // todo
-      }
+  } else {
+    switch (value.id) {
+      case '1':
+        searchBar.value.input = searchBar.value.search.replace(/[[\]']+/g, '')
+        break
+      case '2':
+      case '3':
+        searchBar.value.input = searchBar.value.search.replace(/[#']+/g, '')
+        break
+      default:
     }
-    return {
-      Logo,
-      searchBar,
-      onClickSearchTip,
-      submitSearch
-    }
+  }
+  searchBar.value.search = searchBar.value.input
+}
+const submitSearch = () => {
+  if (searchBar.value.search != '') {
+    // todo: reg for checking whether search is valid
+    searchBar.value.input = searchBar.value.search
+    console.log('search ' + searchBar.value.search)
+    // todo
   }
 }
 </script>
