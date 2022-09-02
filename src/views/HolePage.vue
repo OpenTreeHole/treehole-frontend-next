@@ -17,7 +17,7 @@ const floors = arrayFactory(
     {
       anonyname: 'Dest1n1',
       content:
-        '现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
+        '# 1\n现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
         '\n' +
         '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。',
       deleted: false,
@@ -81,7 +81,7 @@ const { editorData, initEditor, clearEditor } = useEditor()
   <v-container class="px-0">
     <div class="flex lg:px-4">
       <v-col class="max-w-full lg:max-w-[65%] 3xl:max-w-[55%] px-0">
-        <v-list class="pt-0">
+        <v-list class="px-2 -mx-2 py-4 -my-4">
           <div class="border-b-sm">
             <div class="text-3xl px-6 pb-2 flex justify-between">
               <div class="flex grow-0">#123123</div>

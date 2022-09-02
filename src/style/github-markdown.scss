@@ -98,8 +98,8 @@
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   margin: 0;
-  color: var(--color-fg-default);
-  background-color: var(--color-canvas-default);
+  color: rgb(var(--v-theme-on-surface));
+  background-color: rgb(var(--v-theme-surface));
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
   font-size: 16px;
   line-height: 1.5;
@@ -171,12 +171,7 @@
   font-weight: 600;
   padding-bottom: .3em;
   font-size: 2em;
-  border-bottom: 1px solid var(--color-border-muted);
-}
-
-.markdown-viewer mark {
-  background-color: var(--color-attention-subtle);
-  color: var(--color-text-primary);
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 
 .markdown-viewer small {
@@ -203,7 +198,7 @@
   border-style: none;
   max-width: 100%;
   box-sizing: content-box;
-  background-color: var(--color-canvas-default);
+  background-color: var(--v-theme-surface);
 }
 
 .markdown-viewer code,
@@ -221,11 +216,11 @@
   box-sizing: content-box;
   overflow: hidden;
   background: transparent;
-  border-bottom: 1px solid var(--color-border-muted);
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   height: .25em;
   padding: 0;
   margin: 24px 0;
-  background-color: var(--color-border-default);
+  background-color: rgba(var(--v-border-color), var(--v-border-opacity));
   border: 0;
 }
 
@@ -355,7 +350,7 @@
   font-weight: 600;
   padding-bottom: .3em;
   font-size: 1.5em;
-  border-bottom: 1px solid var(--color-border-muted);
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 
 .markdown-viewer h3 {
@@ -376,7 +371,6 @@
 .markdown-viewer h6 {
   font-weight: 600;
   font-size: .85em;
-  color: var(--color-fg-muted);
 }
 
 .markdown-viewer p {
