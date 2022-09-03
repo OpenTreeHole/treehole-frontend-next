@@ -13,7 +13,6 @@
               <v-btn @click="setMode(1)">样式1</v-btn>
               <v-btn @click="setMode(2)">样式2</v-btn>
               <v-btn @click="setMode(3)">样式3</v-btn>
-              <v-btn @click="setMode(4)">样式4</v-btn>
             </div>
             <div class="flex items-center space-x-2">
               <span>回复样式:</span>
@@ -45,25 +44,27 @@
                   v-if="index === 0"
                   :text="specialTag"
                   :color="'red'"
+                  :size="'small'"
                 ></SpecialFlagChip>
               </div>
-              <div class="w-full flex items-center flex-wrap">
+              <div class="w-full flex items-center flex-wrap gap-y-2">
                 <TagChip
                   v-for="(tag, tagIndex) in tags"
                   :key="tagIndex"
                   class="mr-2 my-1"
                   :tag="tag"
+                  :size="'small'"
                 ></TagChip>
               </div>
-              <div class="w-full text-lg">
+              <div class="w-full my-2">
                 {{ content }}
               </div>
-              <div class="text-neutral-400 flex justify-between">
+              <div class="text-neutral-400 flex justify-between text-sm">
                 <span>#114514</span>
                 <span>
                   <v-icon
                     icon="mdi-message-outline"
-                    :size="16"
+                    :size="20"
                   >
                   </v-icon>
                   810
@@ -129,10 +130,10 @@
 
             <template v-if="mode === 3">
               <HoleActionMenu
-                    :size="20"
-                    :icon="'mdi-chevron-down'"
-                    class="float-right"
-                  ></HoleActionMenu>
+                :size="20"
+                :icon="'mdi-chevron-down'"
+                class="float-right"
+              ></HoleActionMenu>
               <div class="w-full flex flex-wrap items-center gap-y-2">
                 <span class="text-lg mr-4">#114514</span>
                 <TagChip
@@ -181,13 +182,12 @@
                   <span>Rick Astley 发布于 2022/7/21</span>
                 </div>
               </div>
-            
             </template>
 
             <template v-if="mode === 5"></template>
 
             <template v-if="replyMode === 1">
-              <div class="w-full border-t py-2">
+              <div class="w-full border-t mt-2 py-2 text-sm">
                 <div>
                   {{ reply }}
                 </div>
@@ -197,7 +197,7 @@
               </div>
             </template>
             <template v-if="replyMode === 2">
-              <div class="w-full border-t py-2 text-sm">
+              <div class="w-full border-t mt-2 py-2 text-sm">
                 <div class="text-neutral-400 my-1">Linus Torvalds 回复于 2022/8/12 :</div>
                 <div>
                   {{ reply }}
@@ -325,7 +325,6 @@ import { camelizeKeys } from '@/utils'
 import { Tag, Floor } from '@/types'
 import { ref, watch } from 'vue'
 import { useStore } from '@/store'
-import HoleActionMenuVue from '@/components/menu/HoleActionMenu.vue'
 import HoleActionMenu from '@/components/menu/HoleActionMenu.vue'
 
 const props = defineProps<{ divisionId: number }>()
