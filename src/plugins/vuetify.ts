@@ -24,13 +24,15 @@ export const vuetify = createVuetify({
       light: {
         dark: false,
         colors: {
-          primary: '#f5f5f5'
+          primary: '#f5f5f5',
+          surface: '#ffffff'
         }
       },
       dark: {
         dark: true,
         colors: {
-          primary: '#1b1b1b'
+          primary: '#1b1b1b',
+          surface: '#191b1c'
         }
       }
     }

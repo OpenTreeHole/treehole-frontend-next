@@ -20,7 +20,6 @@ const route = useRoute()
 const router = useRouter()
 
 const store = useStore()
-
 router.beforeEach(async () => {
   // Get division data
   const localDivisions = localStorage.getItem('divisions')
@@ -36,6 +35,12 @@ router.beforeEach(async () => {
     localStorage.setItem('divisions', JSON.stringify(divisions))
   }
 })
+
+store.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+window.matchMedia('(prefers-color-scheme: dark)').onchange = () => {
+  store.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+}
 </script>
 
 <style>

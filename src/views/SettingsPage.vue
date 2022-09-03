@@ -56,9 +56,9 @@
           <div class="flex mt-3 items-center">
             <span>是否开启夜间模式：</span>
             <v-switch
-              v-model="darkMode"
+              v-model="store.dark"
               hide-details
-              :label="darkMode ? '夜间模式开启' : '夜间模式关闭'"
+              :label="store.dark ? '夜间模式开启' : '夜间模式关闭'"
               color="green"
             />
           </div>
@@ -75,9 +75,10 @@
 import { arrayFactory } from '@/utils/reflect'
 import { Tag } from '@/types'
 import TagChip from '@/components/tag/TagChip.vue'
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
+import { useStore } from '@/store'
 
-const darkMode = ref(false)
+const store = useStore()
 
 const blockedTags = reactive(
   arrayFactory(Tag, [
