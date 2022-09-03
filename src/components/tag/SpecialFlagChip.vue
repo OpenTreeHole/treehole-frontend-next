@@ -3,6 +3,7 @@
     class="select-none"
     label
     :color="color"
+    :size="size"
   >
     {{ text }}
   </v-chip>
@@ -12,7 +13,7 @@
   setup
   lang="ts"
 >
-const props = defineProps<{ text: string; color: string }>()
+const { size = 'default' } = defineProps<{ text: string; color: string; size?: string | number }>()
 </script>
 
 <style

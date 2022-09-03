@@ -6,7 +6,14 @@ import vuetify from 'vite-plugin-vuetify'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), vuetify({ styles: 'expose' })],
+  plugins: [
+    vue({
+      reactivityTransform: true
+    }),
+    vuetify({
+      styles: 'expose'
+    })
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')

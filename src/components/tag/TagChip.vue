@@ -3,8 +3,8 @@
     v-ripple
     :color="tag.color"
     variant="outlined"
+    :size="size"
     class="select-none"
-    small
   >
     {{ tag.name }}
   </v-chip>
@@ -16,5 +16,5 @@
 >
 import { Tag } from '@/types'
 
-defineProps<{ tag: Tag }>()
+const { size = 'default' } = defineProps<{ tag: Tag; size?: string | number }>()
 </script>
