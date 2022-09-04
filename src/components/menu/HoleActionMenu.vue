@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center">
+  <div class="self-center">
     <v-menu
       bottom
       offset-y

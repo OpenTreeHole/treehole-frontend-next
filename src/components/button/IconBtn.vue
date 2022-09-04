@@ -9,6 +9,12 @@
         class="text-left"
         :icon="icon"
       />
+      <span
+        v-if="text"
+        class="pl-1 self-center"
+      >
+        {{ text }}
+      </span>
     </span>
   </span>
 </template>
@@ -19,7 +25,7 @@
 >
 import { useSlots } from 'vue'
 
-defineProps<{ small?: boolean }>()
+defineProps<{ small?: boolean; text?: string }>()
 
 defineEmits<{
   (e: 'click'): void

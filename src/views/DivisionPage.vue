@@ -1,7 +1,7 @@
 <template>
   <v-container class="px-0">
     <div class="flex">
-      <v-col class="max-w-full lg:max-w-[55%] px-0">
+      <v-col class="max-w-full lg:max-w-[65%] 3xl:max-w-[55%] px-0">
         <v-list class="pt-0">
           <div class="text-h4 border-b px-10 pb-8 flex justify-between">
             <div class="flex grow-0">树洞</div>
@@ -36,7 +36,7 @@
           <v-list-item
             v-for="(content, index) in contentsShort"
             :key="index"
-            class="pl-16 py-2 border-b-2 flex-col text-left"
+            class="pl-16 py-3 border-b-sm flex-col text-left"
           >
             <template v-if="mode === 1">
               <div class="w-full flex justify-end">
@@ -75,23 +75,22 @@
 
             <template v-if="mode === 2">
               <div class="w-full flex flex-wrap items-center gap-y-2">
-                <span class="text-lg mr-4">#114514</span>
                 <TagChip
                   v-for="(tag, tagIndex) in tags"
                   :key="tagIndex"
                   class="mr-2"
+                  size="small"
                   :tag="tag"
-                  :size="'small'"
                 ></TagChip>
                 <div class="grow flex justify-end space-x-3">
                   <SpecialFlagChip
                     v-if="index === 0"
                     :text="specialTag"
-                    :color="'red'"
-                    :size="'small'"
+                    color="red"
+                    size="small"
                   ></SpecialFlagChip>
                   <HoleActionMenu
-                    :size="20"
+                    :size="24"
                     :icon="'mdi-chevron-down'"
                   ></HoleActionMenu>
                 </div>
@@ -99,31 +98,25 @@
               <div class="w-full my-2">
                 {{ content }}
               </div>
-              <div class="flex justify-between text-sm text-neutral-400">
-                <div class="flex space-x-10 items-center">
-                  <span>
-                    <v-icon
-                      icon="mdi-message-reply-outline"
-                      :size="20"
-                    ></v-icon>
-                    回复 810
-                  </span>
-                  <span>
-                    <v-icon
-                      icon="mdi-bookmark-outline"
-                      :size="20"
-                    ></v-icon>
-                    收藏
-                  </span>
+              <div class="flex justify-between text-sm text-gray-400">
+                <div class="text-neutral-400">
+                  <span class="pr-2 border-r-2">#114514</span>
+                  <span class="pl-2">发布于 2022/7/21</span>
+                </div>
+                <div class="flex space-x-2 items-center">
+                  <IconBtn
+                    class="px-0"
+                    text="810"
+                  >
+                    mdi-comment-outline
+                  </IconBtn>
+                  <IconBtn class="px-0">mdi-bookmark-outline</IconBtn>
                   <span>
                     <HoleActionMenu
                       :size="20"
                       :icon="'mdi-dots-horizontal'"
                     ></HoleActionMenu>
                   </span>
-                </div>
-                <div class="text-neutral-400">
-                  <span>Rick Astley 发布于 2022/7/21</span>
                 </div>
               </div>
             </template>
@@ -241,7 +234,7 @@
           </v-list-item>
         </v-list>
       </v-col>
-      <v-col class="hidden lg:block max-w-[25%] pl-5">
+      <v-col class="hidden lg:block lg:max-w-[35%] xl:max-w-[30%] 3xl:max-w-[25%] pl-5">
         <v-card
           class="mx-auto"
           max-width="368"
@@ -326,6 +319,7 @@ import { Tag, Floor } from '@/types'
 import { ref, watch } from 'vue'
 import { useStore } from '@/store'
 import HoleActionMenu from '@/components/menu/HoleActionMenu.vue'
+import IconBtn from '@/components/button/IconBtn.vue'
 
 const props = defineProps<{ divisionId: number }>()
 const store = useStore()
