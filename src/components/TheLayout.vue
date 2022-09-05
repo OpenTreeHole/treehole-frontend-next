@@ -11,7 +11,6 @@
             max-width="199px"
           ></v-img>
           <v-autocomplete
-            v-model="searchBar.input"
             v-model:search="searchBar.search"
             class="search-bar max-w-3xl ml-8"
             variant="outlined"
@@ -21,14 +20,31 @@
             hide-details
             prepend-inner-icon="mdi-magnify"
             placeholder="使用标签、帖子编号、楼层编号、或文本进行搜索（筛选）"
-            @keyup.enter="submitSearch"
           >
             <template #no-data>
               <v-list
+                v-if="searchBar.search != ''"
                 density="compact"
-                :items="searchBar.tips"
-                @click:select="onClickSearchTip"
-              ></v-list>
+              >
+                <v-list-item
+                  v-for="(tag, i) in searchBar.tagSuggestion"
+                  :key="i"
+                  @click="searchByTag(tag.name)"
+                >
+                  查看标签：[[{{ tag.name }}]]
+                </v-list-item>
+                <v-list-item
+                  v-if="searchBar.isNumber == 1"
+                  @click="searchByHoleId"
+                  >搜索洞号：#{{ searchBar.search }}</v-list-item
+                >
+                <v-list-item
+                  v-if="searchBar.isNumber == 1"
+                  @click="searchByFloorId"
+                  >跳转至楼层：##{{ searchBar.search }}</v-list-item
+                >
+                <v-list-item @click="searchByContent">搜索文本：{{ searchBar.search }}</v-list-item>
+              </v-list>
             </template>
           </v-autocomplete>
         </div>
@@ -98,7 +114,7 @@
   lang="ts"
 >
 import Logo from '@/assets/img.png'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
 import { routes } from '@/router'
@@ -117,50 +133,39 @@ const otherRoutes = routes.filter(
 )
 console.log(otherRoutes)
 
-const items = [
-  { title: '搜索标签：[[tag]]', value: '1' },
-  { title: '搜索洞号：#hole', value: '2' },
-  { title: '搜索楼层：##floorid', value: '3' },
-  { title: '搜索文本：text', value: '4' }
-]
-const searchBar = ref({ input: '', search: '', tips: items })
-const onClickSearchTip = (value: any) => {
-  console.log('clicked')
-  if (value.value) {
-    switch (value.id) {
-      case '1':
-        searchBar.value.input = '[[' + searchBar.value.search.replace(/[#']+/g, '') + ']]'
-        break
-      case '2':
-        searchBar.value.input = '#' + searchBar.value.search.replace(/[[\]#']+/g, '')
-        break
-      case '3':
-        searchBar.value.input = '##' + searchBar.value.search.replace(/[[\]#']+/g, '')
-        break
-      default:
-        searchBar.value.input = searchBar.value.search.replace(/[[\]#']+/g, '')
+const tagSuggestionList: any = []
+const searchBar = ref({ isTag: 0, isNumber: 0, search: '', tagSuggestion: tagSuggestionList })
+watch(
+  () => searchBar.value.search,
+  (value) => {
+    if (/^\d*$/.test(value)) {
+      searchBar.value.isNumber = 1
+    } else {
+      searchBar.value.isNumber = 0
     }
-  } else {
-    switch (value.id) {
-      case '1':
-        searchBar.value.input = searchBar.value.search.replace(/[[\]']+/g, '')
-        break
-      case '2':
-      case '3':
-        searchBar.value.input = searchBar.value.search.replace(/[#']+/g, '')
-        break
-      default:
-    }
-  }
-  searchBar.value.search = searchBar.value.input
+    searchBar.value.tagSuggestion = [
+      {
+        name: value
+      },
+      {
+        name: value + ' test'
+      }
+    ]
+    // searchBar.value.tagSuggestion = /tag?s=value
+  },
+  { immediate: false }
+)
+const searchByTag = (tagName: string) => {
+  console.log('search tag ' + tagName)
 }
-const submitSearch = () => {
-  if (searchBar.value.search != '') {
-    // todo: reg for checking whether search is valid
-    searchBar.value.input = searchBar.value.search
-    console.log('search ' + searchBar.value.search)
-    // todo
-  }
+const searchByHoleId = () => {
+  console.log('search hole ' + searchBar.value.search)
+}
+const searchByFloorId = () => {
+  console.log('search floor ' + searchBar.value.search)
+}
+const searchByContent = () => {
+  console.log('search by content ' + searchBar.value.search)
 }
 </script>
 
