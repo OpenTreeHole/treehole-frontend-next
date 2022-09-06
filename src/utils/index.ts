@@ -44,7 +44,7 @@ export const convertDate = (v: any): string => {
   return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
 }
 
-export const timeDifference = (date: Date): string => {
+export const timeDifference = (date: Date, detailed = true): string => {
   const now = new Date()
 
   let seconds = Math.floor((now.getTime() - date.getTime()) / 1000)
@@ -61,7 +61,8 @@ export const timeDifference = (date: Date): string => {
   } else if (seconds < 604800) {
     return Math.floor(seconds / 86400) + '天前'
   } else {
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+    if (detailed) return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+    else return date.toLocaleDateString()
   }
 }
 
@@ -133,7 +134,6 @@ export const checkType = (object: any, keysOfType: string[]): boolean => {
 }
 
 export const parseToTypora = (markdown: string) => {
-  markdown = markdown.trim().replace('\n\n', '\n').replace('\n', '\n\n')
   const parseResult = TyporaParser.parse(markdown)
   return parseResult.renderHTML({
     latexRenderer: new KatexRenderer(),
