@@ -112,7 +112,6 @@ const { editorData, initEditor, clearEditor } = useEditor()
                 </div>
               </div>
               <Editor
-                :key="editorData"
                 class="mx-6"
                 :data="editorData"
                 @close="clearEditor"

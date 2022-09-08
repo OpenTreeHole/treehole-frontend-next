@@ -78,7 +78,7 @@
               :class="getNavItemClass(route.path === r.path)"
               @click="router.push(r.path)"
             >
-              {{ r.meta.title }}
+              {{ r.meta?.title }}
             </v-list-item>
           </v-list>
         </div>

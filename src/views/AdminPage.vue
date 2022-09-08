@@ -12,7 +12,7 @@
               :key="i"
               :value="adminRoute.name"
             >
-              {{ adminRoute.meta.title }}
+              {{ adminRoute.meta?.title }}
             </v-tab>
           </v-tabs>
         </div>
