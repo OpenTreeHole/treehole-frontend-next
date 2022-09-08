@@ -7,7 +7,7 @@
       {{ floor.anonyname }}
     </span>
     <span class="px-2 text-neutral-400 text-sm self-center flex-shrink-1 line-clamp-1">
-      {{ timeDifference(floor.timeUpdated) }}
+      {{ displayFloorId ? `##${floor.id}` : timeDifference(floor.timeUpdated) }}
     </span>
     <span
       v-if="extraInfo"
@@ -34,7 +34,7 @@ import { timeDifference, generateColor } from '@/utils'
 import { computed } from 'vue'
 import { Floor } from '@/types'
 
-const props = defineProps<{ floor: Floor }>()
+const props = defineProps<{ floor: Floor; displayFloorId?: boolean }>()
 
 const computeColorClass = (str: string) => 'text-' + generateColor(str)
 

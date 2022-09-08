@@ -134,6 +134,11 @@ export const checkType = (object: any, keysOfType: string[]): boolean => {
 }
 
 export const parseToTypora = (markdown: string) => {
+  markdown = markdown
+    .replaceAll('\n\n', '\n')
+    .replaceAll(/\n>\s+\n/g, '!!QUOTE_NEWLINE_REPLACE!!')
+    .replaceAll('\n', '\n\n')
+    .replaceAll('!!QUOTE_NEWLINE_REPLACE!!', '\n> \n')
   const parseResult = TyporaParser.parse(markdown)
   return parseResult.renderHTML({
     latexRenderer: new KatexRenderer(),
