@@ -10,27 +10,7 @@
             :src="Logo"
             max-width="199px"
           ></v-img>
-          <v-autocomplete
-            v-model="searchBar.input"
-            v-model:search="searchBar.search"
-            class="search-bar max-w-3xl ml-8"
-            variant="outlined"
-            color="white"
-            density="compact"
-            full-width
-            hide-details
-            prepend-inner-icon="mdi-magnify"
-            placeholder="使用标签、帖子编号、楼层编号、或文本进行搜索（筛选）"
-            @keyup.enter="submitSearch"
-          >
-            <template #no-data>
-              <v-list
-                density="compact"
-                :items="searchBar.tips"
-                @click:select="onClickSearchTip"
-              ></v-list>
-            </template>
-          </v-autocomplete>
+          <search-bar></search-bar>
         </div>
       </v-app-bar-title>
     </v-app-bar>
@@ -98,7 +78,7 @@
   lang="ts"
 >
 import Logo from '@/assets/img.png'
-import { ref } from 'vue'
+import SearchBar from '@/components/action/SearchBar.vue'
 import { useStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
 import { routes } from '@/router'
@@ -116,66 +96,6 @@ const otherRoutes = routes.filter(
   (v) => v.name && ['/division', '/hole', '/admin'].every((u) => !v.path.startsWith(u))
 )
 console.log(otherRoutes)
-
-const items = [
-  { title: '搜索标签：[[tag]]', value: '1' },
-  { title: '搜索洞号：#hole', value: '2' },
-  { title: '搜索楼层：##floorid', value: '3' },
-  { title: '搜索文本：text', value: '4' }
-]
-const searchBar = ref({ input: '', search: '', tips: items })
-const onClickSearchTip = (value: any) => {
-  console.log('clicked')
-  if (value.value) {
-    switch (value.id) {
-      case '1':
-        searchBar.value.input = '[[' + searchBar.value.search.replace(/[#']+/g, '') + ']]'
-        break
-      case '2':
-        searchBar.value.input = '#' + searchBar.value.search.replace(/[[\]#']+/g, '')
-        break
-      case '3':
-        searchBar.value.input = '##' + searchBar.value.search.replace(/[[\]#']+/g, '')
-        break
-      default:
-        searchBar.value.input = searchBar.value.search.replace(/[[\]#']+/g, '')
-    }
-  } else {
-    switch (value.id) {
-      case '1':
-        searchBar.value.input = searchBar.value.search.replace(/[[\]']+/g, '')
-        break
-      case '2':
-      case '3':
-        searchBar.value.input = searchBar.value.search.replace(/[#']+/g, '')
-        break
-      default:
-    }
-  }
-  searchBar.value.search = searchBar.value.input
-}
-const submitSearch = () => {
-  if (searchBar.value.search != '') {
-    // todo: reg for checking whether search is valid
-    searchBar.value.input = searchBar.value.search
-    console.log('search ' + searchBar.value.search)
-    // todo
-  }
-}
 </script>
 
-<style lang="scss">
-.search-bar {
-  --v-input-padding-top: 6px !important;
-}
-
-.search-bar .v-field {
-  background: rgb(var(--v-theme-surface));
-  border-color: transparent;
-  color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
-}
-
-.search-bar .v-field__prepend-inner {
-  padding-top: 8px;
-}
-</style>
+<style lang="scss"></style>
