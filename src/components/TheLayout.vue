@@ -10,43 +10,7 @@
             :src="Logo"
             max-width="199px"
           ></v-img>
-          <v-autocomplete
-            v-model:search="searchBar.search"
-            class="search-bar max-w-3xl ml-8"
-            variant="outlined"
-            color="white"
-            density="compact"
-            full-width
-            hide-details
-            prepend-inner-icon="mdi-magnify"
-            placeholder="使用标签、帖子编号、楼层编号、或文本进行搜索（筛选）"
-          >
-            <template #no-data>
-              <v-list
-                v-if="searchBar.search != ''"
-                density="compact"
-              >
-                <v-list-item
-                  v-for="(tag, i) in searchBar.tagSuggestion"
-                  :key="i"
-                  @click="searchByTag(tag.name)"
-                >
-                  查看标签：[[{{ tag.name }}]]
-                </v-list-item>
-                <v-list-item
-                  v-if="searchBar.isNumber == 1"
-                  @click="searchByHoleId"
-                  >搜索洞号：#{{ searchBar.search }}</v-list-item
-                >
-                <v-list-item
-                  v-if="searchBar.isNumber == 1"
-                  @click="searchByFloorId"
-                  >跳转至楼层：##{{ searchBar.search }}</v-list-item
-                >
-                <v-list-item @click="searchByContent">搜索文本：{{ searchBar.search }}</v-list-item>
-              </v-list>
-            </template>
-          </v-autocomplete>
+          <search-bar></search-bar>
         </div>
       </v-app-bar-title>
     </v-app-bar>
@@ -114,7 +78,7 @@
   lang="ts"
 >
 import Logo from '@/assets/img.png'
-import { ref, watch } from 'vue'
+import SearchBar from '@/components/action/SearchBar.vue'
 import { useStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
 import { routes } from '@/router'
@@ -132,55 +96,6 @@ const otherRoutes = routes.filter(
   (v) => v.name && ['/division', '/hole', '/admin'].every((u) => !v.path.startsWith(u))
 )
 console.log(otherRoutes)
-
-const tagSuggestionList: any = []
-const searchBar = ref({ isTag: 0, isNumber: 0, search: '', tagSuggestion: tagSuggestionList })
-watch(
-  () => searchBar.value.search,
-  (value) => {
-    if (/^\d*$/.test(value)) {
-      searchBar.value.isNumber = 1
-    } else {
-      searchBar.value.isNumber = 0
-    }
-    searchBar.value.tagSuggestion = [
-      {
-        name: value
-      },
-      {
-        name: value + ' test'
-      }
-    ]
-    // searchBar.value.tagSuggestion = /tag?s=value
-  },
-  { immediate: false }
-)
-const searchByTag = (tagName: string) => {
-  console.log('search tag ' + tagName)
-}
-const searchByHoleId = () => {
-  console.log('search hole ' + searchBar.value.search)
-}
-const searchByFloorId = () => {
-  console.log('search floor ' + searchBar.value.search)
-}
-const searchByContent = () => {
-  console.log('search by content ' + searchBar.value.search)
-}
 </script>
 
-<style lang="scss">
-.search-bar {
-  --v-input-padding-top: 6px !important;
-}
-
-.search-bar .v-field {
-  background: rgb(var(--v-theme-surface));
-  border-color: transparent;
-  color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
-}
-
-.search-bar .v-field__prepend-inner {
-  padding-top: 8px;
-}
-</style>
+<style lang="scss"></style>
