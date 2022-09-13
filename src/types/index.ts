@@ -89,7 +89,7 @@ export class Hole {
   @Field()
   id: number
 
-  @Field({ factory: (v) => arrayFactory(Floor, v.floors) })
+  @Field({ factory: (v) => arrayFactory(Floor, v.prefetch) })
   floors: Floor[]
 
   @Field({ factory: (v, parent) => factory(Floor, parent.floors.firstFloor) })

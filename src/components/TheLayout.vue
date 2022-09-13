@@ -115,7 +115,6 @@ const getNavItemClass = (active: boolean) => {
 const otherRoutes = routes.filter(
   (v) => v.name && ['/division', '/hole', '/admin'].every((u) => !v.path.startsWith(u))
 )
-console.log(otherRoutes)
 
 const items = [
   { title: '搜索标签：[[tag]]', value: '1' },
