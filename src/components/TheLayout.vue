@@ -82,6 +82,7 @@ import SearchBar from '@/components/action/SearchBar.vue'
 import { useStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
 import { routes } from '@/router'
+import { ref } from 'vue'
 
 const router = useRouter()
 const route = useRoute()
