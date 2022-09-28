@@ -36,7 +36,7 @@
           <v-list-item
             v-for="(content, index) in contentsShort"
             :key="index"
-            class="pl-16 py-3 border-b-sm flex-col text-left"
+            class="pl-16 pt-3 border-b-sm flex-col text-left"
           >
             <template v-if="mode === 1">
               <div class="w-full flex justify-end">
@@ -98,7 +98,7 @@
               <div class="w-full my-2">
                 {{ content }}
               </div>
-              <div class="flex justify-between text-sm text-gray-400">
+              <div class="flex justify-between text-sm text-gray-400 my-1">
                 <div class="text-neutral-400">
                   <span class="pr-2 border-r-2">#114514</span>
                   <span class="pl-2">发布于 2022/7/21</span>
@@ -395,6 +395,7 @@ const tags = ref(allTags.slice(0, 1))
 const setTagsCount = (num: number) => {
   tags.value = allTags.slice(0, num)
 }
+const fun = ()=>{console.log('hi')}
 
 const specialTag = '测试用例'
 
