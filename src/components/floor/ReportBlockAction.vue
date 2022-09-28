@@ -47,7 +47,7 @@
           class="grow mr-2"
           hide-details
           variant="outlined"
-          autofocus="true"
+          :autofocus="true"
           density="compact"
         />
       </QuestionAction>

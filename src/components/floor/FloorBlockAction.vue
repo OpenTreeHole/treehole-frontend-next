@@ -41,7 +41,7 @@
             class="grow mr-2"
             hide-details
             variant="outlined"
-            autofocus="true"
+            :autofocus="true"
             density="compact"
           />
         </div>
@@ -57,7 +57,6 @@
         </p>
       </div>
       <Editor
-        :key="editorData"
         class="mr-2"
         :data="editorData"
         @close="action = ActionType.None"
@@ -73,7 +72,7 @@
           class="grow mr-2"
           hide-details
           variant="outlined"
-          autofocus="true"
+          :autofocus="true"
           density="compact"
         />
       </QuestionAction>

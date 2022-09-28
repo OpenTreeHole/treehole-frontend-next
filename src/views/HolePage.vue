@@ -4,12 +4,15 @@
 >
 import { arrayFactory } from '@/utils/reflect'
 import { DetailedFloor, Tag } from '@/types'
-import { camelizeKeys } from '@/utils'
+import { camelizeKeys, sleep } from '@/utils'
 import FloorBlock from '@/components/floor/FloorBlock.vue'
 import Editor from '@/components/editor/Editor.vue'
 import TagChip from '@/components/tag/TagChip.vue'
 import { useEditor } from '@/composables/editor'
 import { useStore } from '@/store'
+import { onMounted, provide } from 'vue'
+
+const props = defineProps<{ holeId: number; floorId?: number }>()
 
 const floors = arrayFactory(
   DetailedFloor,
@@ -17,9 +20,10 @@ const floors = arrayFactory(
     {
       anonyname: 'Dest1n1',
       content:
-        '# 1\n现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
+        '##112233\n 现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
         '\n' +
-        '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。',
+        '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。\n' +
+        '##112233',
       deleted: false,
       fold: '',
       hole_id: 0,
@@ -27,7 +31,104 @@ const floors = arrayFactory(
       is_me: false,
       like: 0,
       liked: 0,
-      mention: [],
+      mention: [
+        {
+          anonyname: 'Dest1n2',
+          content:
+            '现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
+            '\n' +
+            '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。\n',
+          deleted: false,
+          fold: '',
+          hole_id: 0,
+          id: 112233,
+          is_me: false,
+          like: 0,
+          liked: 0,
+          special_tag: '测试用例',
+          storey: 0,
+          time_created: '2022-07-27T17:07:39.802Z',
+          time_updated: '2022-07-27T17:07:39.802Z'
+        }
+      ],
+      special_tag: '测试用例',
+      storey: 0,
+      time_created: '2022-07-27T17:07:39.802Z',
+      time_updated: '2022-07-27T17:07:39.802Z'
+    },
+    {
+      anonyname: 'Dest1n1',
+      content:
+        '##112233\n 现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
+        '\n' +
+        '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。\n' +
+        '##112233',
+      deleted: false,
+      fold: '',
+      hole_id: 0,
+      id: 100002,
+      is_me: false,
+      like: 0,
+      liked: 0,
+      mention: [
+        {
+          anonyname: 'Dest1n2',
+          content:
+            '现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
+            '\n' +
+            '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。\n',
+          deleted: false,
+          fold: '',
+          hole_id: 0,
+          id: 112233,
+          is_me: false,
+          like: 0,
+          liked: 0,
+          special_tag: '测试用例',
+          storey: 0,
+          time_created: '2022-07-27T17:07:39.802Z',
+          time_updated: '2022-07-27T17:07:39.802Z'
+        }
+      ],
+      special_tag: '测试用例',
+      storey: 0,
+      time_created: '2022-07-27T17:07:39.802Z',
+      time_updated: '2022-07-27T17:07:39.802Z'
+    },
+    {
+      anonyname: 'Dest1n1',
+      content:
+        '##112233\n 现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
+        '\n' +
+        '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。\n' +
+        '##100001',
+      deleted: false,
+      fold: '',
+      hole_id: 0,
+      id: 100003,
+      is_me: false,
+      like: 0,
+      liked: 0,
+      mention: [
+        {
+          anonyname: 'Dest1n2',
+          content:
+            '现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
+            '\n' +
+            '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。\n',
+          deleted: false,
+          fold: '',
+          hole_id: 0,
+          id: 100001,
+          is_me: false,
+          like: 0,
+          liked: 0,
+          special_tag: '测试用例',
+          storey: 0,
+          time_created: '2022-07-27T17:07:39.802Z',
+          time_updated: '2022-07-27T17:07:39.802Z'
+        }
+      ],
       special_tag: '测试用例',
       storey: 0,
       time_created: '2022-07-27T17:07:39.802Z',
@@ -42,7 +143,7 @@ const floors = arrayFactory(
       deleted: true,
       fold: '该内容寄了，已被折叠',
       hole_id: 0,
-      id: 100002,
+      id: 100004,
       is_me: false,
       like: 0,
       liked: 0,
@@ -75,6 +176,21 @@ const store = useStore()
 store.currentDivisionId = 1
 
 const { editorData, initEditor, clearEditor } = useEditor()
+
+const scrollToFloor = (id: number) => {
+  const floorElement = document.getElementById(id.toString())
+  if (floorElement) window.scroll({ top: floorElement.offsetTop, behavior: 'smooth' })
+}
+
+provide('scrollToFloor', scrollToFloor)
+provide('holeId', props.holeId)
+
+onMounted(async () => {
+  if (props.floorId) {
+    await sleep(100)
+    scrollToFloor(props.floorId)
+  }
+})
 </script>
 
 <template>
@@ -112,7 +228,6 @@ const { editorData, initEditor, clearEditor } = useEditor()
                 </div>
               </div>
               <Editor
-                :key="editorData"
                 class="mx-6"
                 :data="editorData"
                 @close="clearEditor"
@@ -122,11 +237,11 @@ const { editorData, initEditor, clearEditor } = useEditor()
 
           <v-list-item
             v-for="(floor, index) in floors"
+            :id="floor.id"
             :key="index"
             class="px-0 py-5 border-b-sm flex-col text-left"
           >
             <FloorBlock
-              :id="floor.id"
               class="px-6"
               :floor="floor"
             />
@@ -158,8 +273,3 @@ const { editorData, initEditor, clearEditor } = useEditor()
     </div>
   </v-container>
 </template>
-
-<style
-  lang="scss"
-  scoped
-></style>

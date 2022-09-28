@@ -1,7 +1,7 @@
 <template>
   <v-container class="mx-0 px-0 pt-0">
     <div class="flex">
-      <v-col class="max-w-[55%] px-0 py-0">
+      <v-col class="max-w-full lg:max-w-[65%] 3xl:max-w-[55%] px-0">
         <div class="text-h4 border-b-sm flex justify-between">
           <v-tabs
             v-model="tab"
@@ -12,7 +12,7 @@
               :key="i"
               :value="adminRoute.name"
             >
-              {{ adminRoute.meta.title }}
+              {{ adminRoute.meta?.title }}
             </v-tab>
           </v-tabs>
         </div>

@@ -21,6 +21,8 @@ const router = useRouter()
 
 const store = useStore()
 router.beforeEach(async () => {
+  // TODO: use coroutine, save the original data
+
   // Get division data
   const localDivisions = localStorage.getItem('divisions')
   if (localDivisions) {

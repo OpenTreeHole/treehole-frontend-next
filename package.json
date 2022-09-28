@@ -28,6 +28,7 @@
     "marked": "^4.0.17",
     "pinia": "^2.0.21",
     "reflect-metadata": "^0.1.13",
+    "rollup-plugin-visualizer": "^5.8.1",
     "sass": "^1.53.0",
     "typora-parser": "^1.0.3",
     "vue": "^3.2.25",

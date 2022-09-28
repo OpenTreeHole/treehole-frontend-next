@@ -41,7 +41,7 @@ import Table from '@editorjs/table'
 import MathTex from 'editorjs-math'
 import { parseEditorJsToMarkdown } from '@/utils/editor'
 
-const { data = { blocks: [] } } = defineProps<{ data?: { blocks: any[] } }>()
+const props = defineProps<{ data: { blocks: any[] } | null }>()
 
 defineEmits<{
   (e: 'close'): void
@@ -151,7 +151,7 @@ onMounted(() => {
     /**
      * Initial Editor data
      */
-    data: data,
+    data: props.data || { blocks: [] },
     onChange: async (api, event) => {
       console.log('something changed', event)
       const data = await api.saver.save()

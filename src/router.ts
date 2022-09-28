@@ -76,7 +76,8 @@ export const routes: RouteRecordRaw[] = [
     },
     component: HolePage,
     props: (route) => ({
-      holeId: parseInt(route.params.id as string)
+      holeId: parseInt(route.params.id as string),
+      floorId: route.query.floor && parseInt(route.query.floor as string)
     })
   },
   {
