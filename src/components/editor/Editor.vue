@@ -157,6 +157,7 @@ onMounted(() => {
       const data = await api.saver.save()
 
       const content = data.blocks
+      console.log(content)
       const parsedData = parseEditorJsToMarkdown(content)
     },
     onReady: () => {

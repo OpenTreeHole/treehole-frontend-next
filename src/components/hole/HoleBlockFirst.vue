@@ -15,7 +15,7 @@
       ></SpecialFlagChip>
       <HoleActionMenu
         :size="24"
-        :icon="'mdi-chevron-down'"
+        icon="mdi-chevron-down"
       ></HoleActionMenu>
     </div>
   </div>
@@ -38,7 +38,7 @@
       <span>
         <HoleActionMenu
           :size="20"
-          :icon="'mdi-dots-horizontal'"
+          icon="mdi-dots-horizontal"
         ></HoleActionMenu>
       </span>
     </div>
