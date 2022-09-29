@@ -33,7 +33,6 @@ defineEmits<{
 
 const slots = useSlots()
 const icon = (slots['default']!()[0].children as string).trim()
-console.log(icon)
 </script>
 
 <style

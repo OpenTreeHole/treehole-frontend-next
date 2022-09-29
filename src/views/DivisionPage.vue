@@ -7,196 +7,9 @@
             <div class="flex grow-0">树洞</div>
             <v-btn>发布树洞</v-btn>
           </div>
-          <div class="border-b p-8">
-            <div class="flex items-center space-x-2">
-              <span>树洞样式:</span>
-              <v-btn @click="setMode(1)">样式1</v-btn>
-              <v-btn @click="setMode(2)">样式2</v-btn>
-              <v-btn @click="setMode(3)">样式3</v-btn>
-            </div>
-            <div class="flex items-center space-x-2">
-              <span>回复样式:</span>
-              <v-btn @click="setReplyMode(0)">不显示</v-btn>
-              <v-btn @click="setReplyMode(1)">样式1</v-btn>
-              <v-btn @click="setReplyMode(2)">样式2</v-btn>
-            </div>
-            <div class="flex items-center space-x-2">
-              <span>Tag数量:</span>
-              <v-btn @click="setTagsCount(2)">少</v-btn>
-              <v-btn @click="setTagsCount(9)">多</v-btn>
-            </div>
-            <div class="flex items-center space-x-2">
-              <HoleActionMenu
-                :size="20"
-                :icon="'mdi-dots-horizontal'"
-              ></HoleActionMenu>
-            </div>
-          </div>
 
-          <v-list-item
-            v-for="(content, index) in contentsShort"
-            :key="index"
-            class="pl-16 pt-3 border-b-sm flex-col text-left"
-          >
-            <template v-if="mode === 1">
-              <div class="w-full flex justify-end">
-                <SpecialFlagChip
-                  v-if="index === 0"
-                  :text="specialTag"
-                  :color="'red'"
-                  :size="'small'"
-                ></SpecialFlagChip>
-              </div>
-              <div class="w-full flex items-center flex-wrap gap-y-2">
-                <TagChip
-                  v-for="(tag, tagIndex) in tags"
-                  :key="tagIndex"
-                  class="mr-2 my-1"
-                  :tag="tag"
-                  :size="'small'"
-                ></TagChip>
-              </div>
-              <div class="w-full my-2">
-                {{ content }}
-              </div>
-              <div class="text-neutral-400 flex justify-between text-sm">
-                <span>#114514</span>
-                <span>
-                  <v-icon
-                    icon="mdi-message-outline"
-                    :size="20"
-                  >
-                  </v-icon>
-                  810
-                </span>
-                <span>Rick Astley 发布于 2022/7/21</span>
-              </div>
-            </template>
-
-            <template v-if="mode === 2">
-              <div class="w-full flex flex-wrap items-center gap-y-2">
-                <TagChip
-                  v-for="(tag, tagIndex) in tags"
-                  :key="tagIndex"
-                  class="mr-2"
-                  size="small"
-                  :tag="tag"
-                ></TagChip>
-                <div class="grow flex justify-end space-x-3">
-                  <SpecialFlagChip
-                    v-if="index === 0"
-                    :text="specialTag"
-                    color="red"
-                    size="small"
-                  ></SpecialFlagChip>
-                  <HoleActionMenu
-                    :size="24"
-                    :icon="'mdi-chevron-down'"
-                  ></HoleActionMenu>
-                </div>
-              </div>
-              <div class="w-full my-2">
-                {{ content }}
-              </div>
-              <div class="flex justify-between text-sm text-gray-400 my-1">
-                <div class="text-neutral-400">
-                  <span class="pr-2 border-r-2">#114514</span>
-                  <span class="pl-2">发布于 2022/7/21</span>
-                </div>
-                <div class="flex space-x-2 items-center">
-                  <IconBtn
-                    class="px-0"
-                    text="810"
-                  >
-                    mdi-comment-outline
-                  </IconBtn>
-                  <IconBtn class="px-0">mdi-bookmark-outline</IconBtn>
-                  <span>
-                    <HoleActionMenu
-                      :size="20"
-                      :icon="'mdi-dots-horizontal'"
-                    ></HoleActionMenu>
-                  </span>
-                </div>
-              </div>
-            </template>
-
-            <template v-if="mode === 3">
-              <HoleActionMenu
-                :size="20"
-                :icon="'mdi-chevron-down'"
-                class="float-right"
-              ></HoleActionMenu>
-              <div class="w-full flex flex-wrap items-center gap-y-2">
-                <span class="text-lg mr-4">#114514</span>
-                <TagChip
-                  v-for="(tag, tagIndex) in tags"
-                  :key="tagIndex"
-                  class="mr-2"
-                  :tag="tag"
-                  :size="'small'"
-                ></TagChip>
-                <div class="grow flex justify-end space-x-3">
-                  <SpecialFlagChip
-                    v-if="index === 0"
-                    :text="specialTag"
-                    :color="'red'"
-                    :size="'small'"
-                  ></SpecialFlagChip>
-                </div>
-              </div>
-              <div class="w-full my-2">
-                {{ content }}
-              </div>
-              <div class="flex justify-between text-sm text-neutral-400">
-                <div class="flex space-x-10 items-center">
-                  <span>
-                    <v-icon
-                      icon="mdi-message-reply-outline"
-                      :size="20"
-                    ></v-icon>
-                    回复 810
-                  </span>
-                  <span>
-                    <v-icon
-                      icon="mdi-bookmark-outline"
-                      :size="20"
-                    ></v-icon>
-                    收藏
-                  </span>
-                  <span>
-                    <HoleActionMenu
-                      :size="20"
-                      :icon="'mdi-dots-horizontal'"
-                    ></HoleActionMenu>
-                  </span>
-                </div>
-                <div class="text-neutral-400">
-                  <span>Rick Astley 发布于 2022/7/21</span>
-                </div>
-              </div>
-            </template>
-
-            <template v-if="mode === 5"></template>
-
-            <template v-if="replyMode === 1">
-              <div class="w-full border-t mt-2 py-2 text-sm">
-                <div>
-                  {{ reply }}
-                </div>
-                <div class="text-right text-sm text-neutral-400">
-                  Linus Torvalds 回复于 2022/8/12
-                </div>
-              </div>
-            </template>
-            <template v-if="replyMode === 2">
-              <div class="w-full border-t mt-2 py-2 text-sm">
-                <div class="text-neutral-400 my-1">Linus Torvalds 回复于 2022/8/12 :</div>
-                <div>
-                  {{ reply }}
-                </div>
-              </div>
-            </template>
+          <v-list-item class="pl-16 py-5 border-b-sm flex-col text-left">
+            <HoleBlock :hole="holeMock"></HoleBlock>
           </v-list-item>
 
           <v-list-item class="pl-16 py-5 border-b-sm flex-col text-left">
@@ -315,11 +128,12 @@ import TagChip from '@/components/tag/TagChip.vue'
 import SpecialFlagChip from '@/components/tag/SpecialFlagChip.vue'
 import { arrayFactory } from '@/utils/reflect'
 import { camelizeKeys } from '@/utils'
-import { Tag, Floor } from '@/types'
+import { Tag, Floor, Hole } from '@/types'
 import { ref, watch } from 'vue'
 import { useStore } from '@/store'
 import HoleActionMenu from '@/components/menu/HoleActionMenu.vue'
 import IconBtn from '@/components/button/IconBtn.vue'
+import HoleBlock from '@/components/hole/HoleBlock.vue'
 
 const props = defineProps<{ divisionId: number }>()
 const store = useStore()
@@ -330,15 +144,6 @@ watch(
   },
   { immediate: true }
 )
-const mode = ref(2)
-const setMode = (num: number) => {
-  mode.value = num
-}
-
-const replyMode = ref(0)
-const setReplyMode = (num: number) => {
-  replyMode.value = num
-}
 
 const allTags = arrayFactory(
   Tag,
@@ -357,45 +162,11 @@ const allTags = arrayFactory(
       name: '*引起不适',
       tag_id: 1,
       temperature: 1
-    },
-    {
-      name: '学习',
-      tag_id: 1,
-      temperature: 1
-    },
-    {
-      name: '恋爱',
-      tag_id: 1,
-      temperature: 1
-    },
-    {
-      name: '*政治敏感',
-      tag_id: 1,
-      temperature: 1
-    },
-    {
-      name: '军训',
-      tag_id: 1,
-      temperature: 1
-    },
-    {
-      name: '求助氵',
-      tag_id: 1,
-      temperature: 1
-    },
-    {
-      name: '*性相关',
-      tag_id: 1,
-      temperature: 1
     }
   ])
 )
 
-const tags = ref(allTags.slice(0, 1))
-const setTagsCount = (num: number) => {
-  tags.value = allTags.slice(0, num)
-}
-const fun = ()=>{console.log('hi')}
+const tags = ref(allTags)
 
 const specialTag = '测试用例'
 
@@ -424,7 +195,7 @@ const floors = arrayFactory(
   Floor,
   camelizeKeys([
     {
-      contents: contents[0],
+      content: contents[0],
       holeId: 114514,
       specialTag: specialTag,
       anonyname: 'Rick Ashley',
@@ -437,7 +208,7 @@ const floors = arrayFactory(
       time_updated: '2022-07-27'
     },
     {
-      contents: contents[1],
+      content: contents[1],
       holeId: 114515,
       specialTag: specialTag,
       anonyname: 'Rick Ashley',
@@ -450,7 +221,7 @@ const floors = arrayFactory(
       time_updated: '2022-07-27'
     },
     {
-      contents: contents[2],
+      content: contents[2],
       holeId: 114516,
       specialTag: specialTag,
       anonyname: 'Rick Ashley',
@@ -463,7 +234,7 @@ const floors = arrayFactory(
       time_updated: '2022-07-27'
     },
     {
-      contents: contents[3],
+      content: contents[3],
       holeId: 114517,
       specialTag: specialTag,
       anonyname: 'Rick Ashley',
@@ -476,7 +247,7 @@ const floors = arrayFactory(
       time_updated: '2022-07-27'
     },
     {
-      contents: contents[4],
+      content: contents[4],
       holeId: 114518,
       specialTag: specialTag,
       anonyname: 'Rick Ashley',
@@ -489,7 +260,7 @@ const floors = arrayFactory(
       time_updated: '2022-07-27'
     },
     {
-      contents: contents[5],
+      content: contents[5],
       holeId: 114514,
       specialTag: specialTag,
       anonyname: 'Linus',
@@ -503,6 +274,20 @@ const floors = arrayFactory(
     }
   ])
 )
+
+console.log('firstFloor:', floors[0])
+
+const holeMock: Hole = {
+  divisionId: 1,
+  id: 1,
+  floors: floors,
+  firstFloor: floors[0],
+  lastFloor: floors[floors.length - 1],
+  reply: 810,
+  tags: allTags,
+  timeCreated: new Date(),
+  timeUpdated: new Date()
+}
 </script>
 
 <style
