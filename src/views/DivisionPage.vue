@@ -8,9 +8,11 @@
             <v-btn>发布树洞</v-btn>
           </div>
 
-          <v-list-item class="pl-16 py-5 border-b-sm flex-col text-left">
+          <router-link to="/hole/1">
+          <v-list-item class="pl-16 py-5 border-b-sm flex-col text-left hover:bg-black-700">
             <HoleBlock :hole="holeMock"></HoleBlock>
           </v-list-item>
+        </router-link>
 
           <v-list-item class="pl-16 py-5 border-b-sm flex-col text-left">
             <div class="w-full">
@@ -124,15 +126,11 @@
   setup
   lang="ts"
 >
-import TagChip from '@/components/tag/TagChip.vue'
-import SpecialFlagChip from '@/components/tag/SpecialFlagChip.vue'
 import { arrayFactory } from '@/utils/reflect'
 import { camelizeKeys } from '@/utils'
 import { Tag, Floor, Hole } from '@/types'
 import { ref, watch } from 'vue'
 import { useStore } from '@/store'
-import HoleActionMenu from '@/components/menu/HoleActionMenu.vue'
-import IconBtn from '@/components/button/IconBtn.vue'
 import HoleBlock from '@/components/hole/HoleBlock.vue'
 
 const props = defineProps<{ divisionId: number }>()

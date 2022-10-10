@@ -1,8 +1,10 @@
 <template>
+  <router-link to="/hole/1">
   <div>
     <HoleBlockFirst :hole="hole" />
     <HoleBlockReply :floor="hole.lastFloor" />
   </div>
+</router-link>
 </template>
 
 <script

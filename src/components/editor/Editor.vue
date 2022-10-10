@@ -155,9 +155,7 @@ onMounted(() => {
     onChange: async (api, event) => {
       console.log('something changed', event)
       const data = await api.saver.save()
-
       const content = data.blocks
-      console.log(content)
       const parsedData = parseEditorJsToMarkdown(content)
     },
     onReady: () => {
