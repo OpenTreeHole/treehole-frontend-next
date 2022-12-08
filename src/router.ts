@@ -4,6 +4,7 @@ import HolePage from '@/views/HolePage.vue'
 import AdminPage from '@/views/AdminPage.vue'
 import SettingsPage from '@/views/SettingsPage.vue'
 import LicensePage from '@/views/LicensePage.vue'
+import LoginPage from '@/views/LoginPage.vue'
 import ReportView from '@/views/admin/ReportView.vue'
 import UsersView from '@/views/admin/UsersView.vue'
 import AdminHistoryView from '@/views/admin/AdminHistoryView.vue'
@@ -112,6 +113,15 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: '/division/1'
+  },
+  {
+    path: '/login',
+    name: 'login',
+    meta: {
+      title: '登录',
+      requiresAuth: false
+    },
+    component: LoginPage
   }
 ]
 
