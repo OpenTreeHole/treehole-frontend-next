@@ -6,42 +6,25 @@
   </v-app>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import TheLayout from './components/TheLayout.vue'
-import { useStore } from '@/store'
-import { listDivisions } from '@/apis'
+import { useDivisionStore, useStyleStore } from '@/store'
 
 const route = useRoute()
 
 const router = useRouter()
 
-const store = useStore()
+const styleStore = useStyleStore()
+const divisionStore = useDivisionStore()
 router.beforeEach(async () => {
-  // TODO: use coroutine, save the original data
-
-  // Get division data
-  const localDivisions = localStorage.getItem('divisions')
-  if (localDivisions) {
-    store.divisions = JSON.parse(localDivisions)
-    listDivisions().then((divisions) => {
-      store.divisions = divisions
-      localStorage.setItem('divisions', JSON.stringify(divisions))
-    })
-  } else {
-    const divisions = await listDivisions()
-    store.divisions = divisions
-    localStorage.setItem('divisions', JSON.stringify(divisions))
-  }
+  await divisionStore.fetchDivisions()
 })
 
-store.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+styleStore.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
 
 window.matchMedia('(prefers-color-scheme: dark)').onchange = () => {
-  store.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  styleStore.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
 }
 </script>
 

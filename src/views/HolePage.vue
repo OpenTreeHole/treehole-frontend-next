@@ -1,7 +1,4 @@
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { arrayFactory } from '@/utils/reflect'
 import { DetailedFloor, Tag } from '@/types'
 import { camelizeKeys, sleep } from '@/utils'
@@ -9,7 +6,7 @@ import FloorBlock from '@/components/floor/FloorBlock.vue'
 import Editor from '@/components/editor/Editor.vue'
 import TagChip from '@/components/tag/TagChip.vue'
 import { useEditor } from '@/composables/editor'
-import { useStore } from '@/store'
+import { useDivisionStore } from '@/store'
 import { onMounted, provide } from 'vue'
 
 const props = defineProps<{ holeId: number; floorId?: number }>()
@@ -172,7 +169,7 @@ const tags = arrayFactory(
   ])
 )
 
-const store = useStore()
+const store = useDivisionStore()
 store.currentDivisionId = 1
 
 const { editorData, initEditor, clearEditor } = useEditor()
@@ -195,15 +192,15 @@ onMounted(async () => {
 
 <template>
   <v-container class="px-0">
-    <div class="flex lg:px-4">
+    <div class="flex">
       <v-col class="max-w-full lg:max-w-[65%] 3xl:max-w-[55%] px-0">
         <v-list class="px-2 -mx-2 py-4 -my-4">
           <div class="border-b-sm">
-            <div class="text-3xl px-6 pb-2 flex justify-between">
+            <div class="text-3xl px-6 lg:px-10 pb-2 flex justify-between">
               <div class="flex grow-0">#123123</div>
               <v-btn @click="initEditor('')">发表评论</v-btn>
             </div>
-            <div class="px-6 pb-2 flex">
+            <div class="px-6 lg:px-10 pb-2 flex">
               <TagChip
                 v-for="(tag, index) in tags"
                 :key="index"
@@ -242,7 +239,7 @@ onMounted(async () => {
             class="px-0 py-5 border-b-sm flex-col text-left"
           >
             <FloorBlock
-              class="px-6"
+              class="px-6 lg:px-10"
               :floor="floor"
             />
           </v-list-item>

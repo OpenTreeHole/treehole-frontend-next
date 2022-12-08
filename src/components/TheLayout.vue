@@ -23,19 +23,19 @@
           <v-list>
             <v-list-subheader> 分区 </v-list-subheader>
             <v-list-item
-              v-if="store.divisions.length === 0"
+              v-if="divisionStore.divisions.length === 0"
               class="text-left pl-10"
             >
               <span class="text-neutral-400">加载中...</span>
             </v-list-item>
             <v-list-item
-              v-for="(division, i) in store.divisions"
+              v-for="(division, i) in divisionStore.divisions"
               :key="i"
               class="text-left pl-10 cursor-pointer select-none"
               :class="
                 getNavItemClass(
                   (route.name === 'division' || route.name === 'hole') &&
-                    store.currentDivisionId === division.id
+                    divisionStore.currentDivisionId === division.id
                 )
               "
               @click="router.push(`/division/${division.id}`)"
@@ -73,19 +73,17 @@
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import Logo from '@/assets/img.png'
 import SearchBar from '@/components/action/SearchBar.vue'
-import { useStore } from '@/store'
+import { useDivisionStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
 import { routes } from '@/router'
+import { ref } from 'vue'
 
 const router = useRouter()
 const route = useRoute()
-const store = useStore()
+const divisionStore = useDivisionStore()
 const navActiveItemClass = 'text-blue-500 bg-opacity-50 bg-gray-200'
 const navInactiveItemClass = 'hover:bg-opacity-30 hover:bg-gray-200'
 const getNavItemClass = (active: boolean) => {

@@ -61,7 +61,7 @@ export const timeDifference = (date: Date, detailed = true): string => {
   } else if (seconds < 604800) {
     return Math.floor(seconds / 86400) + '天前'
   } else {
-    if (detailed) return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+    if (detailed) return date.toLocaleDateString()
     else return date.toLocaleDateString()
   }
 }

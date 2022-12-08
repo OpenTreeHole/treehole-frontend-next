@@ -68,17 +68,14 @@
   </v-container>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { arrayFactory } from '@/utils/reflect'
 import { Tag } from '@/types'
 import TagChip from '@/components/tag/TagChip.vue'
 import { reactive } from 'vue'
-import { useStore } from '@/store'
+import { useStyleStore } from '@/store'
 
-const store = useStore()
+const store = useStyleStore()
 
 const blockedTags = reactive(
   arrayFactory(Tag, [
@@ -151,7 +148,4 @@ const blockedTags = reactive(
 )
 </script>
 
-<style
-  lang="scss"
-  scoped
-></style>
+<style lang="scss" scoped></style>

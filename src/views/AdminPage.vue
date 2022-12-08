@@ -1,7 +1,7 @@
 <template>
   <v-container class="mx-0 px-0 pt-0">
     <div class="flex">
-      <v-col class="max-w-full lg:max-w-[65%] 3xl:max-w-[55%] px-0">
+      <div class="max-w-full lg:max-w-[65%] 3xl:max-w-[55%] px-0">
         <div class="text-h4 border-b-sm flex justify-between">
           <v-tabs
             v-model="tab"
@@ -25,15 +25,12 @@
             <component :is="adminRoute.component" />
           </v-window-item>
         </v-window>
-      </v-col>
+      </div>
     </div>
   </v-container>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ref } from 'vue'
 import { adminRoutes } from '@/router'

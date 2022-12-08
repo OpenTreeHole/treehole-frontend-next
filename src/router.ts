@@ -7,7 +7,7 @@ import LicensePage from '@/views/LicensePage.vue'
 import ReportView from '@/views/admin/ReportView.vue'
 import UsersView from '@/views/admin/UsersView.vue'
 import AdminHistoryView from '@/views/admin/AdminHistoryView.vue'
-import { useStore } from '@/store'
+import { useDivisionStore } from '@/store'
 
 declare module 'vue-router' {
   interface RouteMeta {
@@ -63,7 +63,7 @@ export const routes: RouteRecordRaw[] = [
       divisionId: parseInt(route.params.id as string)
     }),
     beforeEnter: (route) => {
-      const store = useStore()
+      const store = useDivisionStore()
       store.currentDivisionId = parseInt(route.params.id as string)
     }
   },
