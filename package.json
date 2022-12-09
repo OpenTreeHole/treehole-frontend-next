@@ -35,7 +35,7 @@
     "typora-parser": "^1.0.3",
     "vue": "^3.2.25",
     "vue-router": "^4.1.1",
-    "vuetify": "3.0.0-beta.9"
+    "vuetify": "3.0.4"
   },
   "devDependencies": {
     "@editorjs/image": "^2.6.2",
