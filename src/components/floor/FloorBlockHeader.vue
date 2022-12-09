@@ -7,7 +7,7 @@
       {{ floor.anonyname }}
     </span>
     <span class="px-2 text-neutral-400 text-sm self-center flex-shrink-1 line-clamp-1">
-      {{ displayFloorId ? `##${floor.id}` : timeDifference(floor.timeUpdated) }}
+      {{ displayFloorId ? `##${floor.id}` : timeDifference(floor.timeCreated) }}
     </span>
     <span
       v-if="extraInfo"
@@ -38,7 +38,7 @@ const computeColorClass = (str: string) => 'text-' + generateColor(str)
 const extraInfo = computed(() => {
   const ret: string[] = []
   if (props.floor.deleted) ret.push('已删除')
-  if (props.floor.fold) ret.push('已折叠')
+  if (props.floor.fold.length > 0) ret.push('已折叠')
   return ret.join('，')
 })
 </script>

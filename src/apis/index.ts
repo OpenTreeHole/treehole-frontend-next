@@ -20,7 +20,8 @@ import {
   Tag,
   Report,
   IDivisionModify,
-  IReportDeal
+  IReportDeal,
+  FloorHistory
 } from '@/types'
 
 const factory = <T>(TargetClass: new () => T, data: any, meta?: any): T => {
@@ -329,10 +330,9 @@ export const searchFloors = async (s: string, length: number, startFloor: number
   return arrayFactory(DetailedFloor, response.data)
 }
 
-export const addFloor = async (floor: IFloorData) => {
-  const response = await axios.post('/floors', snakifyKeys(floor))
-  const data = camelizeKeys(response.data)
-  return { message: data.message as string, floor: factory(DetailedFloor, data.data) }
+export const addFloor = async (holeId: number, floor: IFloorData) => {
+  const response = await axios.post(`/holes/${holeId}/floors`, snakifyKeys(floor))
+  return factory(DetailedFloor, response.data)
 }
 
 export const modifyFloor = async (floorId: number, content: string) => {
@@ -366,12 +366,10 @@ export const modifyFloorAnonyname = async (floorId: number, anonyname: string) =
 /**
  * Like or Unlike a floor.
  * @param floorId
- * @param like - true: like; false: unlike
+ * @param like - 1 for like, 0 for reset, -1 for dislike
  */
-export const likeFloor = async (floorId: number, like: boolean) => {
-  const response = await axios.put(`/floors/${floorId}`, {
-    like: like ? 'add' : 'cancel'
-  })
+export const likeFloor = async (floorId: number, like: number) => {
+  const response = await axios.post(`/floors/${floorId}/like/${like}`)
   return factory(DetailedFloor, response.data)
 }
 
@@ -380,6 +378,22 @@ export const deleteFloor = async (floorId: number, deleteReason?: string) => {
     data: {
       delete_reason: deleteReason
     }
+  })
+  return factory(DetailedFloor, response.data)
+}
+
+export const getFloorHistory = async (floorId: number) => {
+  const response = await axios.get(`/floors/${floorId}/history`)
+  return arrayFactory(FloorHistory, response.data)
+}
+
+export const restoreFloorFromHistory = async (
+  floorId: number,
+  historyId: number,
+  reason?: string
+) => {
+  const response = await axios.post(`/floors/${floorId}/restore/${historyId}`, {
+    restore_reason: reason
   })
   return factory(DetailedFloor, response.data)
 }

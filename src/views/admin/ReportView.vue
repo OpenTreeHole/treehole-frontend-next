@@ -15,10 +15,7 @@
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { arrayFactory } from '@/utils/reflect'
 import { Report } from '@/types'
 import { camelizeKeys } from '@/utils'
@@ -83,7 +80,4 @@ const reports = arrayFactory(
 )
 </script>
 
-<style
-  lang="scss"
-  scoped
-></style>
+<style lang="scss" scoped></style>

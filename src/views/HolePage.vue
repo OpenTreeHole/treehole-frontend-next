@@ -6,20 +6,20 @@
           <div class="border-b-sm">
             <div class="text-3xl px-6 lg:px-10 pb-2 flex justify-between">
               <div class="flex grow-0">#{{ holeId }}</div>
-              <v-btn @click="initEditor('')">发表评论</v-btn>
+              <v-btn @click="comment">发表评论</v-btn>
             </div>
             <div
-              v-if="hole?.tags"
+              v-if="tags.length > 0"
               class="px-6 lg:px-10 pb-2 flex"
             >
               <TagChip
-                v-for="(tag, index) in hole?.tags"
+                v-for="(tag, index) in tags"
                 :key="index"
                 class="mr-2"
                 :tag="tag"
               ></TagChip>
             </div>
-            <template v-if="editorData">
+            <template v-if="showComment">
               <v-divider class="mx-6 my-2" />
               <div class="flex justify-center">
                 <div class="max-w-[var(--editor-max-width)] flex grow mx-6 lg:ml-11">
@@ -27,6 +27,7 @@
                     特殊标签（留空则无特殊标签）：
                   </span>
                   <v-text-field
+                    v-model="specialTag"
                     class="grow mr-2"
                     hide-details
                     variant="outlined"
@@ -38,7 +39,8 @@
               <Editor
                 class="mx-6"
                 :data="editorData"
-                @close="clearEditor"
+                @close="showComment = false"
+                @send="sendComment"
               ></Editor>
             </template>
           </div>
@@ -46,12 +48,14 @@
           <v-list-item
             v-for="(floor, index) in floors"
             :id="floor.id"
-            :key="index"
+            :key="floor.id"
+            v-intersect="onIntersect(index)"
             class="px-0 py-5 border-b-sm flex-col text-left"
           >
             <FloorBlock
+              v-model:floor="floors[index]"
               class="px-6 lg:px-10"
-              :floor="floor"
+              @new-content="onNewContent"
             />
           </v-list-item>
         </v-list>
@@ -83,24 +87,23 @@
 </template>
 
 <script setup lang="ts">
-import { Hole } from '@/types'
+import { Floor, Hole } from '@/types'
 import { sleep } from '@/utils'
 import FloorBlock from '@/components/floor/FloorBlock.vue'
 import Editor from '@/components/editor/Editor.vue'
 import TagChip from '@/components/tag/TagChip.vue'
 import { useEditor } from '@/composables/editor'
-import { onMounted, provide, ref, computed } from 'vue'
-import { getHole } from '@/apis'
+import { onMounted, provide, ref, computed, reactive } from 'vue'
+import { addFloor, getHole, listFloors } from '@/apis'
 import { useDivisionStore } from '@/store'
 
 const props = defineProps<{ holeId: number; floorId?: number }>()
 
 const hole = ref<Hole | null>(null)
 
-const floors = computed(() => hole.value?.floors || [])
+const floors = reactive<Floor[]>([])
 
 const tags = computed(() => hole.value?.tags || [])
-console.log(tags.value)
 
 const divisionStore = useDivisionStore()
 
@@ -114,10 +117,57 @@ const scrollToFloor = (id: number) => {
 provide('scrollToFloor', scrollToFloor)
 provide('holeId', props.holeId)
 
+const hasNext = ref(true)
+const loading = ref(false)
+const loadEnd = ref(0)
+
+const loadFloorsUntil = async (length: number) => {
+  loadEnd.value = length
+  if (loading.value) return
+  loading.value = true
+  while (floors.length <= loadEnd.value && hasNext.value) {
+    const res = await listFloors(props.holeId, 10, floors.length)
+    if (res.length < 10) hasNext.value = false
+    floors.push(...res)
+  }
+  loading.value = false
+}
+
+const onIntersect = (index: number) => async (isIntersecting: boolean) => {
+  if (isIntersecting && index >= floors.length - 5) {
+    await loadFloorsUntil(index + 10)
+  }
+}
+
+const onNewContent = async () => {
+  hasNext.value = true
+  await loadFloorsUntil(floors.length + 10)
+}
+
+const specialTag = ref('')
+const showComment = ref(false)
+const comment = () => {
+  initEditor('')
+  showComment.value = true
+}
+const sendComment = async (content: string) => {
+  showComment.value = false
+  await addFloor(props.holeId, {
+    content,
+    specialTag: specialTag.value
+  })
+  clearEditor()
+  specialTag.value = ''
+  onNewContent()
+}
+
 onMounted(async () => {
   hole.value = await getHole(props.holeId)
+  await loadFloorsUntil(10)
   divisionStore.currentDivisionId = hole.value?.divisionId || null
   if (props.floorId) {
+    while (floors.every((floor) => floor.id !== props.floorId))
+      await loadFloorsUntil(floors.length + 10)
     await sleep(100)
     scrollToFloor(props.floorId)
   }

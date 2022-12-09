@@ -3,7 +3,7 @@ import { generateColor } from '@/utils'
 
 export interface IFloorData {
   content: string
-  holeId: number
+  replyTo?: number
   specialTag?: string
 }
 
@@ -91,6 +91,9 @@ export class Hole {
 
   @Field({ factory: (v) => arrayFactory(Floor, v.prefetch) })
   floors: Floor[]
+
+  @Field({ factory: () => 0 })
+  floorLoaded: number
 
   @Field({ factory: (v, parent) => factory(Floor, parent.floors.firstFloor) })
   firstFloor: Floor

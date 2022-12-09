@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import TheLayout from './components/TheLayout.vue'
-import { useDivisionStore, useStyleStore } from '@/store'
+import { useDivisionStore, useStyleStore, useUserStore } from '@/store'
 
 const route = useRoute()
 
@@ -17,8 +17,11 @@ const router = useRouter()
 
 const styleStore = useStyleStore()
 const divisionStore = useDivisionStore()
+const userStore = useUserStore()
 router.beforeEach(async () => {
-  await divisionStore.fetchDivisions()
+  await Promise.all([divisionStore.fetchDivisions(), userStore.fetchUser()])
+  // scroll to top of page
+  window.scrollTo(0, 0)
 })
 
 styleStore.dark = window.matchMedia('(prefers-color-scheme: dark)').matches

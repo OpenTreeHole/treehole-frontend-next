@@ -11,8 +11,9 @@
           </div>
 
           <v-list-item
-            v-for="hole in holeStore.getHolesByDivisionId(props.divisionId)"
+            v-for="(hole, index) in holes"
             :key="hole.id"
+            v-intersect="onIntersect(index)"
             class="px-0 py-0 border-b-sm flex-col text-left hover:bg-black-700"
           >
             <HoleBlock :hole="hole"></HoleBlock>
@@ -93,7 +94,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, provide } from 'vue'
+import { computed, onMounted, provide, ref } from 'vue'
 import { useDivisionStore, useHoleStore } from '@/store'
 import HoleBlock from '@/components/hole/HoleBlock.vue'
 
@@ -101,11 +102,34 @@ const props = defineProps<{ divisionId: number }>()
 const holeStore = useHoleStore()
 const divisionStore = useDivisionStore()
 
+const holes = computed(() => holeStore.getHolesByDivisionId(props.divisionId))
+
 provide('divisionId', props.divisionId)
+
+const hasNext = ref(true)
+const loading = ref(false)
+const loadEnd = ref(0)
+
+const loadHolesUntil = async (length: number) => {
+  loadEnd.value = length
+  if (loading.value) return
+  loading.value = true
+  while (holes.value.length < length && hasNext.value) {
+    const res = await holeStore.fetchDivisionHoles(props.divisionId)
+    hasNext.value = res
+  }
+  loading.value = false
+}
+
+const onIntersect = (index: number) => async (isIntersecting: boolean) => {
+  if (isIntersecting && index >= holes.value.length - 5) {
+    await loadHolesUntil(index + 10)
+  }
+}
 
 onMounted(() => {
   divisionStore.currentDivisionId = props.divisionId
-  holeStore.fetchDivisionHoles(props.divisionId)
+  loadHolesUntil(10)
 })
 </script>
 

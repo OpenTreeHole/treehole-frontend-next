@@ -17,16 +17,17 @@
         </v-btn>
         <v-btn
           class="text-white bg-blue-500"
-          @click="$emit('send', getMarkdownContent())"
-          >发送</v-btn
+          @click="getMarkdownContent().then((markdown) => $emit('send', markdown))"
         >
+          发送
+        </v-btn>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import EditorJS from '@editorjs/editorjs'
 import Header from '@editorjs/header'
 import SimpleImage from '@editorjs/simple-image'
@@ -169,10 +170,6 @@ onMounted(() => {
       opacity.value = 100
     }
   })
-})
-
-onBeforeUnmount(() => {
-  editor.value?.destroy()
 })
 
 const getMarkdownContent = async () => {

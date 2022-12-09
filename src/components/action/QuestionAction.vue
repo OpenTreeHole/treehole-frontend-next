@@ -28,12 +28,8 @@
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import IconBtn from '@/components/button/IconBtn.vue'
-import { useSlots } from 'vue'
 
 defineEmits<{
   (e: 'done'): void
@@ -46,7 +42,4 @@ defineProps<{
 }>()
 </script>
 
-<style
-  lang="scss"
-  scoped
-></style>
+<style lang="scss" scoped></style>

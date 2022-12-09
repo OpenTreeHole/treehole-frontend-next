@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { reactive, ref, watch, computed } from 'vue'
-import { Division, Hole, Tag } from '@/types'
+import { Division, Hole, Tag, User, UserAuth } from '@/types'
 import { useTheme } from 'vuetify'
-import { listDivisions, listHoles } from '@/apis'
+import { getCurrentUser, getUserProfile, listDivisions, listHoles } from '@/apis'
 
 export const useStyleStore = defineStore('style', () => {
   const theme = useTheme()
@@ -38,6 +38,14 @@ export const useDivisionStore = defineStore('division', () => {
     return divisions.find((division) => division.id === id)
   })
   return { divisions, fetchDivisions, getDivisionById, currentDivisionId }
+})
+
+export const useUserStore = defineStore('user', () => {
+  const user = ref<UserAuth | null>(null)
+  async function fetchUser() {
+    user.value = await getCurrentUser()
+  }
+  return { user, fetchUser }
 })
 
 export const useHoleStore = defineStore('hole', () => {

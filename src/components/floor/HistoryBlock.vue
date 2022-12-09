@@ -5,7 +5,7 @@
         由 {{ history.userId }} 修改于 {{ timeDifference(history.timeUpdated) }}
       </span>
       <span class="grow"></span>
-      <IconBtn @click="restore"> md:settings_backup_restore </IconBtn>
+      <IconBtn @click="restore">md:settings_backup_restore</IconBtn>
     </div>
     <div
       class="w-full markdown-viewer mt-2 px-2"
@@ -16,8 +16,16 @@
         class="mx-2"
         text="请输入恢复理由："
         text-class="text-blue-600"
+        @done="
+          () => {
+            action = ActionType.None
+            $emit('restore', reason)
+          }
+        "
+        @cancel="action = ActionType.None"
       >
         <v-text-field
+          v-model="reason"
           class="grow mr-2"
           hide-details
           variant="outlined"
@@ -38,8 +46,10 @@ import QuestionAction from '@/components/action/QuestionAction.vue'
 
 defineProps<{ history: FloorHistory }>()
 defineEmits<{
-  (e: 'restore'): void
+  (e: 'restore', reason: string): void
 }>()
+
+const reason = ref('')
 
 enum ActionType {
   None,
