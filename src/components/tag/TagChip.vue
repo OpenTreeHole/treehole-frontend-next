@@ -10,10 +10,7 @@
   </v-chip>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { Tag } from '@/types'
 
 const { size = 'default' } = defineProps<{ tag: Tag; size?: string | number }>()

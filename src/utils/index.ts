@@ -3,6 +3,7 @@ import { marked } from 'marked'
 import { convertKatex, KatexRenderer } from '@/utils/katex'
 import TyporaParser from 'typora-parser'
 import HighlightJsRenderer from 'typora-parser/build/src/plugins/HighlightJsRenderer'
+import removeMarkdown from 'remove-markdown'
 
 const colorList = [
   'red',
@@ -146,4 +147,10 @@ export const parseToTypora = (markdown: string) => {
       displayLineNumbers: true // display line numbers on code block, no effect when vanillaHTML: true
     })
   })
+}
+
+export const plainText = (markdown: string) => {
+  return removeMarkdown(markdown)
+    .replaceAll(/#{1,2}\d+/g, '[引用 $&]')
+    .replaceAll(/\[引用 (#{1,2}\d+)\]/g, '[回复 $1]')
 }

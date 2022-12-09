@@ -28,7 +28,7 @@
   --head-prefix-color: #D0D0D0;
 
   /* text */
-  --text-color: #363C42;
+  --text-color: --color-fg-default;
   --text-search-hit-color: rosybrown;
 
   /* highlight */
@@ -221,13 +221,10 @@
   }
 
   & img {
-    margin-top: 0.2rem;
-    margin-bottom: 0.2rem;
-  }
-
-  & p > .md-image:only-child:not(.md-img-error) img, p > img:only-child {
-    display: block;
-    margin: unset;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   /* underline */

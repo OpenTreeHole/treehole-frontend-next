@@ -1,17 +1,17 @@
 <template>
   <span :class="small ? 'px-1' : 'px-2'">
     <span
-      class="hover:bg-neutral-300 hover:bg-opacity-50 transition cursor-pointer rounded-lg select-none"
-      :class="small ? '-m-1 p-1' : '-m-1.5 p-1.5'"
+      :class="className"
       @click="$emit('click')"
     >
       <v-icon
-        class="text-left"
+        class="text-center"
+        :class="iconClass"
         :icon="icon"
       />
       <span
-        v-if="text"
-        class="pl-1 self-center"
+        v-if="text !== undefined"
+        class="pl-1 self-center text-sm"
       >
         {{ text }}
       </span>
@@ -20,9 +20,9 @@
 </template>
 
 <script setup lang="ts">
-import { useSlots } from 'vue'
+import { computed, useSlots } from 'vue'
 
-defineProps<{ small?: boolean; text?: string }>()
+const props = defineProps<{ small?: boolean; text?: any; noAction?: boolean; iconClass?: string }>()
 
 defineEmits<{
   (e: 'click'): void
@@ -30,6 +30,13 @@ defineEmits<{
 
 const slots = useSlots()
 const icon = (slots['default']!()[0].children as string).trim()
+
+const className = computed(() => ({
+  'select-none': true,
+  'hover:bg-neutral-300 hover:bg-opacity-50 transition cursor-pointer rounded-lg': !props.noAction,
+  '-m-1 p-1': props.small,
+  '-m-1.5 p-1.5': !props.small
+}))
 </script>
 
 <style lang="scss" scoped></style>

@@ -4,7 +4,7 @@
     class="py-2"
   >
     <div
-      class="text-gray-600 hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition relative before:opacity-0 hover:before:transition-opacity hover:before:content-['expand\_more'] hover:before:md-icon-center hover:before:text-gray-400 hover:before:opacity-70"
+      class="text-gray-600 hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none relative before:opacity-0 hover:before:transition-opacity hover:before:content-['expand\_more'] hover:before:md-icon-center hover:before:text-gray-400 hover:before:opacity-70"
       @click="folded = false"
     >
       {{ floor.fold }}
@@ -16,7 +16,7 @@
       class="flex my-2"
     >
       <div
-        class="flex hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition relative before:opacity-0 hover:before:transition-opacity hover:before:content-['expand\_less'] hover:before:md-icon-center hover:before:text-gray-400 hover:before:opacity-70"
+        class="flex hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none relative before:opacity-0 hover:before:transition-opacity hover:before:content-['expand\_less'] hover:before:md-icon-center hover:before:text-gray-400 hover:before:opacity-70"
         @click="gotoReply"
       >
         <p class="line-clamp-2 justify-center">
@@ -32,7 +32,7 @@
       :class="floor.deleted ? 'markdown-gray' : ''"
     >
       <template
-        v-for="(_, i) in [1] * numOfBlocks"
+        v-for="(_, i) in blocksPlaceholderArray"
         :key="i"
       >
         <div
@@ -41,7 +41,7 @@
         />
         <MentionBlock
           v-else
-          :mention="mentionBlocks[(i - 1) / 2]"
+          :mention="mentionBlocks[(i - 1) / 2]!"
         />
       </template>
     </div>
@@ -51,68 +51,61 @@
   </template>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { generateColor, parseToTypora } from '@/utils'
 
 import { DetailedFloor, Floor } from '@/types'
 import MentionBlock from '@/components/floor/MentionBlock.vue'
-import { inject, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, inject, ref } from 'vue'
 
 const props = defineProps<{ floor: Floor; banFold?: boolean }>()
 
-const replyRegexResult = /^\s*##(\d+)\b\s*/g.exec(props.floor.content)
-const replyFloor =
-  (replyRegexResult &&
-    props.floor instanceof DetailedFloor &&
-    props.floor.mention.find((floor) => floor.id.toString() === replyRegexResult[1])) ||
-  null
-
-const markdownBlocksHTML = props.floor.content
-  .replaceAll(/^##(\d+)\b\s*/g, '')
-  .split(/##\d+\b/g)
-  .map((v) => v.trim())
-
-if (markdownBlocksHTML[markdownBlocksHTML.length - 1] === '') {
-  markdownBlocksHTML.pop()
-}
-
-const markdownBlocks = markdownBlocksHTML.map(parseToTypora)
-
-const mentionBlocks = [
-  ...props.floor.content.replaceAll(/^##(\d+)\b\s*/g, '').matchAll(/##(\d+)\b\s*/g)
-].map(
-  (v) =>
-    (props.floor instanceof DetailedFloor &&
-      props.floor.mention.find((floor) => floor.id.toString() === v[1])) ||
+const replyRegexResult = computed(() => /^\s*##(\d+)\b\s*/g.exec(props.floor.content))
+const replyFloor = computed(
+  () =>
+    (replyRegexResult.value &&
+      props.floor instanceof DetailedFloor &&
+      props.floor.mention.find((floor) => floor.id.toString() === replyRegexResult.value![1])) ||
     null
 )
 
-const numOfBlocks = mentionBlocks.length + markdownBlocks.length
+const markdownBlocks = computed(() => {
+  const html = props.floor.content
+    .replaceAll(/^##(\d+)\b\s*/g, '')
+    .split(/##\d+\b/g)
+    .map((v) => v.trim())
+  if (html[html.length - 1] === '') {
+    html.pop()
+  }
+  return html.map(parseToTypora)
+})
 
-const folded = ref(props.floor.fold !== '' && !props.banFold)
+const mentionBlocks = computed(() =>
+  [...props.floor.content.replaceAll(/^##(\d+)\b\s*/g, '').matchAll(/##(\d+)\b\s*/g)].map(
+    (v) =>
+      (props.floor instanceof DetailedFloor &&
+        props.floor.mention.find((floor) => floor.id.toString() === v[1])) ||
+      null
+  )
+)
+
+const numOfBlocks = computed(() => mentionBlocks.value.length + markdownBlocks.value.length)
+const blocksPlaceholderArray = computed(() => Array.from({ length: numOfBlocks.value }))
+
+const folded = ref(props.floor.fold.length !== 0 && !props.banFold)
 
 const computeColorClass = (str: string) => 'text-' + generateColor(str)
 
 const scrollToFloor = inject<(id: number) => void>('scrollToFloor')!
-const holeId = inject<number>('holeId')!
-
-const router = useRouter()
 
 const gotoReply = () => {
-  if (replyFloor) {
-    scrollToFloor(replyFloor.id)
+  if (replyFloor.value) {
+    scrollToFloor(replyFloor.value.id)
   }
 }
 </script>
 
-<style
-  lang="scss"
-  scoped
->
+<style lang="scss" scoped>
 .markdown-gray {
   --text-color: rgb(75 85 99);
 }

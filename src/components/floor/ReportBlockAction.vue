@@ -55,10 +55,7 @@
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { ref } from 'vue'
 import QuestionAction from '@/components/action/QuestionAction.vue'
 import IconBtn from '@/components/button/IconBtn.vue'
@@ -77,7 +74,4 @@ const toggleAction = (type: ActionType) => {
 }
 </script>
 
-<style
-  lang="scss"
-  scoped
-></style>
+<style lang="scss" scoped></style>

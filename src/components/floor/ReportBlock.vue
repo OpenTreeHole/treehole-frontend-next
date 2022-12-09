@@ -20,10 +20,7 @@
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { timeDifference } from '@/utils'
 import { Report } from '@/types'
 import FloorBlockContent from '@/components/floor/FloorBlockContent.vue'
@@ -33,7 +30,4 @@ import ReportBlockAction from '@/components/floor/ReportBlockAction.vue'
 defineProps<{ report: Report }>()
 </script>
 
-<style
-  lang="scss"
-  scoped
-></style>
+<style lang="scss" scoped></style>

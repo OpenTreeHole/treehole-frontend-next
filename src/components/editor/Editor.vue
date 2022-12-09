@@ -15,17 +15,18 @@
         >
           取消
         </v-btn>
-        <v-btn class="text-white bg-blue-500">发送</v-btn>
+        <v-btn
+          class="text-white bg-blue-500"
+          @click="$emit('send', getMarkdownContent())"
+          >发送</v-btn
+        >
       </div>
     </div>
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
-import { onMounted, ref } from 'vue'
+<script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import EditorJS from '@editorjs/editorjs'
 import Header from '@editorjs/header'
 import SimpleImage from '@editorjs/simple-image'
@@ -45,13 +46,15 @@ const props = defineProps<{ data: { blocks: any[] } | null }>()
 
 defineEmits<{
   (e: 'close'): void
+  (e: 'send', markdown: string): void
 }>()
 
 const editorDiv = ref()
 const opacity = ref(0)
+const editor = ref<EditorJS>()
 
 onMounted(() => {
-  const editor = new EditorJS({
+  editor.value = new EditorJS({
     /**
      * Enable/Disable the read only mode
      */
@@ -93,7 +96,10 @@ onMounted(() => {
       /**
        * Or pass class directly without any configuration
        */
-      image: SimpleImage,
+      image: {
+        class: SimpleImage,
+        inlineToolbar: true
+      },
 
       list: {
         class: List,
@@ -157,12 +163,24 @@ onMounted(() => {
       const data = await api.saver.save()
       const content = data.blocks
       const parsedData = parseEditorJsToMarkdown(content)
+      console.log(parsedData)
     },
     onReady: () => {
       opacity.value = 100
     }
   })
 })
+
+onBeforeUnmount(() => {
+  editor.value?.destroy()
+})
+
+const getMarkdownContent = async () => {
+  const data = await editor.value!.save()
+  const content = data.blocks
+  const parsedData = parseEditorJsToMarkdown(content)
+  return parsedData
+}
 </script>
 
 <style lang="scss">

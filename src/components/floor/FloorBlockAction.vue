@@ -1,31 +1,26 @@
 <template>
   <div>
     <div class="flex justify-end mt-2 overflow-visible">
-      <span class="px-2">
-        <span
-          class="hover:bg-neutral-300 hover:bg-opacity-50 -m-1.5 p-1.5 transition cursor-pointer rounded-lg select-none transition"
-        >
-          <v-icon
-            icon="md:thumb_up"
-            color="red"
-          />
-          <span class="pl-1 self-center">1</span>
-        </span>
-      </span>
-      <IconBtn @click="reply">md:chat</IconBtn>
+      <IconBtn
+        icon-class="text-red"
+        :text="floor.like"
+      >
+        mdi-thumb-up-outline
+      </IconBtn>
+      <IconBtn @click="reply">mdi-chat-outline</IconBtn>
       <v-divider
         class="mx-1"
         :vertical="true"
       />
-      <IconBtn @click="edit">md:edit</IconBtn>
-      <IconBtn @click="toggleAction(ActionType.Delete)">md:delete</IconBtn>
-      <IconBtn @click="toggleAction(ActionType.Penalty)">md:person_off</IconBtn>
-      <IconBtn @click="toggleAction(ActionType.History)">md:history</IconBtn>
+      <IconBtn @click="edit">mdi-pencil-outline</IconBtn>
+      <IconBtn @click="toggleAction(ActionType.Delete)">mdi-delete-outline</IconBtn>
+      <IconBtn @click="toggleAction(ActionType.Penalty)">mdi-account-off-outline</IconBtn>
+      <IconBtn @click="toggleAction(ActionType.History)">mdi-history</IconBtn>
       <v-divider
         class="mx-1"
         :vertical="true"
       />
-      <IconBtn @click="toggleAction(ActionType.Report)">md:report</IconBtn>
+      <IconBtn @click="toggleAction(ActionType.Report)">mdi-alert-octagon-outline</IconBtn>
     </div>
     <v-divider
       v-if="action !== ActionType.None"
@@ -118,10 +113,7 @@
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import IconBtn from '@/components/button/IconBtn.vue'
 import Editor from '@/components/editor/Editor.vue'
 import HistoryBlock from '@/components/floor/HistoryBlock.vue'
@@ -195,7 +187,4 @@ const histories = arrayFactory(
 )
 </script>
 
-<style
-  lang="scss"
-  scoped
-></style>
+<style lang="scss" scoped></style>

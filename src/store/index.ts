@@ -34,25 +34,31 @@ export const useDivisionStore = defineStore('division', () => {
     }
   }
 
-  const currentDivision = computed(() => {
-    return divisions.find((division) => division.id === currentDivisionId.value) || null
+  const getDivisionById = computed(() => (id: number) => {
+    return divisions.find((division) => division.id === id)
   })
-  return { divisions, currentDivisionId, fetchDivisions, currentDivision }
+  return { divisions, fetchDivisions, getDivisionById, currentDivisionId }
 })
 
 export const useHoleStore = defineStore('hole', () => {
   const holes = reactive<Map<number, Hole[]>>(new Map())
-  const currentHoles = computed(() => {
-    const divisionStore = useDivisionStore()
-    const divisionId = divisionStore.currentDivisionId
-    if (!divisionId || !holes.has(divisionId)) {
-      return []
-    }
-    return holes.get(divisionId)!
+  const getHolesByDivisionId = computed(() => (divisionId: number) => {
+    return holes.get(divisionId) || []
   })
+
+  const getHoleById = computed(() => (id: number) => {
+    for (const divisionHoles of holes.values()) {
+      const hole = divisionHoles.find((hole) => hole.id === id)
+      if (hole) {
+        return hole
+      }
+    }
+    return null
+  })
+
   async function fetchDivisionHoles(
     divisionId: number,
-    length: number,
+    length = 10,
     tag?: string | Tag
   ): Promise<boolean> {
     if (!holes.has(divisionId)) {
@@ -75,5 +81,5 @@ export const useHoleStore = defineStore('hole', () => {
     oldHoles.sort((a, b) => b.timeUpdated.getTime() - a.timeUpdated.getTime())
     return true
   }
-  return { holes, fetchDivisionHoles, currentHoles }
+  return { holes, fetchDivisionHoles, getHolesByDivisionId, getHoleById }
 })

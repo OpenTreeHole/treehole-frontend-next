@@ -8,10 +8,7 @@
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { Floor } from '@/types'
 
 import FloorBlockAction from '@/components/floor/FloorBlockAction.vue'

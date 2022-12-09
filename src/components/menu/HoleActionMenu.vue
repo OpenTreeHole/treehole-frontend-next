@@ -8,7 +8,6 @@
         <v-icon
           :icon="icon"
           :size="size"
-          class="text-neutral-400"
           v-bind="props"
         ></v-icon>
       </template>
@@ -24,10 +23,7 @@
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 const items = [{ title: '举报' }, { title: '转发' }]
 
 const { size = 20 } = defineProps<{ size?: number; icon: string }>()

@@ -25,10 +25,7 @@
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import SpecialFlagChip from '@/components/tag/SpecialFlagChip.vue'
 import { timeDifference, generateColor } from '@/utils'
 import { computed } from 'vue'
@@ -46,7 +43,4 @@ const extraInfo = computed(() => {
 })
 </script>
 
-<style
-  lang="scss"
-  scoped
-></style>
+<style lang="scss" scoped></style>

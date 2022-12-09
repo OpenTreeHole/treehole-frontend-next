@@ -33,7 +33,7 @@ export class Floor {
   storey: number
 
   @Field()
-  fold: string
+  fold: string[]
 
   @Field()
   like: number

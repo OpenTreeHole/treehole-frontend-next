@@ -29,10 +29,7 @@
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { FloorHistory } from '@/types'
 import { timeDifference, parseToTypora } from '@/utils'
 import { ref } from 'vue'
@@ -60,7 +57,4 @@ const restore = () => {
 }
 </script>
 
-<style
-  lang="scss"
-  scoped
-></style>
+<style lang="scss" scoped></style>

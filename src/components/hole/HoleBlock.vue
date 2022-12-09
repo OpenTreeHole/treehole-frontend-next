@@ -1,18 +1,15 @@
 <template>
-  <router-link to="/hole/1">
-  <div>
+  <div class="px-6 lg:px-10 py-5">
+    <HoleBlockHeader :hole="hole" />
     <HoleBlockFirst :hole="hole" />
-    <HoleBlockReply :floor="hole.lastFloor" />
+    <HoleBlockFooter :hole="hole" />
   </div>
-</router-link>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { Hole } from '@/types'
 import HoleBlockFirst from './HoleBlockFirst.vue'
-import HoleBlockReply from './HoleBlockReply.vue'
+import HoleBlockHeader from './HoleBlockHeader.vue'
+import HoleBlockFooter from './HoleBlockFooter.vue'
 defineProps<{ hole: Hole }>()
 </script>
