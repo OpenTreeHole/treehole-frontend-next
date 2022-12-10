@@ -119,6 +119,9 @@ export class Report {
   @Field()
   dealt: boolean
 
+  @Field()
+  dealtBy: number
+
   @Field({ type: Floor })
   floor: Floor
 
@@ -127,6 +130,9 @@ export class Report {
 
   @Field()
   id: number
+
+  @Field()
+  result: string
 
   @Field({ type: Date })
   timeCreated: Date

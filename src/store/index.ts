@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { reactive, ref, watch, computed } from 'vue'
-import { Division, Hole, Tag, User, UserAuth } from '@/types'
+import { Division, Hole, Tag, UserAuth } from '@/types'
 import { useTheme } from 'vuetify'
-import { getCurrentUser, getUserProfile, listDivisions, listHoles } from '@/apis'
+import { getCurrentUser, listDivisions, listHoles } from '@/apis'
 
 export const useStyleStore = defineStore('style', () => {
   const theme = useTheme()

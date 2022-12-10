@@ -22,14 +22,19 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
 
-const props = defineProps<{ small?: boolean; text?: any; noAction?: boolean; iconClass?: string }>()
+const props = defineProps<{
+  small?: boolean
+  text?: any
+  noAction?: boolean
+  iconClass?: string | string[] | Record<string, boolean>
+}>()
 
 defineEmits<{
   (e: 'click'): void
 }>()
 
 const slots = useSlots()
-const icon = (slots['default']!()[0].children as string).trim()
+const icon = computed(() => (slots['default']!()[0].children as string).trim())
 
 const className = computed(() => ({
   'select-none': true,

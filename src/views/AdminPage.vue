@@ -1,8 +1,8 @@
 <template>
   <v-container class="mx-0 px-0 pt-0">
     <div class="flex">
-      <div class="max-w-full lg:max-w-[65%] 3xl:max-w-[55%] px-0">
-        <div class="text-h4 border-b-sm flex justify-between">
+      <div class="max-w-full lg:max-w-[65%] 3xl:max-w-[55%]">
+        <div class="border-b-sm flex justify-between">
           <v-tabs
             v-model="tab"
             background-color="primary"
@@ -12,21 +12,21 @@
               :key="i"
               :value="adminRoute.name"
             >
-              {{ adminRoute.meta?.title }}
+              <span class="text-[15px] font-bold">{{ adminRoute.meta?.title }}</span>
             </v-tab>
           </v-tabs>
         </div>
-        <v-window v-model="tab">
-          <v-window-item
-            v-for="(adminRoute, i) in adminRoutes"
-            :key="i"
-            :value="adminRoute.name"
-          >
-            <component :is="adminRoute.component" />
-          </v-window-item>
-        </v-window>
       </div>
     </div>
+    <v-window v-model="tab">
+      <v-window-item
+        v-for="(adminRoute, i) in adminRoutes"
+        :key="i"
+        :value="adminRoute.name"
+      >
+        <component :is="adminRoute.component" />
+      </v-window-item>
+    </v-window>
   </v-container>
 </template>
 

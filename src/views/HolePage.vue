@@ -96,6 +96,7 @@ import { useEditor } from '@/composables/editor'
 import { onMounted, provide, ref, computed, reactive } from 'vue'
 import { addFloor, getHole, listFloors } from '@/apis'
 import { useDivisionStore } from '@/store'
+import { useFloorPortal } from '@/composables/floor'
 
 const props = defineProps<{ holeId: number; floorId?: number }>()
 
@@ -109,9 +110,13 @@ const divisionStore = useDivisionStore()
 
 const { editorData, initEditor, clearEditor } = useEditor()
 
-const scrollToFloor = (id: number) => {
-  const floorElement = document.getElementById(id.toString())
+const { gotoFloor } = useFloorPortal()
+
+const scrollToFloor = (floor: Floor | number) => {
+  const floorId = typeof floor === 'number' ? floor : floor.id
+  const floorElement = document.getElementById(floorId.toString())
   if (floorElement) window.scroll({ top: floorElement.offsetTop, behavior: 'smooth' })
+  else gotoFloor(floor)
 }
 
 provide('scrollToFloor', scrollToFloor)

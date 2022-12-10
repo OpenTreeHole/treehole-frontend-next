@@ -23,7 +23,7 @@ import { useRouter } from 'vue-router'
 
 const props = defineProps<{ mention: Floor }>()
 
-const scrollToMention = inject<(id: number) => void>('scrollToFloor')!
+const scrollToMention = inject<(floor: Floor | number) => void>('scrollToFloor')!
 const holeId = inject<number>('holeId')!
 
 const router = useRouter()

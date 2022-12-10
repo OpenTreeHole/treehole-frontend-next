@@ -20,7 +20,6 @@ import {
   Tag,
   Report,
   IDivisionModify,
-  IReportDeal,
   FloorHistory
 } from '@/types'
 
@@ -530,8 +529,22 @@ export const deleteFavorites = async (holeId: number): Promise<string> => {
   return response.data.message
 }
 
-export const listReports = async () => {
-  const response = await axios.get('/reports?category=not_dealed')
+export const listReports = async (
+  offset: number,
+  size: number,
+  range: number,
+  orderedBy?: string,
+  sort?: string
+) => {
+  const response = await axios.get('/reports', {
+    params: {
+      offset,
+      size,
+      range,
+      ordered_by: orderedBy,
+      sort
+    }
+  })
   return arrayFactory(Report, response.data)
 }
 
@@ -548,9 +561,13 @@ export const addReport = async (floorId: number, reason: string) => {
   return factory(Report, response.data)
 }
 
-export const dealReport = async (id: number, deal: IReportDeal): Promise<string> => {
-  const response = await axios.post(`/reports/${id}`, snakifyKeys(deal))
-  return response.data.message
+export const dealReport = async (id: number, result: string) => {
+  const response = await axios.delete(`/reports/${id}`, {
+    data: {
+      result
+    }
+  })
+  return factory(Report, response.data)
 }
 
 export const addPenalty = async (floorId: number, penaltyLevel: number, divisionId: number) => {

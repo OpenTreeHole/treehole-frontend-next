@@ -1,83 +1,94 @@
 <template>
-  <div>
-    <v-list class="pt-0 lg:px-4">
-      <v-list-item
-        v-for="(report, i) in reports"
-        :key="i"
-        class="px-0 py-5 border-b-sm flex-col text-left"
-      >
-        <ReportBlock
-          class="px-6"
-          :report="report"
-        />
-      </v-list-item>
-    </v-list>
+  <div class="flex">
+    <div class="max-w-full lg:max-w-[65%] 3xl:max-w-[55%] grow">
+      <v-list class="pt-0 lg:px-4">
+        <v-list-item
+          v-for="(report, i) in reports"
+          :key="i"
+          v-intersect="onIntersect(i)"
+          class="px-0 py-5 border-b-sm flex-col text-left"
+        >
+          <ReportBlock
+            v-model:report="reports[i]"
+            class="px-6"
+            @deal="onDeal(i)"
+          />
+        </v-list-item>
+      </v-list>
+    </div>
+    <div class="hidden lg:block lg:max-w-[35%] xl:max-w-[30%] 3xl:max-w-[25%] pl-5 lg:pt-4 grow">
+      <v-list class="pt-0 lg:pt-4">
+        <v-list-item>
+          <p class="text-left">举报类别：</p>
+          <v-radio-group v-model="range">
+            <v-radio
+              label="未处理举报"
+              :value="0"
+            ></v-radio>
+            <v-radio
+              label="已处理举报"
+              :value="1"
+            ></v-radio>
+            <v-radio
+              label="所有举报"
+              :value="2"
+            ></v-radio>
+          </v-radio-group>
+        </v-list-item>
+      </v-list>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { arrayFactory } from '@/utils/reflect'
 import { Report } from '@/types'
-import { camelizeKeys } from '@/utils'
 import ReportBlock from '@/components/floor/ReportBlock.vue'
+import { listReports } from '@/apis'
+import { onMounted, provide, reactive, ref, watch } from 'vue'
+import { useFloorPortal } from '@/composables/floor'
 
-const reports = arrayFactory(
-  Report,
-  camelizeKeys([
-    {
-      dealt: false,
-      id: 1,
-      reason: '嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然',
-      floor: {
-        anonyname: 'Dest1n1',
-        content:
-          '现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
-          '\n' +
-          '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。',
-        deleted: false,
-        fold: '',
-        hole_id: 0,
-        id: 100001,
-        is_me: false,
-        like: 0,
-        liked: 0,
-        mention: [],
-        special_tag: '测试用例',
-        storey: 0,
-        time_created: '2022-07-27T17:07:39.802Z',
-        time_updated: '2022-07-27T17:07:39.802Z'
-      },
-      time_created: '2022-08-30T09:51:32.279Z',
-      time_updated: '2022-08-30T09:51:32.279Z'
-    },
-    {
-      dealt: false,
-      id: 2,
-      reason: '嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然嘉然',
-      floor: {
-        anonyname: 'Dest1n1',
-        content:
-          '现代社会以海德格尔的一句“一切实践传统都已经瓦解完了”为嚆矢。滥觞于家庭与社会传统的期望正失去它们的借鉴意义。但面对看似无垠的未来天空，我想循卡尔维诺“树上的男爵”的生活好过过早地振翮。' +
-          '\n' +
-          '我们怀揣热忱的灵魂天然被赋予对超越性的追求，不屑于古旧坐标的约束，钟情于在别处的芬芳。但当这种期望流于对过去观念不假思索的批判，乃至走向虚无与达达主义时，便值得警惕了。',
-        deleted: true,
-        fold: '该内容寄了，已被折叠',
-        hole_id: 0,
-        id: 100002,
-        is_me: false,
-        like: 0,
-        liked: 0,
-        mention: [],
-        special_tag: '测试用例',
-        storey: 0,
-        time_created: '2022-07-27T17:07:39.802Z',
-        time_updated: '2022-07-27T17:07:39.802Z'
-      },
-      time_created: '2022-08-30T09:51:32.279Z',
-      time_updated: '2022-08-30T09:51:32.279Z'
-    }
-  ])
-)
+const { gotoFloor } = useFloorPortal()
+
+provide('scrollToFloor', gotoFloor)
+
+const reports = reactive<Report[]>([])
+
+const range = ref<0 | 1 | 2>(0)
+
+const hasNext = ref(true)
+const loading = ref(false)
+const loadEnd = ref(0)
+
+const loadReportsUntil = async (length: number) => {
+  loadEnd.value = length
+  if (loading.value) return
+  loading.value = true
+  while (reports.length < loadEnd.value && hasNext.value) {
+    const res = await listReports(reports.length, 10, range.value)
+    if (res.length < 10) hasNext.value = false
+    reports.push(...res)
+  }
+  loading.value = false
+}
+
+const onIntersect = (index: number) => async (isIntersecting: boolean) => {
+  if (isIntersecting && index >= reports.length - 5) {
+    await loadReportsUntil(index + 10)
+  }
+}
+
+const onDeal = (index: number) => {
+  if (range.value === 0) reports.splice(index, 1)
+}
+
+watch(range, async () => {
+  reports.splice(0, reports.length)
+  await loadReportsUntil(10)
+})
+
+onMounted(async () => {
+  await loadReportsUntil(10)
+})
 </script>
 
 <style lang="scss" scoped></style>

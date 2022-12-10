@@ -46,7 +46,12 @@
       </template>
     </div>
     <div class="flex justify-end">
-      <span class="text-neutral-400 text-sm px-2">##{{ floor.id }}</span>
+      <span
+        class="text-neutral-400 text-sm px-2 hover:text-neutral-300 transition cursor-pointer active:text-neutral-300 focus:ring-0"
+        @click="scrollToFloor(floor)"
+      >
+        ##{{ floor.id }}
+      </span>
     </div>
   </template>
 </template>
@@ -96,11 +101,11 @@ const folded = ref(props.floor.fold.length !== 0 && !props.banFold)
 
 const computeColorClass = (str: string) => 'text-' + generateColor(str)
 
-const scrollToFloor = inject<(id: number) => void>('scrollToFloor')!
+const scrollToFloor = inject<(floor: Floor | number) => void>('scrollToFloor')!
 
 const gotoReply = () => {
   if (replyFloor.value) {
-    scrollToFloor(replyFloor.value.id)
+    scrollToFloor(replyFloor.value)
   }
 }
 </script>
