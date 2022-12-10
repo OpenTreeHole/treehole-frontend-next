@@ -1,7 +1,7 @@
 <template>
   <div ref="el">
     <v-combobox
-      v-model="tags"
+      :model-value="tags"
       :items="allTags"
       item-title="name"
       variant="outlined"
@@ -9,6 +9,7 @@
       density="compact"
       multiple
       hide-selected
+      @update:model-value="onTagsChange"
     >
       <template #selection="{ item, index }">
         <TagChip
@@ -25,18 +26,20 @@
 <script setup lang="ts">
 import { useTagStore } from '@/store'
 import { Tag } from '@/types'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import TagChip from '../tag/TagChip.vue'
 
 const props = defineProps<{
-  tags: Tag[]
+  modelValue: Tag[]
+  filter?: (tag: Tag) => boolean
+  filterTags?: Tag[]
 }>()
 const emit = defineEmits<{
-  (e: 'update:tags', tags: Tag[]): void
+  (e: 'update:modelValue', tags: Tag[]): void
 }>()
 const tags = computed({
-  get: () => props.tags,
-  set: (v) => emit('update:tags', v)
+  get: () => props.modelValue,
+  set: (v) => emit('update:modelValue', v)
 })
 
 const el = ref<HTMLElement>()
@@ -49,13 +52,15 @@ const allTags = computed(() =>
   tagStore.tags
     .filter((v) => !tags.value.includes(v))
     .filter((v) => v.name.includes(search.value))
+    .filter((v) => !props.filterTags?.some((t) => t.name === v.name))
+    .filter((v) => !props.filter || props.filter(v))
     .slice(0, 6)
 )
 
-watch(tags, () => {
-  if (tags.value.length > 5) tags.value = tags.value.slice(0, 5) // TODO: show error message
-  if (tags.value.every((v) => typeof v !== 'string')) return
-  tags.value = tags.value
+const onTagsChange = (newTags: any) => {
+  let t = newTags as (Tag | string)[]
+  if (t.length > 5) t = t.slice(0, 5) // TODO: show error message
+  tags.value = t
     .filter((v) => typeof v !== 'string' || (v as string).trim() !== '')
     .map((v) => {
       if (typeof v === 'string') {
@@ -63,7 +68,7 @@ watch(tags, () => {
         else return new Tag((v as string).trim())
       } else return v
     })
-})
+}
 
 onMounted(() => {
   tagStore.fetchTags()

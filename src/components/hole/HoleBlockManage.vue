@@ -3,7 +3,7 @@
     <div class="flex grow lg:mx-6 my-2">
       <span class="self-center font-semibold text-orange-300">标签：</span>
       <TagSelector
-        v-model:tags="tags"
+        v-model="tags"
         class="grow"
       ></TagSelector>
     </div>

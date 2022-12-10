@@ -13,6 +13,7 @@
           >
             <span class="self-center">NSFW：</span>
             <v-radio-group
+              v-model="nsfw"
               inline
               hide-details
             >
@@ -43,10 +44,9 @@
               ></TagChip>
             </div>
             <span class="self-center">添加标签：</span>
-            <v-combobox
-              hide-details
-              variant="outlined"
-              density="compact"
+            <TagSelector
+              v-model="tempTags"
+              :filter-tags="blockedTags"
             />
           </div>
         </div>
@@ -56,10 +56,10 @@
           <div class="flex mt-3 items-center">
             <span>是否开启夜间模式：</span>
             <v-switch
-              v-model="store.dark"
+              v-model="styleStore.dark"
               hide-details
-              :label="store.dark ? '夜间模式开启' : '夜间模式关闭'"
-              color="green"
+              :label="styleStore.dark ? '夜间模式开启' : '夜间模式关闭'"
+              color="white"
             />
           </div>
         </div>
@@ -69,82 +69,33 @@
 </template>
 
 <script setup lang="ts">
-import { arrayFactory } from '@/utils/reflect'
-import { Tag } from '@/types'
 import TagChip from '@/components/tag/TagChip.vue'
-import { reactive } from 'vue'
-import { useStyleStore } from '@/store'
+import { computed, ref, watch } from 'vue'
+import { useStyleStore, useTagStore } from '@/store'
+import TagSelector from '@/components/action/TagSelector.vue'
 
-const store = useStyleStore()
+const styleStore = useStyleStore()
+const tagStore = useTagStore()
 
-const blockedTags = reactive(
-  arrayFactory(Tag, [
-    {
-      name: '提问',
-      tagId: 1,
-      temperature: 1
-    },
-    {
-      name: '*性相关',
-      tagId: 2,
-      temperature: 1
-    },
-    {
-      name: '*政治敏感',
-      tagId: 3,
-      temperature: 1
-    },
-    {
-      name: '北区',
-      tagId: 4,
-      temperature: 1
-    },
-    {
-      name: '军训',
-      tagId: 5,
-      temperature: 1
-    },
-    {
-      name: '军训',
-      tagId: 5,
-      temperature: 1
-    },
-    {
-      name: '军训',
-      tagId: 5,
-      temperature: 1
-    },
-    {
-      name: '军训',
-      tagId: 5,
-      temperature: 1
-    },
-    {
-      name: '军训',
-      tagId: 5,
-      temperature: 1
-    },
-    {
-      name: '军训',
-      tagId: 5,
-      temperature: 1
-    },
-    {
-      name: '军训',
-      tagId: 5,
-      temperature: 1
-    },
-    {
-      name: '军训',
-      tagId: 5,
-      temperature: 1
-    },
-    {
-      name: '军训',
-      tagId: 5,
-      temperature: 1
+const blockedTags = computed({
+  get: () => tagStore.blockedTags,
+  set: (val) => {
+    tagStore.blockedTags = val
+  }
+})
+
+const nsfw = ref(2)
+
+const tempTags = ref([])
+
+watch(
+  () => tempTags.value,
+  (newVal) => {
+    if (newVal.length > 0) {
+      blockedTags.value = [...blockedTags.value, ...newVal]
+      tempTags.value = []
     }
-  ])
+  }
 )
 </script>
 

@@ -36,7 +36,7 @@
                 <div class="max-w-[var(--editor-max-width)] flex grow mx-6 lg:ml-11 my-2">
                   <span class="self-center font-semibold text-orange-300"> 标签： </span>
                   <TagSelector
-                    v-model:tags="tags"
+                    v-model="tags"
                     class="grow mr-2"
                   ></TagSelector>
                 </div>
@@ -74,7 +74,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { useDivisionStore, useHoleStore } from '@/store'
+import { useDivisionStore, useHoleStore, useTagStore } from '@/store'
 import HoleBlock from '@/components/hole/HoleBlock.vue'
 import { useEditor } from '@/composables/editor'
 import { addHole } from '@/apis'
@@ -86,6 +86,7 @@ import { sleep } from '@/utils'
 const props = defineProps<{ divisionId: number }>()
 const holeStore = useHoleStore()
 const divisionStore = useDivisionStore()
+const tagStore = useTagStore()
 
 const pinnedHoles = computed(
   () => divisionStore.divisions.find((division) => division.id === props.divisionId)!.pinned
@@ -95,6 +96,9 @@ const holes = computed(() =>
   holeStore
     .getHolesByDivisionId(props.divisionId)
     .filter((hole) => pinnedHoles.value.every((pinned) => pinned.id !== hole.id))
+    .filter((hole) =>
+      hole.tags.every((tag) => !tagStore.blockedTags.find((t) => t.name === tag.name))
+    )
 )
 
 const hasNext = ref(true)
