@@ -151,6 +151,8 @@ export const parseToTypora = (markdown: string) => {
 
 export const plainText = (markdown: string) => {
   return removeMarkdown(markdown)
-    .replaceAll(/#{1,2}\d+/g, '[引用 $&]')
-    .replaceAll(/\[引用 (#{1,2}\d+)\]/g, '[回复 $1]')
+    .replaceAll(/#{1,2}\d+/g, '「引用 $&」')
+    .replaceAll(/^「引用 (#{1,2}\d+)」/g, '「回复 $1」')
+    .replaceAll(/\$\$.+\$\$/g, '「数学公式」')
+    .replaceAll(/\$.+\$/g, '「数学公式」')
 }

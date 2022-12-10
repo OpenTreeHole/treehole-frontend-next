@@ -79,6 +79,14 @@ export class Tag {
 
   @Field({ factory: (v, parent) => generateColor(parent.name) })
   color: string
+
+  constructor(name?: string) {
+    if (!name) return
+    this.name = name
+    this.tagId = 0
+    this.temperature = 0
+    this.color = generateColor(name)
+  }
 }
 
 @Model
@@ -88,6 +96,9 @@ export class Hole {
 
   @Field()
   id: number
+
+  @Field()
+  hidden: boolean
 
   @Field({ factory: (v) => arrayFactory(Floor, v.prefetch) })
   floors: Floor[]

@@ -14,6 +14,13 @@
         color="red"
         size="small"
       ></SpecialFlagChip>
+
+      <SpecialFlagChip
+        v-if="isPinned"
+        text="置顶"
+        color="red"
+        size="small"
+      ></SpecialFlagChip>
     </div>
   </div>
 </template>
@@ -22,6 +29,18 @@
 import { Hole } from '@/types'
 import SpecialFlagChip from '@/components/tag/SpecialFlagChip.vue'
 import TagChip from '@/components/tag/TagChip.vue'
+import { useDivisionStore } from '@/store'
+import { computed } from 'vue'
 
-defineProps<{ hole: Hole }>()
+const props = defineProps<{ hole: Hole }>()
+
+const divisionStore = useDivisionStore()
+
+const pinnedHoles = computed(() =>
+  divisionStore.currentDivisionId
+    ? divisionStore.getDivisionById(divisionStore.currentDivisionId)!.pinned
+    : []
+)
+
+const isPinned = computed(() => !pinnedHoles.value.every((hole) => hole.id !== props.hole.id))
 </script>

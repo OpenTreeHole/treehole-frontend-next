@@ -170,6 +170,7 @@ import {
   addSpecialTag,
   deleteFloor,
   getFloorHistory,
+  getHole,
   likeFloor,
   modifyFloor,
   restoreFloorFromHistory
@@ -282,12 +283,10 @@ const sendPenalty = async () => {
     console.error('Penalty level not selected')
     return
   }
-  if (divisionStore.currentDivisionId === null) {
-    console.error('Division not selected')
-    return
-  }
+  const divisionId =
+    divisionStore.currentDivisionId || (await getHole(floor.value.holeId)).divisionId
   action.value = ActionType.None
-  await addPenalty(floor.value.id, penaltyLevel.value, divisionStore.currentDivisionId)
+  await addPenalty(floor.value.id, penaltyLevel.value, divisionId)
 }
 </script>
 

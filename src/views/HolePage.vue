@@ -23,9 +23,7 @@
               <v-divider class="mx-6 my-2" />
               <div class="flex justify-center">
                 <div class="max-w-[var(--editor-max-width)] flex grow mx-6 lg:ml-11">
-                  <span class="self-center font-semibold text-orange-400">
-                    特殊标签（留空则无特殊标签）：
-                  </span>
+                  <span class="self-center font-semibold text-orange-300">特殊标签：</span>
                   <v-text-field
                     v-model="specialTag"
                     class="grow mr-2"
@@ -33,6 +31,7 @@
                     variant="outlined"
                     autofocus
                     density="compact"
+                    placeholder="留空则无特殊标签"
                   />
                 </div>
               </div>
@@ -60,7 +59,7 @@
           </v-list-item>
         </v-list>
       </div>
-      <div class="hidden lg:block lg:max-w-[35%] xl:max-w-[30%] 3xl:max-w-[25%] pl-5 pt-4 grow">
+      <!-- <div class="hidden lg:block lg:max-w-[35%] xl:max-w-[30%] 3xl:max-w-[25%] pl-5 pt-4 grow">
         <v-card
           class="mx-auto py-2"
           max-width="368"
@@ -72,16 +71,10 @@
           <v-divider />
 
           <v-card-text class="text-lg text-left">
-            <p class="px-1 py-2">
-              #123124
-              <!-- <TagChip
-                class="mx-2"
-                :tag="tags[0]"
-              ></TagChip> -->
-            </p>
+            <p class="px-1 py-2">#123124</p>
           </v-card-text>
         </v-card>
-      </div>
+      </div> -->
     </div>
   </v-container>
 </template>

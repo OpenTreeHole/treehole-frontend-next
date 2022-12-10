@@ -40,7 +40,7 @@
           v-html="markdownBlocks[i / 2]"
         />
         <MentionBlock
-          v-else
+          v-else-if="mentionBlocks[(i - 1) / 2]"
           :mention="mentionBlocks[(i - 1) / 2]!"
         />
       </template>
@@ -61,11 +61,12 @@ import { generateColor, parseToTypora } from '@/utils'
 
 import { DetailedFloor, Floor } from '@/types'
 import MentionBlock from '@/components/floor/MentionBlock.vue'
-import { computed, inject, ref } from 'vue'
+import { computed, inject, onMounted, reactive, ref } from 'vue'
+import { getFloor, getHole } from '@/apis'
 
 const props = defineProps<{ floor: Floor; banFold?: boolean }>()
 
-const replyRegexResult = computed(() => /^\s*##(\d+)\b\s*/g.exec(props.floor.content))
+const replyRegexResult = computed(() => /^\s*#{1,2}(\d+)\b\s*/g.exec(props.floor.content))
 const replyFloor = computed(
   () =>
     (replyRegexResult.value &&
@@ -76,8 +77,8 @@ const replyFloor = computed(
 
 const markdownBlocks = computed(() => {
   const html = props.floor.content
-    .replaceAll(/^##(\d+)\b\s*/g, '')
-    .split(/##\d+\b/g)
+    .replaceAll(/^#{1,2}(\d+)\b\s*/g, '')
+    .split(/#{1,2}\d+\b/g)
     .map((v) => v.trim())
   if (html[html.length - 1] === '') {
     html.pop()
@@ -85,12 +86,15 @@ const markdownBlocks = computed(() => {
   return html.map(parseToTypora)
 })
 
+const mentions = reactive<Record<string, Floor>>(
+  props.floor instanceof DetailedFloor
+    ? props.floor.mention.reduce((acc, cur) => ({ ...acc, [`##${cur.id}`]: cur }), {})
+    : {}
+)
+
 const mentionBlocks = computed(() =>
-  [...props.floor.content.replaceAll(/^##(\d+)\b\s*/g, '').matchAll(/##(\d+)\b\s*/g)].map(
-    (v) =>
-      (props.floor instanceof DetailedFloor &&
-        props.floor.mention.find((floor) => floor.id.toString() === v[1])) ||
-      null
+  [...props.floor.content.replaceAll(/^#{1,2}(\d+)\b\s*/g, '').matchAll(/#{1,2}(\d+)\b\s*/g)].map(
+    (v) => mentions[v[0]] || null
   )
 )
 
@@ -108,6 +112,22 @@ const gotoReply = () => {
     scrollToFloor(replyFloor.value)
   }
 }
+
+onMounted(async () => {
+  const mentionStrs = props.floor.content
+    .replaceAll(/^#{1,2}(\d+)\b\s*/g, '')
+    .matchAll(/#{1,2}(\d+)\b\s*/g)
+  for (const mentionStr of mentionStrs) {
+    const mention = mentions[mentionStr[0]]
+    if (!mention) {
+      if (mentionStr[0].startsWith('##')) {
+        mentions[mentionStr[0]] = await getFloor(parseInt(mentionStr[1]))
+      } else {
+        mentions[mentionStr[0]] = (await getHole(parseInt(mentionStr[1]))).firstFloor
+      }
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full border-t mt-2 pt-2 text-sm">
+  <div class="w-full text-sm">
     <div class="line-clamp-2">
       {{ plainText(floor.content) }}
     </div>

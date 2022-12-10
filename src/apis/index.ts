@@ -411,7 +411,8 @@ export const restoreFloorFromHistory = async (
 export const addHole = async (
   divisionId: number,
   content: string,
-  tags: string[] | Tag[]
+  tags: string[] | Tag[],
+  specialTag?: string
 ): Promise<{ message: string; hole: Hole }> => {
   const response = await axios.post('/holes', {
     division_id: divisionId,
@@ -421,7 +422,8 @@ export const addHole = async (
         ? typeof tags[0] === 'string'
           ? (tags as string[]).map((v) => ({ name: v }))
           : tags.map((v) => ({ name: (v as Tag).name }))
-        : []
+        : [],
+    special_tag: specialTag
   })
   const data = camelizeKeys(response.data)
   return { message: data.message, hole: factory(Hole, data.data) }
@@ -458,8 +460,16 @@ export const modifyHoleTag = async (id: number, tags: string[] | Tag[]) => {
 }
 
 export const modifyHoleDivision = async (id: number, divisionId: number) => {
+  console.log(divisionId)
   const response = await axios.put(`/holes/${id}`, {
     division_id: divisionId
+  })
+  return factory(Hole, response.data)
+}
+
+export const modifyHoleHidden = async (id: number, hidden: boolean) => {
+  const response = await axios.put(`/holes/${id}`, {
+    unhidden: !hidden
   })
   return factory(Hole, response.data)
 }
