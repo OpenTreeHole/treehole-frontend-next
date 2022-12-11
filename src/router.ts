@@ -31,8 +31,8 @@ export const adminRoutes: RouteRecordRaw[] = [
     component: ReportView
   },
   {
-    path: 'division',
-    name: 'division',
+    path: 'division_admin',
+    name: 'division_admin',
     meta: {
       title: '分区',
       requiresAuth: true,
