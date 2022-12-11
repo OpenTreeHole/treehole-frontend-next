@@ -23,8 +23,8 @@ You can also build this project with docker. To build the image, you can create 
 ```yaml
 services:
   auth-frontend:
-    image: shi2002/auth_frontend:dev
-    container_name: auth-frontend
+    image: dest1n1/treehole-frontend-next:dev
+    container_name: treehole-frontend-next
     environment:
       - VITE_BACKEND_URL=${BACKEND_URL}
       - VITE_AUTH_URL=${AUTH_URL}
