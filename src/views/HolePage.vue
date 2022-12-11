@@ -113,7 +113,6 @@ const scrollToFloor = (floor: Floor | number) => {
 }
 
 provide('scrollToFloor', scrollToFloor)
-provide('holeId', props.holeId)
 
 const hasNext = ref(true)
 const loading = ref(false)
@@ -125,7 +124,7 @@ const loadFloorsUntil = async (length: number) => {
   loading.value = true
   while (floors.length < loadEnd.value && hasNext.value) {
     const res = await listFloors(props.holeId, 50, floors.length)
-    if (res.length < 20) hasNext.value = false
+    if (res.length < 50) hasNext.value = false
     floors.push(...res)
   }
   loading.value = false

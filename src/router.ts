@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import DivisionPage from '@/views/DivisionPage.vue'
 import HolePage from '@/views/HolePage.vue'
 import AdminPage from '@/views/AdminPage.vue'
+import SearchPage from '@/views/SearchPage.vue'
 import SettingsPage from '@/views/SettingsPage.vue'
 import LicensePage from '@/views/LicensePage.vue'
 import LoginPage from '@/views/LoginPage.vue'
@@ -91,6 +92,18 @@ export const routes: RouteRecordRaw[] = [
     },
     component: AdminPage,
     children: adminRoutes
+  },
+  {
+    path: '/search',
+    name: 'search',
+    meta: {
+      title: '搜索',
+      requiresAuth: true
+    },
+    component: SearchPage,
+    props: (route) => ({
+      searchText: route.query.text
+    })
   },
   {
     path: '/settings',

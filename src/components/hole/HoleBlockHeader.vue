@@ -6,6 +6,7 @@
       class="mr-2"
       size="small"
       :tag="tag"
+      @click="tagStore.filterTag = tag"
     ></TagChip>
     <div class="grow flex justify-end space-x-3">
       <SpecialFlagChip
@@ -29,12 +30,13 @@
 import { Hole } from '@/types'
 import SpecialFlagChip from '@/components/tag/SpecialFlagChip.vue'
 import TagChip from '@/components/tag/TagChip.vue'
-import { useDivisionStore } from '@/store'
+import { useDivisionStore, useTagStore } from '@/store'
 import { computed } from 'vue'
 
 const props = defineProps<{ hole: Hole }>()
 
 const divisionStore = useDivisionStore()
+const tagStore = useTagStore()
 
 const pinnedHoles = computed(() =>
   divisionStore.currentDivisionId

@@ -89,17 +89,14 @@ export const useHoleStore = defineStore('hole', () => {
     return null
   })
 
-  async function fetchDivisionHoles(
-    divisionId: number,
-    length = 10,
-    tag?: string | Tag
-  ): Promise<boolean> {
+  async function fetchDivisionHoles(divisionId: number, length = 10): Promise<boolean> {
     if (!holes.has(divisionId)) {
       holes.set(divisionId, [])
     }
     const oldHoles = holes.get(divisionId)!
     const time = oldHoles.length > 0 ? oldHoles[oldHoles.length - 1].timeUpdated : new Date()
-    const newHoles = await listHoles(divisionId, time, length, tag)
+    const tagStore = useTagStore()
+    const newHoles = await listHoles(divisionId, time, length, tagStore.filterTag || undefined)
     if (newHoles.length === 0) {
       return false
     }
@@ -153,11 +150,19 @@ export const useHoleStore = defineStore('hole', () => {
 
 export const useTagStore = defineStore('tag', () => {
   const tags = reactive<Tag[]>([])
+  const filterTag = ref<Tag | null>(null)
+
+  const holeStore = useHoleStore()
+  const divisionStore = useDivisionStore()
+  watch(filterTag, () => {
+    holeStore.holes.clear()
+    holeStore.fetchDivisionHoles(divisionStore.currentDivisionId || 1)
+  })
 
   const fetchTags = async () => {
     tags.splice(0, tags.length, ...(await listTags()))
   }
-  return { tags, fetchTags }
+  return { tags, fetchTags, filterTag }
 })
 
 export const useSettingsStore = defineStore('settings', () => {

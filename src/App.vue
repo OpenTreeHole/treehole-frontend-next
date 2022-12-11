@@ -10,7 +10,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import TheLayout from './components/TheLayout.vue'
 import { useDivisionStore, useStyleStore, useUserStore } from '@/store'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
 const route = useRoute()
 
@@ -24,12 +24,12 @@ const firstRoute = ref(true)
 
 router.beforeEach(async () => {
   sessionStorage.setItem(`scroll-${route.path}`, window.scrollY.toString())
-
   const promise = Promise.all([divisionStore.fetchDivisions(), userStore.fetchUser()])
   if (firstRoute.value) {
     firstRoute.value = false
     await promise
   }
+  divisionStore.currentDivisionId = null
 })
 
 router.afterEach(() => {
