@@ -38,7 +38,7 @@ const computeColorClass = (str: string) => 'text-' + generateColor(str)
 const extraInfo = computed(() => {
   const ret: string[] = []
   if (props.floor.deleted) ret.push('已删除')
-  if (props.floor.fold.length > 0) ret.push('已折叠')
+  if (props.floor.fold) ret.push('已折叠')
   return ret.join('，')
 })
 </script>

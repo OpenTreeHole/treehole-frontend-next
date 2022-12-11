@@ -47,7 +47,7 @@
           <v-list-item
             v-for="(floor, index) in floors"
             :id="floor.id"
-            :key="floor.id"
+            :key="`##${floor.id}, ${floor.fold}`"
             v-intersect="onIntersect(index)"
             class="px-0 py-5 border-b-sm flex-col text-left"
           >
@@ -123,23 +123,23 @@ const loadFloorsUntil = async (length: number) => {
   loadEnd.value = length
   if (loading.value) return
   loading.value = true
-  while (floors.length <= loadEnd.value && hasNext.value) {
-    const res = await listFloors(props.holeId, 10, floors.length)
-    if (res.length < 10) hasNext.value = false
+  while (floors.length < loadEnd.value && hasNext.value) {
+    const res = await listFloors(props.holeId, 50, floors.length)
+    if (res.length < 20) hasNext.value = false
     floors.push(...res)
   }
   loading.value = false
 }
 
 const onIntersect = (index: number) => async (isIntersecting: boolean) => {
-  if (isIntersecting && index >= floors.length - 5) {
-    await loadFloorsUntil(index + 10)
+  if (isIntersecting && index >= floors.length - 25) {
+    await loadFloorsUntil(index + 50)
   }
 }
 
 const onNewContent = async () => {
   hasNext.value = true
-  await loadFloorsUntil(floors.length + 10)
+  await loadFloorsUntil(floors.length + 50)
 }
 
 const specialTag = ref('')
@@ -161,11 +161,11 @@ const sendComment = async (content: string) => {
 
 onMounted(async () => {
   hole.value = await getHole(props.holeId)
-  await loadFloorsUntil(10)
+  await loadFloorsUntil(50)
   divisionStore.currentDivisionId = hole.value?.divisionId || null
   if (props.floorId) {
     while (floors.every((floor) => floor.id !== props.floorId))
-      await loadFloorsUntil(floors.length + 10)
+      await loadFloorsUntil(floors.length + 50)
     await sleep(100)
     scrollToFloor(props.floorId)
   }

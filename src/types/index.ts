@@ -32,8 +32,8 @@ export class Floor {
   @Field()
   storey: number
 
-  @Field()
-  fold: string[]
+  @Field({ factory: (v, parent) => parent.foldV2 })
+  fold: string
 
   @Field()
   like: number

@@ -16,6 +16,7 @@
         :vertical="true"
       />
       <IconBtn @click="edit">mdi-pencil-outline</IconBtn>
+      <IconBtn @click="toggleAction(ActionType.Fold)">mdi-folder-off-outline</IconBtn>
       <IconBtn @click="toggleAction(ActionType.Delete)">mdi-delete-outline</IconBtn>
       <IconBtn @click="toggleAction(ActionType.Penalty)">mdi-account-off-outline</IconBtn>
       <IconBtn @click="toggleAction(ActionType.History)">mdi-history</IconBtn>
@@ -88,6 +89,25 @@
         />
       </QuestionAction>
     </template>
+    <template v-else-if="action === ActionType.Fold">
+      <QuestionAction
+        class="mt-4"
+        text="请输入折叠理由："
+        text-class="text-red"
+        @done="sendFold"
+        @cancel="action = ActionType.None"
+      >
+        <v-text-field
+          v-model="foldReason"
+          class="grow mr-2"
+          hide-details
+          variant="outlined"
+          :autofocus="true"
+          density="compact"
+          placeholder="折叠理由不可为空"
+        />
+      </QuestionAction>
+    </template>
     <template v-else-if="action === ActionType.Delete">
       <QuestionAction
         class="mt-4"
@@ -104,6 +124,10 @@
           variant="outlined"
           :autofocus="true"
           density="compact"
+        />
+        <span
+          v-else
+          class="grow"
         />
       </QuestionAction>
     </template>
@@ -169,6 +193,7 @@ import {
   addReport,
   addSpecialTag,
   deleteFloor,
+  foldFloor,
   getFloorHistory,
   getHole,
   likeFloor,
@@ -194,6 +219,7 @@ const divisionStore = useDivisionStore()
 
 const specialTag = ref('')
 const reportReason = ref('')
+const foldReason = ref('')
 const deleteReason = ref('')
 const penaltyLevel = ref<number | null>(null)
 
@@ -202,6 +228,7 @@ enum ActionType {
   Edit,
   Reply,
   Report,
+  Fold,
   Delete,
   History,
   Penalty,
@@ -239,6 +266,7 @@ const sendReply = async (markdown: string) => {
     specialTag: specialTag.value
   })
   clearEditor()
+  specialTag.value = ''
   emit('newContent')
 }
 
@@ -251,6 +279,7 @@ const sendEdit = async (markdown: string) => {
     res = await addSpecialTag(floor.value.id, specialTag.value)
   }
   clearEditor()
+  specialTag.value = ''
   floor.value = res
 }
 
@@ -268,9 +297,20 @@ const sendReport = async () => {
   reportReason.value = ''
 }
 
+const sendFold = async () => {
+  if (!floor.value.fold && foldReason.value === '') {
+    console.error('Fold reason not provided')
+    return
+  }
+  action.value = ActionType.None
+  floor.value = await foldFloor(floor.value.id, foldReason.value)
+  foldReason.value = ''
+}
+
 const sendDelete = async () => {
   action.value = ActionType.None
   floor.value = await deleteFloor(floor.value.id, deleteReason.value)
+  deleteReason.value = ''
 }
 
 const sendRestoreHistory = async (history: FloorHistory, reason: string) => {
@@ -287,6 +327,7 @@ const sendPenalty = async () => {
     divisionStore.currentDivisionId || (await getHole(floor.value.holeId)).divisionId
   action.value = ActionType.None
   await addPenalty(floor.value.id, penaltyLevel.value, divisionId)
+  penaltyLevel.value = null
 }
 </script>
 
