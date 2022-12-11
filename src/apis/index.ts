@@ -350,6 +350,7 @@ export const addSpecialTag = async (floorId: number, specialTag: string) => {
 
 export const foldFloor = async (floorId: number, foldReason: string) => {
   const response = await axios.put(`/floors/${floorId}`, {
+    fold: [],
     fold_v2: foldReason
   })
   return factory(DetailedFloor, response.data)

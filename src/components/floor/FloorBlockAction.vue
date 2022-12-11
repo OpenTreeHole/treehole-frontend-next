@@ -92,12 +92,13 @@
     <template v-else-if="action === ActionType.Fold">
       <QuestionAction
         class="mt-4"
-        text="请输入折叠理由："
+        :text="floor.fold ? '解除折叠？' : '请输入折叠理由：'"
         text-class="text-red"
         @done="sendFold"
         @cancel="action = ActionType.None"
       >
         <v-text-field
+          v-if="!floor.fold"
           v-model="foldReason"
           class="grow mr-2"
           hide-details
@@ -105,6 +106,10 @@
           :autofocus="true"
           density="compact"
           placeholder="折叠理由不可为空"
+        />
+        <span
+          v-else
+          class="grow"
         />
       </QuestionAction>
     </template>
