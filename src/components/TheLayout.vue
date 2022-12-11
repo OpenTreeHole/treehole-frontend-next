@@ -17,7 +17,8 @@
       </v-app-bar-title>
     </v-app-bar>
     <v-navigation-drawer
-      class="z-20 pt-4 pb-10 w-[calc(50%-var(--page-width)/2+180px)]"
+      v-model="showNav"
+      :class="{ 'z-20 pt-4 pb-10 w-[calc(50%-var(--page-width)/2+180px)]': !isMobile }"
       width="null"
     >
       <div class="flex justify-end">
@@ -76,6 +77,18 @@
     </v-main>
 
     <NotificationSnackbar />
+
+    <div class="fixed bottom-4 left-4 z-50">
+      <v-btn
+        v-if="!showNav"
+        color="primary"
+        fab
+        @click="showNav = true"
+        @mousedown.prevent
+      >
+        <v-icon icon="mdi-menu" />
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -86,12 +99,15 @@ import { useDivisionStore, useUserStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
 import { routes } from '@/router'
 import NotificationSnackbar from './NotificationSnackbar.vue'
+import { ref } from 'vue'
 
 const router = useRouter()
 const route = useRoute()
 const divisionStore = useDivisionStore()
 const userStore = useUserStore()
 
+const isMobile = window.innerWidth < 1280
+const showNav = ref(!isMobile)
 const navActiveItemClass = 'text-blue-500 bg-opacity-50 bg-gray-200'
 const navInactiveItemClass = 'hover:bg-opacity-30 hover:bg-gray-200'
 const getNavItemClass = (active: boolean) => {
