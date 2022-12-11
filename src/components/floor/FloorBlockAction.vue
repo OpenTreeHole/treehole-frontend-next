@@ -10,21 +10,47 @@
       >
         mdi-thumb-up-outline
       </IconBtn>
-      <IconBtn @click="reply">mdi-chat-outline</IconBtn>
+      <IconBtn @click="reply"> mdi-chat-outline </IconBtn>
       <v-divider
         class="mx-1"
         :vertical="true"
       />
-      <IconBtn @click="edit">mdi-pencil-outline</IconBtn>
-      <IconBtn @click="toggleAction(ActionType.Fold)">mdi-folder-off-outline</IconBtn>
-      <IconBtn @click="toggleAction(ActionType.Delete)">mdi-delete-outline</IconBtn>
-      <IconBtn @click="toggleAction(ActionType.Penalty)">mdi-account-off-outline</IconBtn>
-      <IconBtn @click="toggleAction(ActionType.History)">mdi-history</IconBtn>
+      <IconBtn
+        v-if="userStore.isAdmin || (floor instanceof DetailedFloor && floor.isMe)"
+        @click="edit"
+      >
+        mdi-pencil-outline
+      </IconBtn>
+      <IconBtn
+        v-if="userStore.isAdmin"
+        @click="toggleAction(ActionType.Fold)"
+      >
+        mdi-folder-off-outline
+      </IconBtn>
+      <IconBtn
+        v-if="userStore.isAdmin || (floor instanceof DetailedFloor && floor.isMe)"
+        @click="toggleAction(ActionType.Delete)"
+      >
+        mdi-delete-outline
+      </IconBtn>
+      <IconBtn
+        v-if="userStore.isAdmin"
+        @click="toggleAction(ActionType.Penalty)"
+      >
+        mdi-account-off-outline
+      </IconBtn>
+      <IconBtn
+        v-if="userStore.isAdmin"
+        @click="toggleAction(ActionType.History)"
+      >
+        mdi-history
+      </IconBtn>
       <v-divider
+        v-if="userStore.isAdmin || (floor instanceof DetailedFloor && floor.isMe)"
         class="mx-1"
         :vertical="true"
       />
-      <IconBtn @click="toggleAction(ActionType.Report)">mdi-alert-octagon-outline</IconBtn>
+      <IconBtn @click="toggleAction(ActionType.Report)"> mdi-alert-octagon-outline </IconBtn>
     </div>
     <v-divider
       v-if="action !== ActionType.None"
@@ -32,7 +58,10 @@
     />
     <template v-if="action === ActionType.Reply || action === ActionType.Edit">
       <div class="flex justify-center">
-        <div class="lg:ml-5 mr-2 max-w-[var(--editor-max-width)] flex grow">
+        <div
+          v-if="userStore.isAdmin"
+          class="lg:ml-5 mr-2 max-w-[var(--editor-max-width)] flex grow"
+        >
           <span class="self-center font-semibold text-orange-400">
             特殊标签（留空则无特殊标签）：
           </span>
@@ -74,6 +103,7 @@
     </template>
     <template v-else-if="action === ActionType.Report">
       <QuestionAction
+        class="mt-4"
         text="请输入举报理由："
         text-class="text-blue-600"
         @done="sendReport"
@@ -165,6 +195,7 @@
     </template>
     <template v-else-if="action === ActionType.Penalty">
       <QuestionAction
+        class="mt-4"
         text="请输入封禁等级："
         text-class="text-blue-600"
         @done="sendPenalty"
@@ -206,7 +237,7 @@ import {
   modifyFloor,
   restoreFloorFromHistory
 } from '@/apis'
-import { useDivisionStore } from '@/store'
+import { useDivisionStore, useUserStore } from '@/store'
 import { useNotification } from '@/composables/notification'
 
 const props = defineProps<{ floor: Floor }>()
@@ -225,6 +256,7 @@ const floor = computed({
 const histories = ref<FloorHistory[]>([])
 
 const divisionStore = useDivisionStore()
+const userStore = useUserStore()
 
 const specialTag = ref('')
 const reportReason = ref('')

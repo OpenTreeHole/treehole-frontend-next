@@ -215,9 +215,6 @@ export class Permission {
 
   @Field({ type: Date, map: true })
   silent: Record<string, Date>
-
-  @Field()
-  offenseCount: number
 }
 
 @Model
@@ -256,8 +253,8 @@ export class UserAuth {
   @Field()
   id: number
 
-  @Field()
-  isAdmin: boolean
+  @Field({ type: Permission })
+  permission: Permission
 
   @Field()
   nickname: string

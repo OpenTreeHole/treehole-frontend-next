@@ -11,6 +11,7 @@ import { useRoute, useRouter } from 'vue-router'
 import TheLayout from './components/TheLayout.vue'
 import { useDivisionStore, useStyleStore, useUserStore } from '@/store'
 import { onMounted, ref } from 'vue'
+import { useNotification } from './composables/notification'
 
 const route = useRoute()
 
@@ -20,10 +21,20 @@ const styleStore = useStyleStore()
 const divisionStore = useDivisionStore()
 const userStore = useUserStore()
 
+const not = useNotification()
+
 const firstRoute = ref(true)
 
 router.beforeEach(async () => {
   sessionStorage.setItem(`scroll-${route.path}`, window.scrollY.toString())
+})
+
+router.beforeResolve(async (to) => {
+  if (to.meta.isAdmin && !userStore.isAdmin) {
+    not.error('管理者権限がありません')
+    return false
+  }
+
   const promise = Promise.all([divisionStore.fetchDivisions(), userStore.fetchUser()])
   if (firstRoute.value) {
     firstRoute.value = false

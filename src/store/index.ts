@@ -75,6 +75,9 @@ export const useDivisionStore = defineStore('division', () => {
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<UserAuth | null>(null)
+  const isAdmin = computed(() => {
+    return user.value && user.value.permission.admin > new Date()
+  })
   async function fetchUser() {
     user.value = await getCurrentUser()
   }
@@ -92,7 +95,7 @@ export const useUserStore = defineStore('user', () => {
     await fetchFavorites()
   }
 
-  return { user, fetchUser, favorites, fetchFavorites, addFavorite, removeFavorite }
+  return { user, isAdmin, fetchUser, favorites, fetchFavorites, addFavorite, removeFavorite }
 })
 
 export const useHoleStore = defineStore('hole', () => {

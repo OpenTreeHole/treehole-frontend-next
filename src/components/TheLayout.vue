@@ -45,14 +45,16 @@
               <v-list-item-title>{{ division.name }}</v-list-item-title>
             </v-list-item>
             <v-divider />
-            <v-list-item
-              class="text-left pl-10 cursor-pointer select-none"
-              :class="getNavItemClass(route.path.startsWith('/admin'))"
-              @click="router.push('/admin')"
-            >
-              <v-list-item-title>管理</v-list-item-title>
-            </v-list-item>
-            <v-divider />
+            <template v-if="userStore.isAdmin">
+              <v-list-item
+                class="text-left pl-10 cursor-pointer select-none"
+                :class="getNavItemClass(route.path.startsWith('/admin'))"
+                @click="router.push('/admin')"
+              >
+                <v-list-item-title>管理</v-list-item-title>
+              </v-list-item>
+              <v-divider />
+            </template>
             <v-list-item
               v-for="(r, i) in otherRoutes"
               :key="i"
@@ -80,7 +82,7 @@
 <script setup lang="ts">
 import Logo from '@/assets/img.png'
 import SearchBar from '@/components/action/SearchBar.vue'
-import { useDivisionStore } from '@/store'
+import { useDivisionStore, useUserStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
 import { routes } from '@/router'
 import NotificationSnackbar from './NotificationSnackbar.vue'
@@ -88,6 +90,8 @@ import NotificationSnackbar from './NotificationSnackbar.vue'
 const router = useRouter()
 const route = useRoute()
 const divisionStore = useDivisionStore()
+const userStore = useUserStore()
+
 const navActiveItemClass = 'text-blue-500 bg-opacity-50 bg-gray-200'
 const navInactiveItemClass = 'hover:bg-opacity-30 hover:bg-gray-200'
 const getNavItemClass = (active: boolean) => {

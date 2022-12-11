@@ -30,7 +30,10 @@
             <template v-if="showComment">
               <v-divider class="mx-6 my-2" />
               <div class="flex justify-center">
-                <div class="max-w-[var(--editor-max-width)] flex grow mx-6 lg:ml-11">
+                <div
+                  v-if="userStore.isAdmin"
+                  class="max-w-[var(--editor-max-width)] flex grow mx-6 lg:ml-11"
+                >
                   <span class="self-center font-semibold text-orange-300">特殊标签：</span>
                   <v-text-field
                     v-model="specialTag"

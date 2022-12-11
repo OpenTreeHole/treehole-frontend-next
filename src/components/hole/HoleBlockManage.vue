@@ -7,60 +7,62 @@
         class="grow"
       ></TagSelector>
     </div>
-    <div class="flex grow lg:mx-6 my-2">
-      <span class="self-center font-semibold">分区：</span>
-      <v-select
-        v-model="division"
-        class="grow"
-        hide-details
-        :items="divisionStore.divisions"
-        item-title="name"
-        variant="outlined"
-        density="compact"
-        return-object
-      ></v-select>
-    </div>
-    <div class="flex grow lg:mx-6 my-2 space-x-8">
-      <div class="flex grow">
-        <span class="self-center font-semibold">置顶：</span>
-        <span class="grow"></span>
-        <v-switch
-          v-model="pinned"
-          class="grow-0"
+    <template v-if="userStore.isAdmin">
+      <div class="flex grow lg:mx-6 my-2">
+        <span class="self-center font-semibold">分区：</span>
+        <v-select
+          v-model="division"
+          class="grow"
           hide-details
-          color="blue"
-        ></v-switch>
+          :items="divisionStore.divisions"
+          item-title="name"
+          variant="outlined"
+          density="compact"
+          return-object
+        ></v-select>
       </div>
-      <div class="flex grow">
-        <span class="self-center font-semibold">隐藏：</span>
-        <span class="grow"></span>
-        <v-switch
-          v-model="hidden"
-          class="grow-0"
-          hide-details
-          color="blue"
-        ></v-switch>
+      <div class="flex grow lg:mx-6 my-2 space-x-8">
+        <div class="flex grow">
+          <span class="self-center font-semibold">置顶：</span>
+          <span class="grow"></span>
+          <v-switch
+            v-model="pinned"
+            class="grow-0"
+            hide-details
+            color="blue"
+          ></v-switch>
+        </div>
+        <div class="flex grow">
+          <span class="self-center font-semibold">隐藏：</span>
+          <span class="grow"></span>
+          <v-switch
+            v-model="hidden"
+            class="grow-0"
+            hide-details
+            color="blue"
+          ></v-switch>
+        </div>
       </div>
-    </div>
-    <div class="flex grow justify-end">
-      <v-btn
-        class="mr-3"
-        @click="$emit('close')"
-      >
-        取消
-      </v-btn>
-      <v-btn
-        class="text-white bg-blue-500"
-        @click="sendModifyHole"
-      >
-        发送
-      </v-btn>
-    </div>
+      <div class="flex grow justify-end">
+        <v-btn
+          class="mr-3"
+          @click="$emit('close')"
+        >
+          取消
+        </v-btn>
+        <v-btn
+          class="text-white bg-blue-500"
+          @click="sendModifyHole"
+        >
+          发送
+        </v-btn>
+      </div>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useDivisionStore, useHoleStore } from '@/store'
+import { useDivisionStore, useHoleStore, useUserStore } from '@/store'
 import { Hole } from '@/types'
 import { computed, ref } from 'vue'
 import TagSelector from '@/components/action/TagSelector.vue'
@@ -76,6 +78,7 @@ const not = useNotification()
 
 const holeStore = useHoleStore()
 const divisionStore = useDivisionStore()
+const userStore = useUserStore()
 
 const hole = computed({
   get: () => props.hole,

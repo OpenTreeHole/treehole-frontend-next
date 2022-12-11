@@ -2,6 +2,7 @@
   <v-container class="px-0 pt-0">
     <div class="flex">
       <div class="w-full lg:max-w-[65%] 3xl:max-w-[55%] px-0 pt-4 grow">
+        <!-- TODO: Show Silence Info -->
         <v-list class="py-2">
           <div class="border-b-sm">
             <div class="text-4xl px-6 lg:px-10 pb-8 flex justify-between">
@@ -19,8 +20,11 @@
             <template v-if="showCreateHole">
               <v-divider class="mx-6 my-2" />
               <div class="flex justify-center">
-                <div class="max-w-[var(--editor-max-width)] flex grow mx-6 lg:ml-11 my-2">
-                  <span class="self-center font-semibold text-orange-300">特殊标签：</span>
+                <div
+                  v-if="userStore.isAdmin"
+                  class="max-w-[var(--editor-max-width)] flex grow mx-6 lg:ml-11 my-2"
+                >
+                  <span class="self-center font-semibold text-orange-300"> 特殊标签： </span>
                   <v-text-field
                     v-model="specialTag"
                     class="grow mr-2"
@@ -74,7 +78,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { useDivisionStore, useHoleStore, useSettingsStore } from '@/store'
+import { useDivisionStore, useHoleStore, useSettingsStore, useUserStore } from '@/store'
 import HoleBlock from '@/components/hole/HoleBlock.vue'
 import { useEditor } from '@/composables/editor'
 import { addHole } from '@/apis'
@@ -88,6 +92,7 @@ const props = defineProps<{ divisionId: number }>()
 const holeStore = useHoleStore()
 const divisionStore = useDivisionStore()
 const settingsStore = useSettingsStore()
+const userStore = useUserStore()
 
 const not = useNotification()
 
