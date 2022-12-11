@@ -10,7 +10,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import TheLayout from './components/TheLayout.vue'
 import { useDivisionStore, useStyleStore, useUserStore } from '@/store'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const route = useRoute()
 
@@ -41,6 +41,10 @@ styleStore.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
 window.matchMedia('(prefers-color-scheme: dark)').onchange = () => {
   styleStore.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
 }
+
+onMounted(async () => {
+  await userStore.fetchFavorites()
+})
 </script>
 
 <style>

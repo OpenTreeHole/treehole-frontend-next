@@ -6,7 +6,15 @@
           <div class="border-b-sm">
             <div class="text-3xl px-6 lg:px-10 pb-2 flex justify-between">
               <div class="flex grow-0">#{{ holeId }}</div>
-              <v-btn @click="comment">发表评论</v-btn>
+              <div class="flex space-x-4">
+                <v-btn @click="comment">发表评论</v-btn>
+                <v-btn
+                  class="self-center"
+                  @click="toggleFavorite"
+                >
+                  {{ isFavorite ? '已收藏' : '收藏' }}
+                </v-btn>
+              </div>
             </div>
             <div
               v-if="tags.length > 0"
@@ -88,8 +96,9 @@ import TagChip from '@/components/tag/TagChip.vue'
 import { useEditor } from '@/composables/editor'
 import { onMounted, provide, ref, computed, reactive } from 'vue'
 import { addFloor, getHole, listFloors } from '@/apis'
-import { useDivisionStore } from '@/store'
+import { useDivisionStore, useUserStore } from '@/store'
 import { useFloorPortal } from '@/composables/floor'
+import { useNotification } from '@/composables/notification'
 
 const props = defineProps<{ holeId: number; floorId?: number }>()
 
@@ -100,6 +109,9 @@ const floors = reactive<Floor[]>([])
 const tags = computed(() => hole.value?.tags || [])
 
 const divisionStore = useDivisionStore()
+const userStore = useUserStore()
+
+const not = useNotification()
 
 const { editorData, initEditor, clearEditor } = useEditor()
 
@@ -113,6 +125,20 @@ const scrollToFloor = (floor: Floor | number) => {
 }
 
 provide('scrollToFloor', scrollToFloor)
+
+const isFavorite = computed(() => {
+  return userStore.favorites.some((favorite) => favorite.id === props.holeId)
+})
+
+const toggleFavorite = async () => {
+  if (isFavorite.value) {
+    await userStore.removeFavorite(props.holeId)
+    not.success('取消收藏成功')
+  } else {
+    await userStore.addFavorite(props.holeId)
+    not.success('收藏成功')
+  }
+}
 
 const hasNext = ref(true)
 const loading = ref(false)
@@ -147,12 +173,14 @@ const comment = () => {
   initEditor('')
   showComment.value = true
 }
+
 const sendComment = async (content: string) => {
   showComment.value = false
   await addFloor(props.holeId, {
     content,
     specialTag: specialTag.value
   })
+  not.success('发表成功')
   clearEditor()
   specialTag.value = ''
   onNewContent()

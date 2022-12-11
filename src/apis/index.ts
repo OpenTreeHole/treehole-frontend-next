@@ -84,30 +84,17 @@ const refreshRequestInterceptor = (config: AxiosRequestConfig) => {
 }
 
 const errorInterceptor = async (error: AxiosError<any, any>) => {
-  if (error.response) {
-    if (error.response.data.message) {
-      return Promise.reject(
-        new ApiError(error, `${error.response.status}: ${error.response.data.message}`)
-      )
-    } else {
-      console.log(
-        '请点开以下错误（如果存在response字段则将其一并点开，反正能点开多少点多少），并将错误信息截图'
-      )
-      console.log({ error })
-      return Promise.reject(
-        new ApiError(
-          error,
-          `${error.response.status}: 未知错误，请按F12查看控制台以获得错误信息并发至站务分区`
-        )
-      )
-    }
-  } else {
-    console.log(
-      '请点开以下错误（如果存在response字段则将其一并点开，反正能点开多少点多少），并将错误信息截图'
-    )
-    console.log({ error })
+  if (error instanceof ApiError) return Promise.reject(error)
+  if (error.response?.data?.message) {
     return Promise.reject(
-      new ApiError(error, '未知axios错误，请按F12查看控制台以获得错误信息并发至站务分区，')
+      new ApiError(error, `${error.response.status}: ${error.response.data.message}`)
+    )
+  } else {
+    console.log('请点开以下错误（如果存在 response 字段则将其一并点开），并将错误信息截图')
+    console.log({ error })
+    const prefix = error.response?.status ? `${error.response.status}: ` : ''
+    return Promise.reject(
+      new ApiError(error, `${prefix}未知错误，请按 F12 查看控制台以获得错误信息并发至站务分区`)
     )
   }
 }
@@ -565,11 +552,10 @@ export const getReport = async (id: number) => {
 }
 
 export const addReport = async (floorId: number, reason: string) => {
-  const response = await axios.post('/reports', {
+  await axios.post('/reports', {
     floor_id: floorId,
     reason: reason
   })
-  return factory(Report, response.data)
 }
 
 export const dealReport = async (id: number, result: string) => {
@@ -596,6 +582,10 @@ export const uploadImage = async (
     image: imageBase64
   })
   return camelizeKeys(response.data)
+}
+
+export const testError = async () => {
+  await axios.get('/not_exist')
 }
 
 export default axios

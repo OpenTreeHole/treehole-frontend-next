@@ -65,11 +65,14 @@ import { Hole } from '@/types'
 import { computed, ref } from 'vue'
 import TagSelector from '@/components/action/TagSelector.vue'
 import { modifyHoleDivision, modifyHoleHidden, modifyHoleTag } from '@/apis'
+import { useNotification } from '@/composables/notification'
 
 const props = defineProps<{ hole: Hole }>()
 const emit = defineEmits<{
   (e: 'close'): void
 }>()
+
+const not = useNotification()
 
 const holeStore = useHoleStore()
 const divisionStore = useDivisionStore()
@@ -123,6 +126,8 @@ const sendModifyHole = async () => {
       pinned: pinnedIds
     })
   }
+
+  not.success('修改成功')
 
   await divisionStore.fetchDivisions()
 }

@@ -2,7 +2,15 @@ import { defineStore } from 'pinia'
 import { reactive, ref, watch, computed } from 'vue'
 import { Division, Hole, IDivisionModify, Tag, UserAuth } from '@/types'
 import { useTheme } from 'vuetify'
-import { getCurrentUser, listDivisions, listHoles, listTags } from '@/apis'
+import {
+  addFavorites,
+  deleteFavorites,
+  getCurrentUser,
+  getFavorites,
+  listDivisions,
+  listHoles,
+  listTags
+} from '@/apis'
 import * as api from '@/apis'
 
 export const useStyleStore = defineStore('style', () => {
@@ -70,7 +78,21 @@ export const useUserStore = defineStore('user', () => {
   async function fetchUser() {
     user.value = await getCurrentUser()
   }
-  return { user, fetchUser }
+
+  const favorites = ref<Hole[]>([])
+  async function fetchFavorites() {
+    favorites.value = await getFavorites()
+  }
+  async function addFavorite(holeId: number) {
+    await addFavorites(holeId)
+    await fetchFavorites()
+  }
+  async function removeFavorite(holeId: number) {
+    await deleteFavorites(holeId)
+    await fetchFavorites()
+  }
+
+  return { user, fetchUser, favorites, fetchFavorites, addFavorite, removeFavorite }
 })
 
 export const useHoleStore = defineStore('hole', () => {
@@ -178,4 +200,15 @@ export const useSettingsStore = defineStore('settings', () => {
     localStorage.setItem('nsfw', JSON.stringify(nsfw))
   })
   return { blockedTags, nsfw }
+})
+
+export interface Notification {
+  type: 'success' | 'error' | 'info' | 'warning'
+  message: string
+  timeout: number
+}
+
+export const useNotificationStore = defineStore('notification', () => {
+  const notification = ref<Notification | null>(null)
+  return { notification }
 })

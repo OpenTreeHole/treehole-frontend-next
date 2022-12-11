@@ -3,6 +3,7 @@ import DivisionPage from '@/views/DivisionPage.vue'
 import HolePage from '@/views/HolePage.vue'
 import AdminPage from '@/views/AdminPage.vue'
 import SearchPage from '@/views/SearchPage.vue'
+import FavoritePage from '@/views/FavoritePage.vue'
 import SettingsPage from '@/views/SettingsPage.vue'
 import LicensePage from '@/views/LicensePage.vue'
 import LoginPage from '@/views/LoginPage.vue'
@@ -16,6 +17,7 @@ declare module 'vue-router' {
     title: string
     isAdmin?: boolean
     requiresAuth: boolean
+    hideInNav?: boolean
   }
 }
 
@@ -98,12 +100,22 @@ export const routes: RouteRecordRaw[] = [
     name: 'search',
     meta: {
       title: '搜索',
-      requiresAuth: true
+      requiresAuth: true,
+      hideInNav: true
     },
     component: SearchPage,
     props: (route) => ({
       searchText: route.query.text
     })
+  },
+  {
+    path: '/favorite',
+    name: 'favorite',
+    meta: {
+      title: '收藏',
+      requiresAuth: true
+    },
+    component: FavoritePage
   },
   {
     path: '/settings',

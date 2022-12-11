@@ -85,12 +85,15 @@ import QuestionAction from '@/components/action/QuestionAction.vue'
 import IconBtn from '@/components/button/IconBtn.vue'
 import { Report } from '@/types'
 import { addPenalty, dealReport, deleteFloor, getHole } from '@/apis'
+import { useNotification } from '@/composables/notification'
 
 const props = defineProps<{ report: Report }>()
 const emit = defineEmits<{
   (e: 'update:report', report: Report): void
   (e: 'deal'): void
 }>()
+
+const not = useNotification()
 
 const report = computed({
   get: () => props.report,
@@ -117,21 +120,28 @@ const dealResult = ref('')
 const sendDelete = async () => {
   action.value = ActionType.None
   report.value.floor = await deleteFloor(report.value.floor.id, deleteReason.value)
+  not.success('删除成功')
 }
 
 const sendPenalty = async () => {
   if (penaltyLevel.value === null) {
-    console.error('penaltyLevel is null')
+    not.error('请选择封禁等级')
     return
   }
   action.value = ActionType.None
   const hole = await getHole(report.value.floor.holeId)
   await addPenalty(report.value.floor.id, penaltyLevel.value, hole.divisionId)
+  not.success('封禁成功')
 }
 
 const sendDeal = async () => {
+  if (dealResult.value === '') {
+    not.error('请输入处理结果')
+    return
+  }
   action.value = ActionType.None
   report.value = await dealReport(report.value.id, dealResult.value)
+  not.success('处理成功')
   emit('deal')
 }
 </script>

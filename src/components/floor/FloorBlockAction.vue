@@ -86,6 +86,7 @@
           variant="outlined"
           :autofocus="true"
           density="compact"
+          placeholder="举报理由不可为空"
         />
       </QuestionAction>
     </template>
@@ -206,12 +207,15 @@ import {
   restoreFloorFromHistory
 } from '@/apis'
 import { useDivisionStore } from '@/store'
+import { useNotification } from '@/composables/notification'
 
 const props = defineProps<{ floor: Floor }>()
 const emit = defineEmits<{
   (e: 'update:floor', floor: Floor): void
   (e: 'newContent'): void
 }>()
+
+const not = useNotification()
 
 const floor = computed({
   get: () => props.floor,
@@ -270,6 +274,7 @@ const sendReply = async (markdown: string) => {
     replyTo: floor.value.id,
     specialTag: specialTag.value
   })
+  not.success('回复成功')
   clearEditor()
   specialTag.value = ''
   emit('newContent')
@@ -283,6 +288,7 @@ const sendEdit = async (markdown: string) => {
   if (floor.value.specialTag !== specialTag.value) {
     res = await addSpecialTag(floor.value.id, specialTag.value)
   }
+  not.success('修改成功')
   clearEditor()
   specialTag.value = ''
   floor.value = res
@@ -297,18 +303,24 @@ const sendLike = async () => {
 }
 
 const sendReport = async () => {
+  if (reportReason.value === '') {
+    not.error('举报理由不能为空')
+    return
+  }
   action.value = ActionType.None
   await addReport(floor.value.id, reportReason.value)
+  not.success('举报成功')
   reportReason.value = ''
 }
 
 const sendFold = async () => {
   if (!floor.value.fold && foldReason.value === '') {
-    console.error('Fold reason not provided')
+    not.error('折叠理由不能为空')
     return
   }
   action.value = ActionType.None
   floor.value = await foldFloor(floor.value.id, foldReason.value)
+  not.success('折叠成功')
   foldReason.value = ''
 }
 
@@ -320,18 +332,20 @@ const sendDelete = async () => {
 
 const sendRestoreHistory = async (history: FloorHistory, reason: string) => {
   floor.value = await restoreFloorFromHistory(floor.value.id, history.id, reason)
+  not.success('恢复成功')
   histories.value = await getFloorHistory(floor.value.id)
 }
 
 const sendPenalty = async () => {
   if (penaltyLevel.value === null) {
-    console.error('Penalty level not selected')
+    not.error('请选择封禁等级')
     return
   }
   const divisionId =
     divisionStore.currentDivisionId || (await getHole(floor.value.holeId)).divisionId
   action.value = ActionType.None
   await addPenalty(floor.value.id, penaltyLevel.value, divisionId)
+  not.success('封禁成功')
   penaltyLevel.value = null
 }
 </script>

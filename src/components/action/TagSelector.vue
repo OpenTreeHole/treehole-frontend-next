@@ -59,7 +59,7 @@ const allTags = computed(() =>
 
 const onTagsChange = (newTags: any) => {
   let t = newTags as (Tag | string)[]
-  if (t.length > 5) t = t.slice(0, 5) // TODO: show error message
+  if (t.length > 5) t = t.slice(0, 5)
   tags.value = t
     .filter((v) => typeof v !== 'string' || (v as string).trim() !== '')
     .map((v) => {

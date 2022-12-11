@@ -72,6 +72,8 @@
         <slot />
       </div>
     </v-main>
+
+    <NotificationSnackbar />
   </div>
 </template>
 
@@ -81,6 +83,7 @@ import SearchBar from '@/components/action/SearchBar.vue'
 import { useDivisionStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
 import { routes } from '@/router'
+import NotificationSnackbar from './NotificationSnackbar.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -92,7 +95,10 @@ const getNavItemClass = (active: boolean) => {
 }
 
 const otherRoutes = routes.filter(
-  (v) => v.name && ['/division', '/hole', '/admin'].every((u) => !v.path.startsWith(u))
+  (v) =>
+    v.name &&
+    !v.meta?.hideInNav &&
+    ['/division', '/hole', '/admin'].every((u) => !v.path.startsWith(u))
 )
 </script>
 

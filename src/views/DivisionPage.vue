@@ -82,11 +82,14 @@ import Editor from '@/components/editor/Editor.vue'
 import { Tag } from '@/types'
 import TagSelector from '@/components/action/TagSelector.vue'
 import { sleep } from '@/utils'
+import { useNotification } from '@/composables/notification'
 
 const props = defineProps<{ divisionId: number }>()
 const holeStore = useHoleStore()
 const divisionStore = useDivisionStore()
 const settingsStore = useSettingsStore()
+
+const not = useNotification()
 
 const pinnedHoles = computed(
   () => divisionStore.divisions.find((division) => division.id === props.divisionId)!.pinned
@@ -135,11 +138,12 @@ const createHole = async () => {
 
 const sendCreateHole = async (content: string) => {
   if (tags.value.length === 0) {
-    console.error('no tags')
+    not.error('请至少选择一个标签')
     return
   }
   showCreateHole.value = false
   await addHole(props.divisionId, content, tags.value, specialTag.value)
+  not.success('发布成功')
   clearEditor()
   specialTag.value = ''
   tags.value = []
