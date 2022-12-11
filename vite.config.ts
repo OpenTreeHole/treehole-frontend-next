@@ -9,7 +9,7 @@ import visualizer from 'rollup-plugin-visualizer'
 export default defineConfig({
   plugins: [
     vue(),
-    vuetify({ styles: 'expose' }),
+    vuetify({ styles: { configFile: 'src/plugins/vuetify.scss' } }),
     visualizer({
       emitFile: true,
       filename: 'report.html'

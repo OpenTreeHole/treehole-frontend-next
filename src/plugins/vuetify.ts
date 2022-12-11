@@ -3,7 +3,7 @@ import * as directives from 'vuetify/directives'
 
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@mdi/font/css/materialdesignicons.css'
-import './vuetify.scss'
+import 'vuetify/styles'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import { md } from 'vuetify/iconsets/md'
 import { createVuetify } from 'vuetify'
