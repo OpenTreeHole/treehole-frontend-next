@@ -74,7 +74,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { useDivisionStore, useHoleStore, useTagStore } from '@/store'
+import { useDivisionStore, useHoleStore, useSettingsStore } from '@/store'
 import HoleBlock from '@/components/hole/HoleBlock.vue'
 import { useEditor } from '@/composables/editor'
 import { addHole } from '@/apis'
@@ -86,7 +86,7 @@ import { sleep } from '@/utils'
 const props = defineProps<{ divisionId: number }>()
 const holeStore = useHoleStore()
 const divisionStore = useDivisionStore()
-const tagStore = useTagStore()
+const settingsStore = useSettingsStore()
 
 const pinnedHoles = computed(
   () => divisionStore.divisions.find((division) => division.id === props.divisionId)!.pinned
@@ -97,8 +97,9 @@ const holes = computed(() =>
     .getHolesByDivisionId(props.divisionId)
     .filter((hole) => pinnedHoles.value.every((pinned) => pinned.id !== hole.id))
     .filter((hole) =>
-      hole.tags.every((tag) => !tagStore.blockedTags.find((t) => t.name === tag.name))
+      hole.tags.every((tag) => !settingsStore.blockedTags.find((t) => t.name === tag.name))
     )
+    .filter((hole) => settingsStore.nsfw != 0 || !hole.tags.some((tag) => tag.name.startsWith('*')))
 )
 
 const hasNext = ref(true)

@@ -153,18 +153,24 @@ export const useHoleStore = defineStore('hole', () => {
 
 export const useTagStore = defineStore('tag', () => {
   const tags = reactive<Tag[]>([])
-  const localBlockedTags = localStorage.getItem('blockedTags')
-  const _blockedTags = ref<Tag[]>(localBlockedTags ? JSON.parse(localBlockedTags) : [])
-  const blockedTags = computed({
-    get: () => _blockedTags.value,
-    set: (tags: Tag[]) => {
-      _blockedTags.value = tags
-      localStorage.setItem('blockedTags', JSON.stringify(tags))
-      console.log('blockedTags', tags)
-    }
-  })
+
   const fetchTags = async () => {
     tags.splice(0, tags.length, ...(await listTags()))
   }
-  return { tags, _blockedTags, blockedTags, fetchTags }
+  return { tags, fetchTags }
+})
+
+export const useSettingsStore = defineStore('settings', () => {
+  const localBlockedTags = localStorage.getItem('blockedTags')
+  const blockedTags = reactive<Tag[]>(localBlockedTags ? JSON.parse(localBlockedTags) : [])
+  watch(blockedTags, (tags) => {
+    localStorage.setItem('blockedTags', JSON.stringify(tags))
+  })
+
+  const localNsfw = localStorage.getItem('nsfw')
+  const nsfw = ref(localNsfw ? JSON.parse(localNsfw) : 2)
+  watch(nsfw, (nsfw) => {
+    localStorage.setItem('nsfw', JSON.stringify(nsfw))
+  })
+  return { blockedTags, nsfw }
 })

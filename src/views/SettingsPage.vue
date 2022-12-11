@@ -33,6 +33,7 @@
                 label="显示"
               ></v-radio>
             </v-radio-group>
+            <v-divider class="col-span-2" />
             <span>已屏蔽以下标签：</span>
             <div class="flex-wrap flex gap-2">
               <TagChip
@@ -71,20 +72,25 @@
 <script setup lang="ts">
 import TagChip from '@/components/tag/TagChip.vue'
 import { computed, ref, watch } from 'vue'
-import { useStyleStore, useTagStore } from '@/store'
+import { useSettingsStore, useStyleStore } from '@/store'
 import TagSelector from '@/components/action/TagSelector.vue'
 
 const styleStore = useStyleStore()
-const tagStore = useTagStore()
+const settingsStore = useSettingsStore()
 
 const blockedTags = computed({
-  get: () => tagStore.blockedTags,
+  get: () => settingsStore.blockedTags,
   set: (val) => {
-    tagStore.blockedTags = val
+    settingsStore.blockedTags = val
   }
 })
 
-const nsfw = ref(2)
+const nsfw = computed({
+  get: () => settingsStore.nsfw,
+  set: (val) => {
+    settingsStore.nsfw = val
+  }
+})
 
 const tempTags = ref([])
 
@@ -92,7 +98,7 @@ watch(
   () => tempTags.value,
   (newVal) => {
     if (newVal.length > 0) {
-      blockedTags.value = [...blockedTags.value, ...newVal]
+      blockedTags.value.push(...newVal)
       tempTags.value = []
     }
   }
