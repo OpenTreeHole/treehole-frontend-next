@@ -1,7 +1,6 @@
 // noinspection DuplicatedCode
 
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import { router } from '@/router'
 import { camelizeKeys, snakifyKeys } from '@/utils'
 import JWTManager from '@/apis/jwt'
 import Cookies from 'js-cookie'
@@ -48,22 +47,21 @@ export class ApiError extends Error {
 
 const jwt = new JWTManager(async () => (await refresh()).access)
 jwt.refreshErrorCallback = async (refreshError: AxiosError<any, any>) => {
-  if (refreshError.response?.status === 401) {
+  if (
+    refreshError.response?.status === 401 ||
+    (refreshError as unknown as ApiError).originalError.response?.status === 401
+  ) {
     Cookies.remove('access', { domain: config.cookieDomain, expires: 10 })
     Cookies.remove('refresh', { domain: config.cookieDomain, expires: 10 })
-    if (router.currentRoute.value.name !== 'login') {
-      await router.replace({
-        name: 'login'
-      })
-      if (refreshError.response?.data.message)
-        return Promise.reject(
-          new ApiError(
-            refreshError,
-            `${refreshError.response.status}: ${refreshError.response.data.message}`
-          )
+    window.location.replace(config.authBaseUrl + 'register?url=' + location.origin)
+    if (refreshError.response?.data.message)
+      return Promise.reject(
+        new ApiError(
+          refreshError,
+          `${refreshError.response.status}: ${refreshError.response.data.message}`
         )
-      else return Promise.reject(new ApiError(refreshError, '会话已过期，请重新登录'))
-    }
+      )
+    else return Promise.reject(new ApiError(refreshError, '会话已过期，请重新登录'))
   }
 }
 axios.interceptors.response.use((response) => response, jwt.responseErrorInterceptor)

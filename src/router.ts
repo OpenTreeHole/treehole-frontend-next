@@ -138,15 +138,6 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: '/division/1'
-  },
-  {
-    path: '/login',
-    name: 'login',
-    meta: {
-      title: '登录',
-      requiresAuth: false
-    },
-    component: LoginPage
   }
 ]
 
