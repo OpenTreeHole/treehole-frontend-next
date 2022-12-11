@@ -10,6 +10,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import TheLayout from './components/TheLayout.vue'
 import { useDivisionStore, useStyleStore, useUserStore } from '@/store'
+import { onMounted, ref } from 'vue'
 
 const route = useRoute()
 
@@ -18,10 +19,21 @@ const router = useRouter()
 const styleStore = useStyleStore()
 const divisionStore = useDivisionStore()
 const userStore = useUserStore()
+
+const firstRoute = ref(true)
+
 router.beforeEach(async () => {
-  await Promise.all([divisionStore.fetchDivisions(), userStore.fetchUser()])
-  // scroll to top of page
-  window.scrollTo(0, 0)
+  sessionStorage.setItem(`scroll-${route.path}`, window.scrollY.toString())
+
+  const promise = Promise.all([divisionStore.fetchDivisions(), userStore.fetchUser()])
+  if (firstRoute.value) {
+    firstRoute.value = false
+    await promise
+  }
+})
+
+router.afterEach(() => {
+  window.scrollTo(0, +(sessionStorage.getItem(`scroll-${route.path}`) || 0))
 })
 
 styleStore.dark = window.matchMedia('(prefers-color-scheme: dark)').matches

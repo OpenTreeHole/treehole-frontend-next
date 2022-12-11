@@ -46,11 +46,12 @@
       </template>
     </div>
     <div class="flex justify-end">
-      <span
-        class="text-neutral-400 text-sm px-2 hover:text-neutral-300 transition cursor-pointer active:text-neutral-300 focus:ring-0"
-        @click="scrollToFloor(floor)"
-      >
-        ##{{ floor.id }}
+      <span class="text-neutral-500 text-sm px-2">
+        {{ floor.storey }}F(<span
+          class="text-neutral-400 hover:text-neutral-300 transition cursor-pointer active:text-neutral-300 focus:ring-0"
+          @click="scrollToFloor(floor)"
+          >##{{ floor.id }}</span
+        >)
       </span>
     </div>
   </template>
