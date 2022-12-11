@@ -6,10 +6,8 @@ import SearchPage from '@/views/SearchPage.vue'
 import FavoritePage from '@/views/FavoritePage.vue'
 import SettingsPage from '@/views/SettingsPage.vue'
 import LicensePage from '@/views/LicensePage.vue'
-import LoginPage from '@/views/LoginPage.vue'
 import ReportView from '@/views/admin/ReportView.vue'
-import UsersView from '@/views/admin/UsersView.vue'
-import AdminHistoryView from '@/views/admin/AdminHistoryView.vue'
+import DivisionView from '@/views/admin/DivisionView.vue'
 import { useDivisionStore } from '@/store'
 
 declare module 'vue-router' {
@@ -24,7 +22,7 @@ declare module 'vue-router' {
 export const adminRoutes: RouteRecordRaw[] = [
   {
     path: 'report',
-    name: 'admin',
+    name: 'report',
     meta: {
       title: '举报',
       requiresAuth: true,
@@ -33,24 +31,14 @@ export const adminRoutes: RouteRecordRaw[] = [
     component: ReportView
   },
   {
-    path: 'users',
-    name: 'users',
+    path: 'division',
+    name: 'division',
     meta: {
-      title: '用户管理',
+      title: '分区',
       requiresAuth: true,
       isAdmin: true
     },
-    component: UsersView
-  },
-  {
-    path: 'history',
-    name: 'history',
-    meta: {
-      title: '管理记录',
-      requiresAuth: true,
-      isAdmin: true
-    },
-    component: AdminHistoryView
+    component: DivisionView
   }
 ]
 
