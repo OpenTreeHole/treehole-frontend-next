@@ -124,6 +124,8 @@ export const login = async (
 
 export const logout = async (): Promise<{ message: string }> => {
   const response = await authAxios.get('/logout')
+  Cookies.remove('access', { domain: config.cookieDomain, expires: 10 })
+  Cookies.remove('refresh', { domain: config.cookieDomain, expires: 10 })
   return camelizeKeys(response.data)
 }
 
