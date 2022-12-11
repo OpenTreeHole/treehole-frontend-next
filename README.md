@@ -2,14 +2,14 @@
 
 ## Build
 
-This project use yarn as package manager. If you haven't install Node.js yet, you can download and install it from https://nodejs.org/
+This project use pnpm as package manager. If you haven't install Node.js yet, you can download and install it from https://nodejs.org/
 
-Once you install Node.js, you can run ```npm install yarn -g``` to install yarn.
+Once you install Node.js, you can run ```npm install pnpm -g``` to install pnpm.
 
 To build this project, you should run
 
 ```shell
-yarn build
+pnpm build
 ```
 
 which will execute the script ```scripts.build``` written in ```package.json```.
@@ -22,6 +22,6 @@ The output files will be generated in ```/dist``` folder. If you need to review 
 
 You can run
 ```shell
-yarn dev
+pnpm dev
 ```
 to launch the dev server.
