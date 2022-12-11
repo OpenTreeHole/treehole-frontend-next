@@ -53,7 +53,7 @@ jwt.refreshErrorCallback = async (refreshError: AxiosError<any, any>) => {
   ) {
     Cookies.remove('access', { domain: config.cookieDomain, expires: 10 })
     Cookies.remove('refresh', { domain: config.cookieDomain, expires: 10 })
-    window.location.replace(config.authBaseUrl + 'register?url=' + location.origin)
+    window.location.replace(config.authBaseUrl + 'login?url=' + location.origin)
     if (refreshError.response?.data.message)
       return Promise.reject(
         new ApiError(
