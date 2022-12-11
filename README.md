@@ -22,7 +22,7 @@ You can also build this project with docker. To build the image, you can create 
 
 ```yaml
 services:
-  auth-frontend:
+  treehole-frontend-next:
     image: dest1n1/treehole-frontend-next:dev
     container_name: treehole-frontend-next
     environment:
