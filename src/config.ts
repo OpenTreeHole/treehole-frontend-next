@@ -14,7 +14,6 @@ const config = {
   backEndUrl: import.meta.env.VITE_BACKEND_URL,
   authUrl: import.meta.env.VITE_AUTH_URL,
   authBaseUrl: import.meta.env.VITE_AUTH_BASE_URL,
-  backEndWebsocketNotificationApi: import.meta.env.VITE_BACKEND_WEBSOCKET_NOTIFICATION_API,
   cookieDomain: import.meta.env.VITE_COOKIE_DOMAIN,
 
   // licenses

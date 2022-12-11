@@ -90,7 +90,7 @@
         :data="editorData"
         @close="action = ActionType.None"
         @send="
-          (content) => {
+          (content: string) => {
             if (action === ActionType.Reply) {
               sendReply(content)
             } else if (action === ActionType.Edit) {
@@ -178,7 +178,7 @@
         >
           <HistoryBlock
             :history="history"
-            @restore="(reason) => sendRestoreHistory(history, reason)"
+            @restore="(reason: string) => sendRestoreHistory(history, reason)"
           />
           <v-divider
             v-if="index !== histories.length - 1"
