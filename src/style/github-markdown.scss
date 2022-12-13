@@ -213,15 +213,10 @@
 }
 
 .markdown-viewer hr {
-  box-sizing: content-box;
   overflow: hidden;
-  background: transparent;
-  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   height: .25em;
   padding: 0;
   margin: 24px 0;
-  background-color: rgba(var(--v-border-color), var(--v-border-opacity));
-  border: 0;
 }
 
 .markdown-viewer input {
