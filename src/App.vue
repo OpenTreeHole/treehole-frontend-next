@@ -30,16 +30,17 @@ router.beforeEach(async () => {
 })
 
 router.beforeResolve(async (to) => {
-  if (to.meta.isAdmin && !userStore.isAdmin) {
-    not.error('管理者権限がありません')
-    return false
-  }
-
   const promise = Promise.all([divisionStore.fetchDivisions(), userStore.fetchUser()])
   if (firstRoute.value) {
     firstRoute.value = false
     await promise
   }
+
+  if (to.meta.isAdmin && !userStore.isAdmin) {
+    not.error('管理者権限がありません')
+    return false
+  }
+
   divisionStore.currentDivisionId = null
 })
 

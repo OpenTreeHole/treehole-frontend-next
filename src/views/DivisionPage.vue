@@ -155,12 +155,12 @@ const sendCreateHole = async (content: string) => {
   holeStore.clearHolesInDivision(props.divisionId)
   hasNext.value = true
   await sleep(1000)
-  loadHolesUntil(10)
+  await loadHolesUntil(10)
 }
 
-onMounted(() => {
+onMounted(async () => {
   divisionStore.currentDivisionId = props.divisionId
-  loadHolesUntil(10)
+  await loadHolesUntil(10)
 })
 </script>
 

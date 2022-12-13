@@ -7,7 +7,7 @@ import FavoritePage from '@/views/FavoritePage.vue'
 import SettingsPage from '@/views/SettingsPage.vue'
 import LicensePage from '@/views/LicensePage.vue'
 import ReportView from '@/views/admin/ReportView.vue'
-import DivisionView from '@/views/admin/DivisionView.vue'
+import UserView from '@/views/admin/UserView.vue'
 import { useDivisionStore } from '@/store'
 
 declare module 'vue-router' {
@@ -31,14 +31,14 @@ export const adminRoutes: RouteRecordRaw[] = [
     component: ReportView
   },
   {
-    path: 'division_admin',
-    name: 'division_admin',
+    path: 'user_admin',
+    name: 'user_admin',
     meta: {
-      title: '分区',
+      title: '用户',
       requiresAuth: true,
       isAdmin: true
     },
-    component: DivisionView
+    component: UserView
   }
 ]
 

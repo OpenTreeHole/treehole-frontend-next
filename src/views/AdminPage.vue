@@ -31,7 +31,6 @@
 </template>
 
 <script setup lang="ts">
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ref } from 'vue'
 import { adminRoutes } from '@/router'
 

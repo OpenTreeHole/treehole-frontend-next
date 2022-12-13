@@ -1,7 +1,7 @@
 <template>
   <div class="flex">
     <div class="max-w-full lg:max-w-[65%] 3xl:max-w-[55%] grow">
-      <v-list class="pt-0 lg:px-4">
+      <v-list class="py-0">
         <v-list-item
           v-for="(report, i) in reports"
           :key="i"
@@ -10,15 +10,15 @@
         >
           <ReportBlock
             v-model:report="reports[i]"
-            class="px-6"
+            class="px-6 lg:px-10"
             @deal="onDeal(i)"
           />
         </v-list-item>
       </v-list>
     </div>
-    <div class="hidden lg:block lg:max-w-[35%] xl:max-w-[30%] 3xl:max-w-[25%] pl-5 lg:pt-4 grow">
-      <v-list class="pt-0 lg:pt-4">
-        <v-list-item>
+    <div class="hidden lg:block lg:max-w-[35%] xl:max-w-[30%] 3xl:max-w-[25%] pl-5 grow">
+      <v-list>
+        <v-list-item class="py-5">
           <p class="text-left">举报类别：</p>
           <v-radio-group v-model="range">
             <v-radio
