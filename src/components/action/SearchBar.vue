@@ -36,11 +36,7 @@
             @click="searchByTag(tag)"
           >
             查看标签：
-            <TagChip
-              class="cursor-pointer"
-              :tag="tag"
-              size="small"
-            />
+            <span :class="`text-${tag.color}`">{{ tag.name }}</span>
           </v-list-item>
 
           <v-list-item

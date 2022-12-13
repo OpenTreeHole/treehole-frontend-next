@@ -1,16 +1,33 @@
 <template>
   <div ref="el">
-    <v-combobox
+    <v-autocomplete
+      v-model:search="search"
       :model-value="tags"
-      :items="allTags"
       item-title="name"
       variant="outlined"
       hide-details
       density="compact"
       multiple
+      :menu="true"
       hide-selected
-      @update:model-value="onTagsChange"
     >
+      <template #no-data>
+        <v-list density="compact">
+          <v-list-item
+            v-for="(tag, i) in allTags"
+            :key="i"
+            class="my-1"
+            :class="`text-${tag.color}`"
+            @click="onClickSuggestions(tag)"
+          >
+            <v-list-item-title>{{ tag.name }}</v-list-item-title>
+            <v-list-item-subtitle class="flex">
+              <v-icon icon="mdi-fire"></v-icon>
+              <span class="self-center">{{ tag.temperature }}</span>
+            </v-list-item-subtitle>
+          </v-list-item>
+        </v-list>
+      </template>
       <template #selection="{ item, index }">
         <TagChip
           class="mr-1"
@@ -19,7 +36,7 @@
           @click="tags.splice(index, 1)"
         />
       </template>
-    </v-combobox>
+    </v-autocomplete>
   </div>
 </template>
 
@@ -57,29 +74,35 @@ const allTags = computed(() =>
     .slice(0, 6)
 )
 
-const onTagsChange = (newTags: any) => {
-  let t = newTags as (Tag | string)[]
-  if (t.length > 5) t = t.slice(0, 5)
-  tags.value = t
-    .filter((v) => typeof v !== 'string' || (v as string).trim() !== '')
-    .map((v) => {
-      if (typeof v === 'string') {
-        if (tagStore.tags.some((t) => t.name === v)) return tagStore.tags.find((t) => t.name === v)!
-        else return new Tag((v as string).trim())
-      } else return v
-    })
+const addTag = (tag: Tag) => {
+  if (tags.value.length >= 5) return
+  tags.value.push(tag)
+}
+
+const onClickSuggestions = (tag: Tag) => {
+  addTag(tag)
+  search.value = ''
 }
 
 onMounted(() => {
   tagStore.fetchTags()
 
   // Some black magic to deal with the shitty v-combobox
-  el.value?.querySelector('input')?.addEventListener('input', () => {
-    search.value = el.value?.querySelector('input')?.value || ''
-  })
-  el.value?.querySelector('input')?.addEventListener('keypress', function (e) {
+  el.value?.querySelector('input')?.addEventListener('keyup', function (e) {
     if (e.key === 'Enter') {
-      search.value = el.value?.querySelector('input')?.value || ''
+      if (search.value.trim() !== '') {
+        if (allTags.value.length > 0) {
+          addTag(allTags.value[0])
+        } else {
+          const tag = new Tag(search.value.trim())
+          addTag(tag)
+        }
+      }
+      search.value = ''
+    } else if (e.key === 'Escape') {
+      search.value = ''
+    } else if (e.key === 'Backspace') {
+      tags.value.pop()
     }
   })
 })

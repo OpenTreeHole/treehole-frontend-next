@@ -53,8 +53,9 @@
             </div>
             <span class="self-center">添加标签：</span>
             <TagSelector
-              v-model="tempTags"
+              :model-value="[]"
               :filter-tags="blockedTags"
+              @update:model-value="(v) => blockedTags.push(...v)"
             />
           </div>
         </div>
@@ -81,9 +82,9 @@ import TagChip from '@/components/tag/TagChip.vue'
 import { computed, ref, watch } from 'vue'
 import { useSettingsStore, useStyleStore } from '@/store'
 import TagSelector from '@/components/action/TagSelector.vue'
-import * as api from '@/apis';
-import { useNotification } from '@/composables/notification';
-import { sleep } from '@/utils';
+import * as api from '@/apis'
+import { useNotification } from '@/composables/notification'
+import { sleep } from '@/utils'
 
 const styleStore = useStyleStore()
 const settingsStore = useSettingsStore()
@@ -102,18 +103,6 @@ const nsfw = computed({
     settingsStore.nsfw = val
   }
 })
-
-const tempTags = ref([])
-
-watch(
-  () => tempTags.value,
-  (newVal) => {
-    if (newVal.length > 0) {
-      blockedTags.value.push(...newVal)
-      tempTags.value = []
-    }
-  }
-)
 
 const logout = async () => {
   await api.logout()
