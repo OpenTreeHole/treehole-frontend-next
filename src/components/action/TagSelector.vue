@@ -8,7 +8,6 @@
       hide-details
       density="compact"
       multiple
-      :menu="true"
       hide-selected
     >
       <template #no-data>

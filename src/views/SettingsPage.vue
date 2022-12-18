@@ -79,7 +79,7 @@
 
 <script setup lang="ts">
 import TagChip from '@/components/tag/TagChip.vue'
-import { computed, ref, watch } from 'vue'
+import { computed } from 'vue'
 import { useSettingsStore, useStyleStore } from '@/store'
 import TagSelector from '@/components/action/TagSelector.vue'
 import * as api from '@/apis'
