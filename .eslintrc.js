@@ -4,7 +4,13 @@ module.exports = {
     node: true,
     'vue/setup-compiler-macros': true
   },
-  extends: ['eslint:recommended', 'plugin:vue/vue3-recommended', 'plugin:@typescript-eslint/recommended', 'prettier', 'plugin:prettier/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:vue/vue3-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+    'plugin:prettier/recommended'
+  ],
   plugins: ['vue', 'html', 'prettier'],
   parserOptions: {
     ecmaVersion: 8,
@@ -35,6 +41,7 @@ module.exports = {
     'vue/multi-word-component-names': 'off',
     'no-mutating-props': 'off',
     'vue/no-v-html': 'off',
+    'vue/no-setup-props-destructure': 'off',
     'prettier/prettier': ['warn']
   },
   overrides: [

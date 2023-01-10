@@ -1,5 +1,22 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import './index.css'
+import { createPinia } from 'pinia'
 
-createApp(App).mount('#app')
+import { router } from './router'
+import { vuetify } from './plugins/vuetify'
+import './index.scss'
+import { useNotification } from './composables/notification'
+
+const pinia = createPinia()
+
+const app = createApp(App).use(router).use(vuetify).use(pinia)
+
+app.config.errorHandler = (err) => {
+  const not = useNotification()
+  if (err instanceof Error) {
+    not.error(err.message)
+  }
+  console.error(err)
+}
+
+app.mount('#app')

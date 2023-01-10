@@ -1,16 +1,66 @@
-# Vue 3 + TypeScript + Vite
+# Treehole Frontend Next
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Build
 
-## Recommended IDE Setup
+This project use pnpm as package manager. If you haven't install Node.js yet, you can download and install it from https://nodejs.org/
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+Once you install Node.js, you can run ```npm install pnpm -g``` to install pnpm.
 
-## Type Support For `.vue` Imports in TS
+To build this project, you should run
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+```shell
+pnpm build
+```
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+which will execute the script ```scripts.build``` written in ```package.json```.
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+The output files will be generated in ```/dist``` folder. If you need to review the bundled size, you can check ```/dist/report.html```.
+
+### Docker
+
+You can also build this project with docker. To build the image, you can create a `docker-compose.yml` file like this:
+
+```yaml
+services:
+  treehole-frontend-next:
+    image: dest1n1/treehole-frontend-next:dev
+    container_name: treehole-frontend-next
+    environment:
+      - VITE_BACKEND_URL=${BACKEND_URL}
+      - VITE_AUTH_URL=${AUTH_URL}
+      - VITE_AUTH_BASE_URL=${AUTH_BASE_URL}
+      - VITE_COOKIE_DOMAIN=${COOKIE_DOMAIN}
+    ports:
+      - 8080:80
+```
+
+where `${BACKEND_URL}`, `${AUTH_URL}`, `${AUTH_BASE_URL}` and `${COOKIE_DOMAIN}` are the environment variables you want to set. You can either set them in the `docker-compose.yml` file or set them in the environment.
+
+The `BACKEND_URL` and `AUTH_URL` are respectively the url of the treehole backend and the auth backend. The `AUTH_BASE_URL` the url of the auth frontend. The `COOKIE_DOMAIN` should be the shared domain of the auth frontend and the treehole frontend.
+
+For example, the `.env` file for the treehole frontend is like this:
+
+```shell
+BACKEND_URL=https://www.fduhole.com/api/
+AUTH_URL=https://auth.fduhole.com/api/
+AUTH_BASE_URL=https://auth.fduhole.com/
+COOKIE_DOMAIN=.fduhole.com
+```
+
+After you create the `docker-compose.yml` file and set the environment variables, you can run
+
+```shell
+docker-compose up -d
+```
+
+to start the container.
+
+## Development
+
+### Run
+
+You can run
+```shell
+pnpm dev
+```
+to launch the dev server.

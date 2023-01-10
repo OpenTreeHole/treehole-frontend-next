@@ -1,0 +1,82 @@
+@import "katex/dist/katex";
+@import "style/github-markdown";
+@import "style/codemirror";
+@import "style/forest";
+@import "style/editor/katex";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-2xl font-bold md:text-4xl;
+  }
+
+  h2 {
+    @apply text-xl font-bold md:text-3xl;
+  }
+
+  h3 {
+    @apply text-lg font-bold md:text-2xl;
+  }
+
+  h4 {
+    @apply text-base font-bold md:text-lg;
+  }
+
+  body {
+    @apply text-sm md:text-base;
+  }
+}
+
+@layer utilities {
+  .md-icon-center {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: inherit;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'liga';
+
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .contain-layout {
+    contain: layout;
+  }
+
+  .contain-paint {
+    contain: paint;
+  }
+
+  .contain-none {
+    contain: none;
+  }
+}
+
+
+html {
+  --editor-max-width: 650px;
+  @media (min-width: 1280px) {
+    --page-width: 72rem;
+  }
+  @media (min-width: 1720px) {
+    --page-width: 80rem;
+    --editor-max-width: 700px
+  }
+}

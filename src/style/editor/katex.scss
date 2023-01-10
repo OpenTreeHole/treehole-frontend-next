@@ -1,0 +1,15 @@
+span.aff-katex-inline-editor {
+  background-color: #efefef;
+}
+span.aff-katex-inline-editor:before {
+  content: '$$';
+  color: darkgray;
+}
+span.aff-katex-inline-editor:after {
+  content: '$$';
+  color: darkgray;
+}
+span.aff-katex-inline-editor {
+  color: darkgray;
+  margin-right: 1em;
+}
