@@ -22,6 +22,7 @@ specifiers:
   '@types/lodash': ^4.14.182
   '@types/marked': ^4.0.3
   '@types/node': ^18.0.6
+  '@types/pdfobject': ^2.2.3
   '@types/remove-markdown': ^0.3.1
   '@typescript-eslint/eslint-plugin': ^5.20.0
   '@typescript-eslint/parser': ^5.20.0
@@ -39,6 +40,7 @@ specifiers:
   lodash: ^4.17.21
   marked: ^4.0.17
   material-design-icons-iconfont: ^6.7.0
+  pdfobject: ^2.2.8
   pinia: ^2.0.21
   postcss: ^8.4.12
   prettier: ^2.6.2
@@ -75,6 +77,7 @@ dependencies:
   katex: 0.16.3
   lodash: 4.17.21
   marked: 4.2.3
+  pdfobject: 2.2.8
   pinia: 2.0.27_mgnvym7yiazkylwwogi5r767ue
   reflect-metadata: 0.1.13
   remove-markdown: 0.5.0
@@ -95,6 +98,7 @@ devDependencies:
   '@types/lodash': 4.14.190
   '@types/marked': 4.0.7
   '@types/node': 18.11.9
+  '@types/pdfobject': 2.2.3
   '@typescript-eslint/eslint-plugin': 5.45.0_czs5uoqkd3podpy6vgtsxfc7au
   '@typescript-eslint/parser': 5.45.0_hsf322ms6xhhd4b5ne6lb74y4a
   '@vitejs/plugin-vue': 4.0.0_vite@4.0.0+vue@3.2.45
@@ -516,6 +520,10 @@ packages:
 
   /@types/node/18.11.9:
     resolution: {integrity: sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==}
+
+  /@types/pdfobject/2.2.3:
+    resolution: {integrity: sha512-MD9wkJikZX9GwEbYwMsJWDChNpATrf2ULVQ5oEfZue/SwA5l77Sm8KWWoM4NYS/RFy+/r0oDm4Z3EBbr7In08g==}
+    dev: true
 
   /@types/remove-markdown/0.3.1:
     resolution: {integrity: sha512-JpJNEJEsmmltyL2LdE8KRjJ0L2ad5vgLibqNj85clohT9AyTrfN6jvHxStPshDkmtcL/ShFu0p2tbY7DBS1mqQ==}
@@ -1954,6 +1962,10 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
     dev: true
+
+  /pdfobject/2.2.8:
+    resolution: {integrity: sha512-dB/soWNMLtVGHfXERXnAtsKm0XwC6lyGVYegQcZxL4rw07rNOKvawc9kddBzlGr7TbiBZuGf4Drb3kyRbTf/QA==}
+    dev: false
 
   /picocolors/1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
