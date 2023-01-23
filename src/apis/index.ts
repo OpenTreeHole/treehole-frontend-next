@@ -32,6 +32,7 @@ const arrayFactory = <T>(TargetClass: new () => T, data: any[], meta?: any): T[]
 
 const authAxios = axios.create()
 const refreshAxios = axios.create()
+const localAxios = axios.create()
 
 /**
  * Error caused by axios (or other api interaction)
@@ -588,4 +589,4 @@ export const testError = async () => {
   await axios.get('/not_exist')
 }
 
-export default axios
+export default localAxios
