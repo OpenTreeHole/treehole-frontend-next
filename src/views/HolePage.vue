@@ -2,59 +2,64 @@
   <v-container class="px-0 pt-0">
     <div class="flex">
       <div class="w-full lg:max-w-[65%] 3xl:max-w-[55%] px-0 pt-4 grow">
-        <v-list class="py-2">
-          <div class="border-b-sm">
-            <div class="text-3xl px-6 lg:px-10 pb-2 flex justify-between">
-              <div class="flex grow-0">#{{ holeId }}</div>
-              <div class="flex space-x-4">
-                <v-btn @click="comment">发表评论</v-btn>
-                <v-btn
-                  class="self-center"
-                  @click="toggleFavorite"
-                >
-                  {{ isFavorite ? '已收藏' : '收藏' }}
-                </v-btn>
-              </div>
+        <div class="border-b-sm mt-2 pb-4">
+          <div class="text-3xl px-6 lg:px-10 pb-2 flex justify-between">
+            <div class="flex grow-0">#{{ holeId }}</div>
+            <div class="flex space-x-4">
+              <v-btn
+                color="primary"
+                @click="comment"
+                >发表评论</v-btn
+              >
+              <v-btn
+                class="self-center"
+                color="primary"
+                @click="toggleFavorite"
+              >
+                {{ isFavorite ? '已收藏' : '收藏' }}
+              </v-btn>
             </div>
-            <div
-              v-if="tags.length > 0"
-              class="px-6 lg:px-10 pb-2 flex"
-            >
-              <TagChip
-                v-for="(tag, index) in tags"
-                :key="index"
-                class="mr-2"
-                :tag="tag"
-              ></TagChip>
-            </div>
-            <template v-if="showComment">
-              <v-divider class="mx-6 my-2" />
-              <div class="flex justify-center">
-                <div
-                  v-if="userStore.isAdmin"
-                  class="max-w-[var(--editor-max-width)] flex grow mx-6 lg:ml-11"
-                >
-                  <span class="self-center font-semibold text-orange-300">特殊标签：</span>
-                  <v-text-field
-                    v-model="specialTag"
-                    class="grow mr-2"
-                    hide-details
-                    variant="outlined"
-                    autofocus
-                    density="compact"
-                    placeholder="留空则无特殊标签"
-                  />
-                </div>
-              </div>
-              <Editor
-                class="mx-6"
-                :data="editorData"
-                @close="showComment = false"
-                @send="sendComment"
-              ></Editor>
-            </template>
           </div>
+          <div
+            v-if="tags.length > 0"
+            class="px-6 lg:px-10 pb-2 flex"
+          >
+            <TagChip
+              v-for="(tag, index) in tags"
+              :key="index"
+              class="mr-2"
+              :tag="tag"
+            ></TagChip>
+          </div>
+          <template v-if="showComment">
+            <v-divider class="mx-6 my-2" />
+            <div class="flex justify-center">
+              <div
+                v-if="userStore.isAdmin"
+                class="max-w-[var(--editor-max-width)] flex grow mx-6 lg:ml-11"
+              >
+                <span class="self-center font-semibold text-orange-300">特殊标签：</span>
+                <v-text-field
+                  v-model="specialTag"
+                  class="grow mr-2"
+                  hide-details
+                  variant="outlined"
+                  autofocus
+                  density="compact"
+                  placeholder="留空则无特殊标签"
+                />
+              </div>
+            </div>
+            <Editor
+              class="mx-6"
+              :data="editorData"
+              @close="showComment = false"
+              @send="sendComment"
+            ></Editor>
+          </template>
+        </div>
 
+        <v-list class="py-0">
           <v-list-item
             v-for="(floor, index) in floors"
             :id="floor.id"
@@ -67,6 +72,10 @@
               class="px-6 lg:px-10"
               @new-content="onNewContent"
             />
+          </v-list-item>
+
+          <v-list-item>
+            <LoadingCircular ref="loader" />
           </v-list-item>
         </v-list>
       </div>
@@ -102,6 +111,7 @@ import { addFloor, getHole, listFloors } from '@/apis'
 import { useDivisionStore, useUserStore } from '@/store'
 import { useFloorPortal } from '@/composables/floor'
 import { useNotification } from '@/composables/notification'
+import LoadingCircular from '@/components/LoadingCircular.vue'
 
 const props = defineProps<{ holeId: number; floorId?: number }>()
 
@@ -146,13 +156,14 @@ const toggleFavorite = async () => {
 const hasNext = ref(true)
 const loading = ref(false)
 const loadEnd = ref(0)
+const loader = ref<InstanceType<typeof LoadingCircular>>()
 
 const loadFloorsUntil = async (length: number) => {
   loadEnd.value = length
   if (loading.value) return
   loading.value = true
   while (floors.length < loadEnd.value && hasNext.value) {
-    const res = await listFloors(props.holeId, 50, floors.length)
+    const res = await loader.value!.load(listFloors(props.holeId, 50, floors.length))
     if (res.length < 50) hasNext.value = false
     floors.push(...res)
   }

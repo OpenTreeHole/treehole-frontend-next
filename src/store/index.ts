@@ -220,16 +220,12 @@ export const useSettingsStore = defineStore('settings', () => {
   })
 
   const forceTheme = ref(localStorage.getItem('forceTheme'))
-  watch(
-    forceTheme,
-    (theme) => {
-      if (theme) {
-        localStorage.setItem('forceTheme', theme || '')
-        styleStore.dark = theme === 'dark'
-      }
-    },
-    { immediate: true }
-  )
+  watch(forceTheme, (theme) => {
+    if (theme) {
+      localStorage.setItem('forceTheme', theme || '')
+      styleStore.dark = theme === 'dark'
+    }
+  })
 
   return { blockedTags, nsfw, forceTheme }
 })

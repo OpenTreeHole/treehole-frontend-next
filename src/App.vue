@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import TheLayout from './components/TheLayout.vue'
-import { useDivisionStore, useStyleStore, useUserStore } from '@/store'
+import { useDivisionStore, useSettingsStore, useStyleStore, useUserStore } from '@/store'
 import { onMounted, ref } from 'vue'
 import { useNotification } from './composables/notification'
 
@@ -20,6 +20,7 @@ const router = useRouter()
 const styleStore = useStyleStore()
 const divisionStore = useDivisionStore()
 const userStore = useUserStore()
+const settingsStore = useSettingsStore()
 
 const not = useNotification()
 
@@ -48,10 +49,14 @@ router.afterEach(() => {
   window.scrollTo(0, +(sessionStorage.getItem(`scroll-${route.path}`) || 0))
 })
 
-styleStore.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-
-window.matchMedia('(prefers-color-scheme: dark)').onchange = () => {
+if (settingsStore.forceTheme) {
+  styleStore.dark = settingsStore.forceTheme === 'dark'
+} else {
   styleStore.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+  window.matchMedia('(prefers-color-scheme: dark)').onchange = () => {
+    styleStore.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  }
 }
 
 onMounted(async () => {
