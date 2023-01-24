@@ -65,9 +65,9 @@
           <div class="flex mt-3 items-center">
             <span>是否开启夜间模式：</span>
             <v-switch
-              v-model="styleStore.dark"
+              v-model="dark"
               hide-details
-              :label="styleStore.dark ? '夜间模式开启' : '夜间模式关闭'"
+              :label="dark ? '夜间模式开启' : '夜间模式关闭'"
               color="white"
             />
           </div>
@@ -101,6 +101,14 @@ const nsfw = computed({
   get: () => settingsStore.nsfw,
   set: (val) => {
     settingsStore.nsfw = val
+  }
+})
+
+const dark = computed({
+  get: () => styleStore.dark,
+  set: (val) => {
+    styleStore.dark = val
+    settingsStore.forceTheme = val ? 'dark' : 'light'
   }
 })
 

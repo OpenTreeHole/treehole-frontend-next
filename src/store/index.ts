@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { reactive, ref, watch, computed } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { Division, Hole, IDivisionModify, Tag, UserAuth } from '@/types'
 import { useTheme } from 'vuetify'
 import {
@@ -70,7 +70,13 @@ export const useDivisionStore = defineStore('division', () => {
   const getDivisionById = computed(() => (id: number) => {
     return divisions.find((division) => division.id === id)
   })
-  return { divisions, fetchDivisions, getDivisionById, currentDivisionId, modifyDivision }
+  return {
+    divisions,
+    fetchDivisions,
+    getDivisionById,
+    currentDivisionId,
+    modifyDivision
+  }
 })
 
 export const useUserStore = defineStore('user', () => {
@@ -95,7 +101,15 @@ export const useUserStore = defineStore('user', () => {
     await fetchFavorites()
   }
 
-  return { user, isAdmin, fetchUser, favorites, fetchFavorites, addFavorite, removeFavorite }
+  return {
+    user,
+    isAdmin,
+    fetchUser,
+    favorites,
+    fetchFavorites,
+    addFavorite,
+    removeFavorite
+  }
 })
 
 export const useHoleStore = defineStore('hole', () => {
@@ -191,6 +205,8 @@ export const useTagStore = defineStore('tag', () => {
 })
 
 export const useSettingsStore = defineStore('settings', () => {
+  const styleStore = useStyleStore()
+
   const localBlockedTags = localStorage.getItem('blockedTags')
   const blockedTags = reactive<Tag[]>(localBlockedTags ? JSON.parse(localBlockedTags) : [])
   watch(blockedTags, (tags) => {
@@ -202,7 +218,16 @@ export const useSettingsStore = defineStore('settings', () => {
   watch(nsfw, (nsfw) => {
     localStorage.setItem('nsfw', JSON.stringify(nsfw))
   })
-  return { blockedTags, nsfw }
+
+  const forceTheme = ref(localStorage.getItem('forceTheme'))
+  watch(forceTheme, (theme) => {
+    if (theme) {
+      localStorage.setItem('forceTheme', theme || '')
+      styleStore.dark = theme === 'dark'
+    }
+  })
+
+  return { blockedTags, nsfw, forceTheme }
 })
 
 export interface Notification {
