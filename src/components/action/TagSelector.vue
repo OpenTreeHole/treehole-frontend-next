@@ -2,37 +2,45 @@
   <div ref="el">
     <v-autocomplete
       v-model:search="search"
-      :model-value="tags"
-      item-title="name"
+      :model-value="tagsForAutoComplete"
+      chips
+      :items="allTags"
+      item-title="title"
+      item-value="value"
       variant="outlined"
       hide-details
       density="compact"
       multiple
       hide-selected
+      @update:model-value="updateTags"
     >
       <template #no-data>
         <v-list density="compact">
-          <v-list-item
-            v-for="(tag, i) in allTags"
-            :key="i"
-            class="my-1"
-            :class="`text-${tag.color}`"
-            @click="onClickSuggestions(tag)"
-          >
-            <v-list-item-title>{{ tag.name }}</v-list-item-title>
-            <v-list-item-subtitle class="flex">
-              <v-icon icon="mdi-fire"></v-icon>
-              <span class="self-center">{{ tag.temperature }}</span>
-            </v-list-item-subtitle>
+          <v-list-item class="my-1">
+            <v-list-item-title>没有找到标签</v-list-item-title>
           </v-list-item>
         </v-list>
       </template>
-      <template #selection="{ item, index }">
+
+      <template #item="slot">
+        <v-list-item
+          v-bind="slot.props"
+          class="my-1"
+          :class="`text-${slot.item.value.color}`"
+        >
+          <v-list-item-subtitle class="flex">
+            <v-icon icon="mdi-fire"></v-icon>
+            <span class="self-center">{{ slot.item.value.temperature }}</span>
+          </v-list-item-subtitle>
+        </v-list-item>
+      </template>
+      <template #chip="slot">
         <TagChip
+          v-bind="slot.props"
           class="mr-1"
-          :tag="item.raw"
+          :tag="slot.item.value"
           size="small"
-          @click="tags.splice(index, 1)"
+          @click="updateTags(modelValue.filter((v, i) => i != slot.index))"
         />
       </template>
     </v-autocomplete>
@@ -40,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+import { useNotification } from '@/composables/notification'
 import { useTagStore } from '@/store'
 import { Tag } from '@/types'
 import { computed, onMounted, ref } from 'vue'
@@ -53,55 +62,66 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'update:modelValue', tags: Tag[]): void
 }>()
-const tags = computed({
-  get: () => props.modelValue,
-  set: (v) => emit('update:modelValue', v)
-})
+
+const tagsForAutoComplete = computed(() =>
+  props.modelValue.map((v) => ({ title: v.name, value: v }))
+)
+
+const updateTags = (tags: Tag[]) => {
+  if (tags.length > 5) {
+    not.error('最多只能添加 5 个标签！')
+    return
+  }
+  // Reject if there are duplicate tags (if two tags have the same name)
+  if (tags.some((v, i) => tags.findIndex((t) => t.name === v.name) !== i)) {
+    not.error('标签不能重复！')
+    return
+  }
+  emit('update:modelValue', tags)
+}
 
 const el = ref<HTMLElement>()
 
+const not = useNotification()
 const tagStore = useTagStore()
 
 const search = ref('')
 
-const allTags = computed(() =>
-  tagStore.tags
-    .filter((v) => !tags.value.includes(v))
-    .filter((v) => v.name.includes(search.value))
+const allTags = computed(() => {
+  const trimSearch = search.value.trim()
+
+  let tags = tagStore.tags
+    .filter((v) => !props.modelValue.includes(v))
+    .filter((v) => v.name.includes(trimSearch))
     .filter((v) => !props.filterTags?.some((t) => t.name === v.name))
     .filter((v) => !props.filter || props.filter(v))
     .slice(0, 6)
-)
 
-const addTag = (tag: Tag) => {
-  if (tags.value.length >= 5) return
-  tags.value.push(tag)
-}
-
-const onClickSuggestions = (tag: Tag) => {
-  addTag(tag)
-  search.value = ''
-}
+  if (trimSearch !== '') {
+    if (tags.some((v) => v.name === trimSearch)) {
+      // Put the tag that matches the search at the top
+      tags = tags
+        .filter((v) => v.name === trimSearch)
+        .concat(tags.filter((v) => v.name !== trimSearch))
+    } else tags = [new Tag(search.value.trim()), ...tags]
+  }
+  return tags.map((v) => ({ title: v.name, value: v }))
+})
 
 onMounted(() => {
   tagStore.fetchTags()
 
-  // Some black magic to deal with the shitty v-combobox
+  // Some black magic to deal with the shitty v-autocomplete
   el.value?.querySelector('input')?.addEventListener('keyup', function (e) {
     if (e.key === 'Enter') {
       if (search.value.trim() !== '') {
-        if (allTags.value.length > 0) {
-          addTag(allTags.value[0])
-        } else {
-          const tag = new Tag(search.value.trim())
-          addTag(tag)
-        }
+        updateTags([...props.modelValue, new Tag(search.value)])
+      } else {
+        not.warning('标签不能为空！')
       }
       search.value = ''
     } else if (e.key === 'Escape') {
       search.value = ''
-    } else if (e.key === 'Backspace') {
-      tags.value.pop()
     }
   })
 })
