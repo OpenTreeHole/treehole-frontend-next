@@ -9,6 +9,7 @@ import LicensePage from '@/views/LicensePage.vue'
 import ReportView from '@/views/admin/ReportView.vue'
 import UserView from '@/views/admin/UserView.vue'
 import { useDivisionStore } from '@/store'
+import config from './config'
 
 declare module 'vue-router' {
   interface RouteMeta {
@@ -126,6 +127,18 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: '/division/1'
+  },
+  {
+    path: '/login',
+    redirect: config.authBaseUrl + 'login'
+  },
+  {
+    path: '/register',
+    redirect: config.authBaseUrl + 'register'
+  },
+  {
+    path: '/forgetpassword',
+    redirect: config.authBaseUrl + 'register?type=forget_password'
   }
 ]
 

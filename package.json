@@ -1,7 +1,7 @@
 {
   "name": "treehole-frontend-next",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "dev": "vite --port 8080",
     "build": "vue-tsc --noEmit && vite build",
@@ -36,7 +36,7 @@
     "typora-parser": "^1.0.3",
     "vue": "^3.2.25",
     "vue-router": "^4.1.1",
-    "vuetify": "3.0.4"
+    "vuetify": "3.1.2"
   },
   "devDependencies": {
     "@editorjs/image": "^2.6.2",
