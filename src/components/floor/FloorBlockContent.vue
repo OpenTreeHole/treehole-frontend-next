@@ -62,7 +62,7 @@ import { generateColor, parseToTypora } from '@/utils'
 
 import { DetailedFloor, Floor } from '@/types'
 import MentionBlock from '@/components/floor/MentionBlock.vue'
-import { computed, inject, onMounted, reactive, ref } from 'vue'
+import { computed, inject, reactive, ref, watch } from 'vue'
 import { getFloor, getHole } from '@/apis'
 
 const props = defineProps<{ floor: Floor; banFold?: boolean }>()
@@ -114,21 +114,25 @@ const gotoReply = () => {
   }
 }
 
-onMounted(async () => {
-  const mentionStrs = props.floor.content
-    .replaceAll(/^#{1,2}(\d+)\b\s*/g, '')
-    .matchAll(/#{1,2}(\d+)\b\s*/g)
-  for (const mentionStr of mentionStrs) {
-    const mention = mentions[mentionStr[0]]
-    if (!mention) {
-      if (mentionStr[0].startsWith('##')) {
-        mentions[mentionStr[0]] = await getFloor(parseInt(mentionStr[1]))
-      } else {
-        mentions[mentionStr[0]] = (await getHole(parseInt(mentionStr[1]))).firstFloor
+watch(
+  () => props.floor,
+  async () => {
+    const mentionStrs = props.floor.content
+      .replaceAll(/^#{1,2}(\d+)\b\s*/g, '')
+      .matchAll(/#{1,2}(\d+)\b\s*/g)
+    for (const mentionStr of mentionStrs) {
+      const mention = mentions[mentionStr[0]]
+      if (!mention) {
+        if (mentionStr[0].startsWith('##')) {
+          mentions[mentionStr[0]] = await getFloor(parseInt(mentionStr[1]))
+        } else {
+          mentions[mentionStr[0]] = (await getHole(parseInt(mentionStr[1]))).firstFloor
+        }
       }
     }
-  }
-})
+  },
+  { immediate: true }
+)
 </script>
 
 <style lang="scss" scoped>

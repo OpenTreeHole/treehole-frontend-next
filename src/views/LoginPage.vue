@@ -63,10 +63,7 @@
   </v-container>
 </template>
 
-<script
-  lang="ts"
-  setup
->
+<script lang="ts" setup>
 import { ref, onDeactivated } from 'vue'
 import { login } from '@/apis'
 const password = ref('')
@@ -92,10 +89,7 @@ const gotoPassword = () => {
 }
 </script>
 
-<style
-  scoped
-  lang="scss"
->
+<style scoped lang="scss">
 .v-field {
   background: rgb(var(--v-theme-surface));
   border-color: transparent;
