@@ -6,6 +6,7 @@ import { router } from './router'
 import { vuetify } from './plugins/vuetify'
 import './index.scss'
 import { useNotification } from './composables/notification'
+import { version } from '../package.json'
 
 const pinia = createPinia()
 
@@ -20,3 +21,5 @@ app.config.errorHandler = (err) => {
 }
 
 app.mount('#app')
+
+console.log(`OpenTreeHole Frontend v${version}`)
