@@ -82,7 +82,7 @@ export const useDivisionStore = defineStore('division', () => {
 export const useUserStore = defineStore('user', () => {
   const user = ref<UserAuth | null>(null)
   const isAdmin = computed(() => {
-    return user.value && user.value.permission.admin > new Date()
+    return user.value && user.value.isAdmin
   })
   async function fetchUser() {
     user.value = await getCurrentUser()

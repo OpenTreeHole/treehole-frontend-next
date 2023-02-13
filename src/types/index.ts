@@ -208,14 +208,14 @@ export class Punishment {
   endTime: Date
 }
 
-@Model
-export class Permission {
-  @Field({ type: Date })
-  admin: Date
+// @Model
+// export class Permission {
+//   @Field({ type: Date })
+//   admin: Date
 
-  @Field({ type: Date, map: true })
-  silent: Record<string, Date>
-}
+//   @Field({ type: Date, map: true })
+//   silent: Record<string, Date>
+// }
 
 @Model
 export class User {
@@ -234,8 +234,8 @@ export class User {
   @Field()
   nickname: string
 
-  @Field({ type: Permission })
-  permission: Permission
+  // @Field({ type: Permission })
+  // permission: Permission
 
   @Field({ type: Date })
   joinedTime: Date
@@ -253,20 +253,17 @@ export class UserAuth {
   @Field()
   id: number
 
-  @Field({ type: Permission })
-  permission: Permission
-
   @Field()
   nickname: string
 
-  @Field()
-  offenseCount: number
-
-  @Field({ type: Date, map: true })
-  silent: Record<string, Date>
-
   @Field({ type: Date })
   joinedTime: Date
+
+  @Field({ type: Date })
+  lastLogin: Date
+
+  @Field()
+  isAdmin: boolean
 }
 
 @Model
