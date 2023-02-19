@@ -196,18 +196,17 @@
     <template v-else-if="action === ActionType.Penalty">
       <QuestionAction
         class="mt-4"
-        text="请输入封禁等级："
+        text="请输入封禁天数："
         text-class="text-blue-600"
         @done="sendPenalty"
         @cancel="action = ActionType.None"
       >
-        <v-select
-          v-model="penaltyLevel"
+        <v-text-field
+          v-model="penaltyDays"
           class="grow mr-2"
-          :items="[1, 2, 3]"
           hide-details
           variant="outlined"
-          autofocus
+          :autofocus="true"
           density="compact"
         />
       </QuestionAction>
@@ -262,7 +261,7 @@ const specialTag = ref('')
 const reportReason = ref('')
 const foldReason = ref('')
 const deleteReason = ref('')
-const penaltyLevel = ref<number | null>(null)
+const penaltyDays = ref<number | null>(null)
 
 enum ActionType {
   None,
@@ -369,16 +368,16 @@ const sendRestoreHistory = async (history: FloorHistory, reason: string) => {
 }
 
 const sendPenalty = async () => {
-  if (penaltyLevel.value === null) {
-    not.error('请选择封禁等级')
+  if (penaltyDays.value === null) {
+    not.error('请输入封禁天数')
     return
   }
   const divisionId =
     divisionStore.currentDivisionId || (await getHole(floor.value.holeId)).divisionId
   action.value = ActionType.None
-  await addPenalty(floor.value.id, penaltyLevel.value, divisionId)
+  await addPenalty(floor.value.id, penaltyDays.value, divisionId)
   not.success('封禁成功')
-  penaltyLevel.value = null
+  penaltyDays.value = null
 }
 </script>
 
