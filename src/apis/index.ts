@@ -568,9 +568,9 @@ export const dealReport = async (id: number, result: string) => {
   return factory(Report, response.data)
 }
 
-export const addPenalty = async (floorId: number, penaltyLevel: number, divisionId: number) => {
+export const addPenalty = async (floorId: number, days: number, divisionId: number) => {
   const response = await axios.post(`/penalty/${floorId}`, {
-    penalty_level: penaltyLevel,
+    days,
     division_id: divisionId
   })
   return factory(User, response.data)
