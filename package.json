@@ -21,6 +21,7 @@
     "@editorjs/quote": "^2.4.0",
     "@editorjs/simple-image": "^1.4.1",
     "@editorjs/table": "^2.0.4",
+    "@types/markdown-it": "^12.2.3",
     "@types/remove-markdown": "^0.3.1",
     "axios": "^0.27.2",
     "js-cookie": "^3.0.1",
@@ -36,6 +37,7 @@
     "typora-parser": "^1.0.3",
     "vue": "^3.2.25",
     "vue-router": "^4.1.1",
+    "vue3-markdown-it": "^1.0.10",
     "vuetify": "3.1.2"
   },
   "devDependencies": {
