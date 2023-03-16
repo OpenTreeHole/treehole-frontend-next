@@ -21,10 +21,10 @@
   --white-color: #fff;
 
   /* head */
-  --head-text-color: #333444;
-  --h1-text-color: rgba(0, 52, 68, 0.9);
+  --head-text-color: var(--theme-primary-color);
+  --h1-text-color: var(--theme-primary-color);
   --h5-text-color: var(--theme-primary-color);
-  --h6-text-color: rgba(0, 153, 123, 0.838);
+  --h6-text-color: var(--theme-primary-color);
   --head-prefix-color: #D0D0D0;
 
   /* text */

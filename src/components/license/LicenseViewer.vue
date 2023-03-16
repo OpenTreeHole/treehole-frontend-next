@@ -33,7 +33,7 @@ const html = ref<string>('')
 onMounted(async () => {
   if (props.license.type === 'pdf') PDFObject.embed(props.license.file, pdfContainer.value)
   else if (props.license.type === 'markdown') {
-    const response = await fetch(props.license.file)
+    const response = await fetch(props.license.file, { cache: 'no-store' })
     const markdown = await response.text()
     html.value = parseToTypora(markdown)
   }

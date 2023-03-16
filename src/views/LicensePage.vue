@@ -40,10 +40,8 @@ const licenses = ref<{ name: string; file: string; type: 'pdf' }[]>([])
 const tab = ref<string | null>(null)
 
 const fetchLicenses = async () => {
-  const response = await axios.get<{ name: string; file: string; type: 'pdf' }[]>(
-    '/license/index.json'
-  )
-  licenses.value = response.data
+  const response = await fetch('/licenses/index.json', { cache: 'no-store' })
+  licenses.value = await response.json()
 }
 
 onMounted(async () => {

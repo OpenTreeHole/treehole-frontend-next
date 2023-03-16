@@ -9,8 +9,14 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import TheLayout from './components/TheLayout.vue'
-import { useDivisionStore, useSettingsStore, useStyleStore, useUserStore } from '@/store'
-import { onMounted, ref } from 'vue'
+import {
+  useDivisionStore,
+  useSettingsStore,
+  useStyleStore,
+  useTagStore,
+  useUserStore
+} from '@/store'
+import { ref } from 'vue'
 import { useNotification } from './composables/notification'
 
 const route = useRoute()
@@ -21,6 +27,7 @@ const styleStore = useStyleStore()
 const divisionStore = useDivisionStore()
 const userStore = useUserStore()
 const settingsStore = useSettingsStore()
+const tagStore = useTagStore()
 
 const not = useNotification()
 
@@ -31,10 +38,18 @@ router.beforeEach(async () => {
 })
 
 router.beforeResolve(async (to) => {
-  const promise = Promise.all([divisionStore.fetchDivisions(), userStore.fetchUser()])
-  if (firstRoute.value) {
-    firstRoute.value = false
-    await promise
+  if (to.meta.requiresAuth) {
+    console.log('asdhasdkas')
+    const promise = Promise.all([
+      divisionStore.fetchDivisions(),
+      userStore.fetchUser(),
+      tagStore.fetchTags()
+    ])
+    if (firstRoute.value) {
+      firstRoute.value = false
+      await userStore.fetchFavorites()
+      await promise
+    }
   }
 
   if (to.meta.isAdmin && !userStore.isAdmin) {
@@ -58,10 +73,6 @@ if (settingsStore.forceTheme) {
     styleStore.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 }
-
-onMounted(async () => {
-  await userStore.fetchFavorites()
-})
 </script>
 
 <style>
