@@ -1,7 +1,22 @@
 [
     {
         "name": "社区公约",
-        "file": "/license/community_convention.pdf",
-        "type": "pdf"
+        "file": "/license/community_convention_v3.md",
+        "type": "markdown"
+    },
+    {
+        "name": "隐私政策",
+        "file": "/license/privacy_policy.md",
+        "type": "markdown"
+    },
+    {
+        "name": "用户协议",
+        "file": "/license/user_agreement.md",
+        "type": "markdown"
+    },
+    {
+        "name": "蛋壳公约",
+        "file": "/license/danke_community_convention.md",
+        "type": "markdown"
     }
 ]

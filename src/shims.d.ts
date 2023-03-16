@@ -67,3 +67,8 @@ declare module 'editorjs-math' {
   const MathTex: any
   export default MathTex
 }
+
+declare module 'vue3-markdown-it' {
+  const Markdown: any
+  export default Markdown
+}

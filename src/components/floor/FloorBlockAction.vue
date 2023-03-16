@@ -208,6 +208,7 @@
           variant="outlined"
           :autofocus="true"
           density="compact"
+          type="number"
         />
       </QuestionAction>
     </template>
@@ -261,7 +262,7 @@ const specialTag = ref('')
 const reportReason = ref('')
 const foldReason = ref('')
 const deleteReason = ref('')
-const penaltyDays = ref<number | null>(null)
+const penaltyDays = ref('1')
 
 enum ActionType {
   None,
@@ -368,16 +369,19 @@ const sendRestoreHistory = async (history: FloorHistory, reason: string) => {
 }
 
 const sendPenalty = async () => {
-  if (penaltyDays.value === null) {
+  if (penaltyDays.value === '') {
     not.error('请输入封禁天数')
+    return
+  } else if (parseInt(penaltyDays.value) <= 0) {
+    not.error('封禁天数必须大于0')
     return
   }
   const divisionId =
     divisionStore.currentDivisionId || (await getHole(floor.value.holeId)).divisionId
   action.value = ActionType.None
-  await addPenalty(floor.value.id, penaltyDays.value, divisionId)
+  await addPenalty(floor.value.id, parseInt(penaltyDays.value), divisionId)
   not.success('封禁成功')
-  penaltyDays.value = null
+  penaltyDays.value = '1'
 }
 </script>
 

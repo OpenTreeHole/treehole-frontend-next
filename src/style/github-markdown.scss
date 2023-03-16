@@ -104,6 +104,7 @@
   font-size: 16px;
   line-height: 1.5;
   word-wrap: break-word;
+  text-align: left;
 }
 
 .markdown-viewer .octicon {
@@ -712,7 +713,7 @@
   list-style-type: lower-roman;
 }
 
-.markdown-viewer div>ol:not([type]) {
+.markdown-viewer div>ol:not([type]), .markdown-viewer blockquote>ol:not([type]) {
   list-style-type: decimal;
 }
 
