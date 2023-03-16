@@ -1,7 +1,7 @@
 {
   "name": "treehole-frontend-next",
   "private": true,
-  "version": "1.0.5",
+  "version": "1.0.5-qf1",
   "scripts": {
     "dev": "vite --port 8080",
     "build": "vue-tsc --noEmit && vite build",
