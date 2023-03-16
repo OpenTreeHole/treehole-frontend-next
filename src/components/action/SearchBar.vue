@@ -152,8 +152,6 @@ const searchByText = (text: string) => {
 }
 
 onMounted(() => {
-  tagStore.fetchTags()
-
   el.value?.querySelector('input')?.addEventListener('keyup', function (e) {
     if (e.key === 'Enter') {
       if (search.value.trim() !== '') {
