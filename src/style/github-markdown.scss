@@ -713,7 +713,7 @@
   list-style-type: lower-roman;
 }
 
-.markdown-viewer div>ol:not([type]) {
+.markdown-viewer div>ol:not([type]), .markdown-viewer blockquote>ol:not([type]) {
   list-style-type: decimal;
 }
 
