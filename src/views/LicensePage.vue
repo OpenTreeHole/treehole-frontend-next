@@ -32,7 +32,6 @@
 
 <script lang="ts" setup>
 import LicenseViewer from '@/components/license/LicenseViewer.vue'
-import axios from '@/apis'
 import { onMounted, ref } from 'vue'
 
 const licenses = ref<{ name: string; file: string; type: 'pdf' }[]>([])
@@ -40,7 +39,7 @@ const licenses = ref<{ name: string; file: string; type: 'pdf' }[]>([])
 const tab = ref<string | null>(null)
 
 const fetchLicenses = async () => {
-  const response = await fetch('/licenses/index.json', { cache: 'no-store' })
+  const response = await fetch('/license/index.json', { cache: 'no-store' })
   licenses.value = await response.json()
 }
 
