@@ -221,7 +221,6 @@ import Editor from '@/components/editor/Editor.vue'
 import HistoryBlock from '@/components/floor/HistoryBlock.vue'
 import QuestionAction from '@/components/action/QuestionAction.vue'
 import { generateColor } from '@/utils'
-import { useEditor } from '@/composables/editor'
 import { computed, ref } from 'vue'
 import { DetailedFloor, Floor, FloorHistory } from '@/types'
 import {
@@ -277,7 +276,8 @@ enum ActionType {
   Division
 }
 
-const { editorData, initEditor, clearEditor } = useEditor()
+const editorData = ref('')
+
 const action = ref<ActionType>(ActionType.None)
 const computeColorClass = (str: string) => 'text-' + generateColor(str)
 
@@ -290,13 +290,13 @@ const toggleAction = async (type: ActionType) => {
 
 const edit = () => {
   specialTag.value = floor.value.specialTag
-  initEditor(floor.value.content)
+  editorData.value = floor.value.content
   toggleAction(ActionType.Edit)
 }
 
 const reply = () => {
   specialTag.value = ''
-  initEditor('')
+  editorData.value = ''
   toggleAction(ActionType.Reply)
 }
 
@@ -307,7 +307,7 @@ const sendReply = async (markdown: string) => {
     specialTag: specialTag.value
   })
   not.success('回复成功')
-  clearEditor()
+  editorData.value = ''
   specialTag.value = ''
   emit('newContent')
 }
@@ -321,7 +321,7 @@ const sendEdit = async (markdown: string) => {
     res = await addSpecialTag(floor.value.id, specialTag.value)
   }
   not.success('修改成功')
-  clearEditor()
+  editorData.value = ''
   specialTag.value = ''
   floor.value = res
 }

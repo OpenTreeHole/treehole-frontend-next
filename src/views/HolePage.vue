@@ -105,7 +105,6 @@ import { sleep } from '@/utils'
 import FloorBlock from '@/components/floor/FloorBlock.vue'
 import Editor from '@/components/editor/Editor.vue'
 import TagChip from '@/components/tag/TagChip.vue'
-import { useEditor } from '@/composables/editor'
 import { onMounted, provide, ref, computed, reactive } from 'vue'
 import { addFloor, getHole, listFloors } from '@/apis'
 import { useDivisionStore, useUserStore } from '@/store'
@@ -126,7 +125,7 @@ const userStore = useUserStore()
 
 const not = useNotification()
 
-const { editorData, initEditor, clearEditor } = useEditor()
+const editorData = ref('')
 
 const { gotoFloor } = useFloorPortal()
 
@@ -184,7 +183,7 @@ const onNewContent = async () => {
 const specialTag = ref('')
 const showComment = ref(false)
 const comment = () => {
-  initEditor('')
+  editorData.value = ''
   showComment.value = true
 }
 
@@ -195,7 +194,7 @@ const sendComment = async (content: string) => {
     specialTag: specialTag.value
   })
   not.success('发表成功')
-  clearEditor()
+  editorData.value = ''
   specialTag.value = ''
   onNewContent()
 }
