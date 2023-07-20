@@ -88,6 +88,7 @@
       <Editor
         class="mr-2"
         :data="editorData"
+        :unique-id="'editor-floor' + floor.id + (action === ActionType.Reply ? '-reply' : '-edit')"
         @close="action = ActionType.None"
         @send="
           (content: string) => {

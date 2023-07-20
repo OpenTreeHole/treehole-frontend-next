@@ -48,6 +48,7 @@
             <Editor
               class="mx-6"
               :data="editorData"
+              :unique-id="'editor-division-' + props.divisionId + '-create-hole'"
               @close="showCreateHole = false"
               @send="sendCreateHole"
             ></Editor>

@@ -53,6 +53,7 @@
             <Editor
               class="mx-6"
               :data="editorData"
+              :unique-id="'editor-hole-' + props.holeId + '-reply'"
               @close="showComment = false"
               @send="sendComment"
             ></Editor>
