@@ -1,5 +1,5 @@
 <template>
-  <div class="my-2">
+  <div class="my-2 editor">
     <div class="text-left lg:ml-5 flex justify-center">
       <div class="lg:max-w-[calc(var(--editor-max-width))] max-w-full grow pr-2">
         <textarea ref="editorDiv"></textarea>
@@ -25,7 +25,7 @@
         </IconBtn>
         <IconBtn
           class="text-blue-500"
-          @click="$emit('send', editor.value())"
+          @click="$emit('send', editor!.value())"
         >
           mdi-send
         </IconBtn>

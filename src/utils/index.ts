@@ -97,10 +97,6 @@ export const snakifyKeys = (obj: any): any => {
   return obj
 }
 
-export const mark = (str: string) => {
-  return marked(convertKatex(str))
-}
-
 export const reduceKeys = (reduced: any, before: any): any => {
   assign(reduced, pick(before, keys(reduced)))
   return reduced
@@ -135,11 +131,64 @@ export const checkType = (object: any, keysOfType: string[]): boolean => {
 }
 
 export const parseToTypora = (markdown: string) => {
-  markdown = markdown
-    .replaceAll('\n\n', '\n')
-    .replaceAll(/\n>\s+\n/g, '!!QUOTE_NEWLINE_REPLACE!!')
-    .replaceAll('\n', '\n\n')
-    .replaceAll('!!QUOTE_NEWLINE_REPLACE!!', '\n> \n')
+  const convertToMultipleLineBreak = (str: string) => {
+    // convert consecutive line breaks between paragraphs to 2 line breaks
+    // this is because typora will convert 2 line breaks to <p> tag.
+    // line breaks in other blocks will not be affected.
+    let env: 'code' | 'math' | 'list' | 'quote' | 'table' | 'none' = 'none'
+    let result = ''
+
+    for (const line of str.split('\n')) {
+      if (line.startsWith('```')) {
+        if (env === 'code') {
+          env = 'none'
+        } else if (env === 'none') {
+          env = 'code'
+        }
+      } else if (line.startsWith('$$')) {
+        if (env === 'math') {
+          env = 'none'
+        } else if (env === 'none') {
+          env = 'math'
+        }
+      } else if (line.startsWith('|')) {
+        if (env !== 'code' && env !== 'math') {
+          env = 'table'
+        }
+      } else if (line.startsWith('> ')) {
+        if (env !== 'code' && env !== 'math') {
+          env = 'quote'
+        }
+      } else if (
+        line.startsWith('- ') ||
+        line.startsWith('* ') ||
+        line.startsWith('+ ') ||
+        /^\d+\. /.test(line)
+      ) {
+        if (env !== 'code' && env !== 'math') {
+          env = 'list'
+        }
+      } else {
+        if (env !== 'code' && env !== 'math') {
+          env = 'none'
+        }
+      }
+
+      result += line
+      if (env === 'none') {
+        if (line !== '') {
+          result += '\n\n'
+        }
+      } else {
+        result += '\n'
+      }
+      console.log(env)
+    }
+    return result
+  }
+  console.log(markdown)
+  markdown = convertToMultipleLineBreak(markdown)
+  console.log(markdown)
   const parseResult = TyporaParser.parse(markdown)
   return parseResult.renderHTML({
     latexRenderer: new KatexRenderer(),

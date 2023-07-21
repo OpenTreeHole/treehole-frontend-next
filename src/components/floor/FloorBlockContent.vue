@@ -47,11 +47,20 @@
     </div>
     <div class="flex justify-end">
       <span class="text-neutral-500 text-sm px-2">
-        {{ floor.storey }}F(<span
-          class="text-neutral-400 hover:text-neutral-300 transition cursor-pointer active:text-neutral-300 focus:ring-0"
-          @click="scrollToFloor(floor)"
-          >##{{ floor.id }}</span
-        >)
+        <template v-if="props.storey">
+          {{ props.storey }}F(<span
+            class="text-neutral-400 hover:text-neutral-300 transition cursor-pointer active:text-neutral-300 focus:ring-0"
+            @click="scrollToFloor(floor)"
+            >##{{ floor.id }}</span
+          >)
+        </template>
+        <template v-else>
+          <span
+            class="text-neutral-400 hover:text-neutral-300 transition cursor-pointer active:text-neutral-300 focus:ring-0"
+            @click="scrollToFloor(floor)"
+            >##{{ floor.id }}</span
+          >
+        </template>
       </span>
     </div>
   </template>
@@ -65,7 +74,7 @@ import MentionBlock from '@/components/floor/MentionBlock.vue'
 import { computed, inject, reactive, ref, watch } from 'vue'
 import { getFloor, getHole } from '@/apis'
 
-const props = defineProps<{ floor: Floor; banFold?: boolean }>()
+const props = defineProps<{ floor: Floor; storey?: number; banFold?: boolean }>()
 
 const replyRegexResult = computed(() => /^\s*#{1,2}(\d+)\b\s*/g.exec(props.floor.content))
 const replyFloor = computed(

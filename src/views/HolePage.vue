@@ -70,6 +70,7 @@
           >
             <FloorBlock
               v-model:floor="floors[index]"
+              :storey="index + 1"
               class="px-6 lg:px-10"
               @new-content="onNewContent"
             />
@@ -165,6 +166,7 @@ const loadFloorsUntil = async (length: number) => {
   while (floors.length < loadEnd.value && hasNext.value) {
     const res = await loader.value!.load(listFloors(props.holeId, 50, floors.length))
     if (res.length < 50) hasNext.value = false
+
     floors.push(...res)
   }
   loading.value = false

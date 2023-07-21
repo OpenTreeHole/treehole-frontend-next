@@ -29,9 +29,6 @@ export class Floor {
   @Field()
   id: number
 
-  @Field()
-  storey: number
-
   @Field({ factory: (v, parent) => parent.foldV2 })
   fold: string
 

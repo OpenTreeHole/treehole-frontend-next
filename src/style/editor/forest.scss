@@ -1,9 +1,10 @@
 @charset "UTF-8";
-@import "forest/fonts";
-@import "forest/code-mirror";
+@use "forest/fonts" as *;
+@use "forest/code-mirror" as *;
 
 /** color vars **/
-.markdown-viewer {
+@mixin forest {
+  @include forest-code-mirror;
   /* system vars*/
   --primary-color: #f0f0f0; /* color of primary buttons */
   --side-bar-bg-color: #003444;
@@ -121,18 +122,6 @@
   & h1 > span {
     position: relative;
     display: inline-block;
-  }
-
-  & h1 > span:after {
-    content: '';
-    display: block;
-    position: absolute;
-    border-top: 3px double var(--h1-text-color);
-    height: 3px;
-    width: 15rem;
-    max-width: 80%;
-    left: 50%;
-    transform: translateX(-50%);
   }
 
   & h2 {
