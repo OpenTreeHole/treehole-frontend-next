@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-end mt-2 overflow-visible">
+    <div class="flex justify-end py-2">
       <IconBtn
         :icon-class="
           floor instanceof DetailedFloor && floor.liked ? 'text-red-500' : 'text-neutral-400'

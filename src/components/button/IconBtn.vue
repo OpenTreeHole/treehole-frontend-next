@@ -1,6 +1,6 @@
 <template>
   <span :class="small ? 'px-1' : 'px-2'">
-    <span
+    <div
       :class="className"
       @click="$emit('click')"
     >
@@ -15,7 +15,7 @@
       >
         {{ text }}
       </span>
-    </span>
+    </div>
   </span>
 </template>
 

@@ -5,18 +5,28 @@
         <div class="border-b-sm mt-2 pb-4">
           <div class="text-3xl px-6 lg:px-10 pb-2 flex justify-between">
             <div class="flex grow-0">#{{ holeId }}</div>
-            <div class="flex space-x-4">
+            <div class="flex space-x-4 items-center">
+              <div class="flex">
+                <IconBtn
+                  class="text-lg"
+                  @click="gotoEnd"
+                >
+                  mdi-arrow-collapse-down
+                </IconBtn>
+                <IconBtn
+                  class="text-lg"
+                  :class="isFavorite ? 'text-orange-300' : 'text-gray-400'"
+                  @click="toggleFavorite"
+                >
+                  {{ isFavorite ? 'mdi-star' : 'mdi-star-outline' }}
+                </IconBtn>
+              </div>
+
               <v-btn
                 color="primary"
                 @click="comment"
-                >发表评论</v-btn
               >
-              <v-btn
-                class="self-center"
-                color="primary"
-                @click="toggleFavorite"
-              >
-                {{ isFavorite ? '已收藏' : '收藏' }}
+                发表评论
               </v-btn>
             </div>
           </div>
@@ -66,7 +76,7 @@
             :id="floor.id"
             :key="`##${floor.id}, ${floor.fold}`"
             v-intersect="onIntersect(index)"
-            class="px-0 py-5 border-b-sm flex-col text-left"
+            class="px-0 pt-5 pb-3 border-b-sm flex-col text-left"
           >
             <FloorBlock
               v-model:floor="floors[index]"
@@ -113,6 +123,7 @@ import { useDivisionStore, useUserStore } from '@/store'
 import { useFloorPortal } from '@/composables/floor'
 import { useNotification } from '@/composables/notification'
 import LoadingCircular from '@/components/LoadingCircular.vue'
+import IconBtn from '@/components/button/IconBtn.vue'
 
 const props = defineProps<{ holeId: number; floorId?: number }>()
 
@@ -139,6 +150,11 @@ const scrollToFloor = (floor: Floor | number) => {
 }
 
 provide('scrollToFloor', scrollToFloor)
+
+const gotoEnd = async () => {
+  await loadFloorsUntil(hole.value?.reply || 0)
+  scrollToFloor(floors[floors.length - 1])
+}
 
 const isFavorite = computed(() => {
   return userStore.favorites.some((favorite) => favorite.id === props.holeId)
