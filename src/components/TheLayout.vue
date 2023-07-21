@@ -45,7 +45,7 @@
             >
               <v-list-item-title>{{ division.name }}</v-list-item-title>
             </v-list-item>
-            <v-divider />
+            <v-divider class="border-gray-800" />
             <template v-if="userStore.isAdmin">
               <v-list-item
                 class="text-left pl-10 cursor-pointer select-none"
@@ -54,7 +54,7 @@
               >
                 <v-list-item-title>管理</v-list-item-title>
               </v-list-item>
-              <v-divider />
+              <v-divider class="border-gray-800" />
             </template>
             <v-list-item
               v-for="(r, i) in otherRoutes"

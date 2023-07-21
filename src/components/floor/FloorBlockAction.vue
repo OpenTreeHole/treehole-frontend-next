@@ -10,9 +10,18 @@
       >
         mdi-thumb-up-outline
       </IconBtn>
+      <IconBtn
+        :icon-class="
+          floor instanceof DetailedFloor && floor.disliked ? 'text-red-500' : 'text-neutral-400'
+        "
+        :text="floor.dislike"
+        @click="sendDislike"
+      >
+        mdi-thumb-down-outline
+      </IconBtn>
       <IconBtn @click="reply"> mdi-chat-outline </IconBtn>
       <v-divider
-        class="mx-1"
+        class="mx-1 border-gray-800"
         :vertical="true"
       />
       <IconBtn
@@ -47,7 +56,7 @@
       </IconBtn>
       <v-divider
         v-if="userStore.isAdmin || (floor instanceof DetailedFloor && floor.isMe)"
-        class="mx-1"
+        class="mx-1 border-gray-800"
         :vertical="true"
       />
       <IconBtn @click="toggleAction(ActionType.Report)"> mdi-alert-octagon-outline </IconBtn>
@@ -332,6 +341,14 @@ const sendLike = async () => {
     floor.value = await likeFloor(floor.value.id, 0)
   } else {
     floor.value = await likeFloor(floor.value.id, 1)
+  }
+}
+
+const sendDislike = async () => {
+  if (floor.value instanceof DetailedFloor && floor.value.disliked) {
+    floor.value = await likeFloor(floor.value.id, 0)
+  } else {
+    floor.value = await likeFloor(floor.value.id, -1)
   }
 }
 

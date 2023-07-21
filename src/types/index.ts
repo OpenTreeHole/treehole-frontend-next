@@ -35,6 +35,9 @@ export class Floor {
   @Field()
   like: number
 
+  @Field()
+  dislike: number
+
   @Field({ type: Date })
   timeCreated: Date
 
@@ -53,6 +56,9 @@ export class DetailedFloor extends Floor {
 
   @Field()
   liked?: boolean
+
+  @Field()
+  disliked?: boolean
 
   @Field({ type: Floor, array: true })
   mention: Floor[]
