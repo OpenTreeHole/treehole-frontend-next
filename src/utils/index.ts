@@ -182,13 +182,10 @@ export const parseToTypora = (markdown: string) => {
       } else {
         result += '\n'
       }
-      console.log(env)
     }
     return result
   }
-  console.log(markdown)
   markdown = convertToMultipleLineBreak(markdown)
-  console.log(markdown)
   const parseResult = TyporaParser.parse(markdown)
   return parseResult.renderHTML({
     latexRenderer: new KatexRenderer(),

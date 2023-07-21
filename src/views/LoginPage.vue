@@ -76,7 +76,6 @@ const emailRules = [
 const passwordRules = [(pwd: string) => pwd.length >= 8 || 'Password must be over 8 characters']
 const emailLogin = async () => {
   const response = await login(email.value, password.value)
-  console.log(response)
 }
 onDeactivated(() => {
   email.value = ''

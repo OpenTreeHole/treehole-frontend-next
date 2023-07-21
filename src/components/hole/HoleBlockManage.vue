@@ -106,7 +106,6 @@ const sendModifyHole = async () => {
     newHole = await modifyHoleTag(hole.value.id, tags.value)
   }
   if (division.value.id !== hole.value.divisionId) {
-    console.log(division.value)
     newHole = await modifyHoleDivision(hole.value.id, division.value.id)
   }
   if (hidden.value !== hole.value.hidden) {

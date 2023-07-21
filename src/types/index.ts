@@ -292,3 +292,38 @@ export class FloorHistory {
   @Field({ type: Date })
   timeUpdated: Date
 }
+
+@Model
+export class Message {
+  @Field()
+  code:
+    | 'favorite'
+    | 'reply'
+    | 'mention'
+    | 'modify'
+    | 'permission'
+    | 'report'
+    | 'report_dealt'
+    | 'mail'
+
+  @Field()
+  data: any
+
+  @Field()
+  description: string
+
+  @Field()
+  id: number
+
+  @Field()
+  message: string
+
+  @Field()
+  url: string
+
+  @Field({ type: Date })
+  timeCreated: Date
+
+  @Field({ type: Date })
+  timeUpdated: Date
+}
