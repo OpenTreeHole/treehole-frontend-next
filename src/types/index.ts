@@ -300,9 +300,10 @@ const messageDataFactory = (data: any, parent: any) => {
     case 'mention':
     case 'modify':
     case 'permission':
+      return factory(Floor, data)
     case 'report':
     case 'report_dealt':
-      return factory(Floor, data)
+      return factory(Report, data)
     case 'mail':
       return null
   }

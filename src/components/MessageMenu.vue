@@ -98,6 +98,16 @@
               <FloorBlockHeader :floor="message.data"></FloorBlockHeader>
               <FloorBlockContent :floor="message.data"></FloorBlockContent>
             </v-card>
+            <v-card
+              v-if="message.data instanceof Report"
+              width="400"
+              class="relative right-1 pl-4 pr-2 py-2"
+            >
+              <ReportBlock
+                :report="message.data"
+                no-action
+              ></ReportBlock>
+            </v-card>
           </v-menu>
 
           <template v-if="messages.length === 0">
@@ -125,7 +135,8 @@ import FloorBlockContent from './floor/FloorBlockContent.vue'
 import { useFloorPortal } from '@/composables/floor'
 import { useUserStore } from '@/store'
 import { computed, reactive, ref } from 'vue'
-import { Message, Floor } from '@/types'
+import { Message, Floor, Report } from '@/types'
+import ReportBlock from './floor/ReportBlock.vue'
 
 const userStore = useUserStore()
 
