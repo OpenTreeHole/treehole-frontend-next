@@ -53,7 +53,7 @@
               <v-list-item
                 class="px-4 py-3 select-none"
                 :class="{
-                  'border-sm': i !== messages.length - 1,
+                  'border-b-sm': i !== messages.length - 1,
                   'hover:bg-neutral-100 cursor-pointer': !!message.data
                 }"
                 v-bind="props"
