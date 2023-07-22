@@ -69,8 +69,9 @@
                   <div class="pr-2">
                     <v-checkbox
                       v-if="selecting"
-                      :model-value="selectedMessages.includes(message.id)"
-                      color="indigo"
+                      :model-value="selectedMessages.includes(message.id) || message.hasRead"
+                      :color="message.hasRead ? 'primary' : 'indigo'"
+                      :disabled="message.hasRead"
                       hide-details
                       density="compact"
                     ></v-checkbox>
@@ -146,7 +147,7 @@ const { gotoFloor } = useFloorPortal()
 const selecting = ref(false)
 const selectedMessages = reactive<number[]>([])
 const selectMessage = (message: Message) => {
-  if (!selectedMessages.includes(message.id)) {
+  if (!selectedMessages.includes(message.id) && !message.hasRead) {
     selectedMessages.push(message.id)
   } else {
     selectedMessages.splice(selectedMessages.indexOf(message.id), 1)
