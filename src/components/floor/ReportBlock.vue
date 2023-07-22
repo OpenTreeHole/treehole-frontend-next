@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="flex">
+    <p class="flex pt-2">
       <span class="font-bold min-w-max">举报理由：</span>
       <span> {{ report.reason }} </span>
       <span class="grow"></span>

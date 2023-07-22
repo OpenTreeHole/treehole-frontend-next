@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="flex justify-end mt-2 overflow-visible">
+    <div class="flex justify-end py-2 overflow-visible">
       <IconBtn @click="toggleAction(ActionType.Delete)">mdi-delete-outline</IconBtn>
       <IconBtn @click="toggleAction(ActionType.Penalty)">mdi-account-off-outline</IconBtn>
       <v-divider
-        class="mx-1"
+        class="mx-1 border-gray-800"
         :vertical="true"
       />
       <IconBtn

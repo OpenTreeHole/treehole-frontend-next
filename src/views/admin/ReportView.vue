@@ -18,7 +18,7 @@
     </div>
     <div class="hidden lg:block lg:max-w-[35%] xl:max-w-[30%] 3xl:max-w-[25%] pl-5 grow">
       <v-list>
-        <v-list-item class="py-5">
+        <v-list-item class="py-3">
           <p class="text-left">举报类别：</p>
           <v-radio-group v-model="range">
             <v-radio

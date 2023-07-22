@@ -12,10 +12,16 @@
   </div>
   <div
     v-else
-    class="w-full my-2 hover:text-neutral-500 transition cursor-pointer active:text-neutral-400 focus:ring-0 line-clamp-5"
-    @click="$router.push(`/hole/${hole.id}`)"
+    class="py-2 -mr-3"
   >
-    {{ plainText(hole.firstFloor.content) }}
+    <div
+      class="w-full -m-1.5 p-1.5 hover:text-neutral-500 transition cursor-pointer active:background-neutral-400 focus:ring-0 hover:bg-neutral-300 hover:bg-opacity-50 rounded-lg"
+      @click="$router.push(`/hole/${hole.id}`)"
+    >
+      <div class="line-clamp-5 min-h-[16px]">
+        {{ plainText(hole.firstFloor.content) }}
+      </div>
+    </div>
   </div>
 </template>
 

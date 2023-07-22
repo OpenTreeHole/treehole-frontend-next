@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-end mt-2 overflow-visible">
+    <div class="flex justify-end py-2">
       <IconBtn
         :icon-class="
           floor instanceof DetailedFloor && floor.liked ? 'text-red-500' : 'text-neutral-400'
@@ -10,9 +10,18 @@
       >
         mdi-thumb-up-outline
       </IconBtn>
+      <IconBtn
+        :icon-class="
+          floor instanceof DetailedFloor && floor.disliked ? 'text-red-500' : 'text-neutral-400'
+        "
+        :text="floor.dislike"
+        @click="sendDislike"
+      >
+        mdi-thumb-down-outline
+      </IconBtn>
       <IconBtn @click="reply"> mdi-chat-outline </IconBtn>
       <v-divider
-        class="mx-1"
+        class="mx-1 border-gray-800"
         :vertical="true"
       />
       <IconBtn
@@ -47,7 +56,7 @@
       </IconBtn>
       <v-divider
         v-if="userStore.isAdmin || (floor instanceof DetailedFloor && floor.isMe)"
-        class="mx-1"
+        class="mx-1 border-gray-800"
         :vertical="true"
       />
       <IconBtn @click="toggleAction(ActionType.Report)"> mdi-alert-octagon-outline </IconBtn>
@@ -88,6 +97,7 @@
       <Editor
         class="mr-2"
         :data="editorData"
+        :unique-id="'editor-floor' + floor.id + (action === ActionType.Reply ? '-reply' : '-edit')"
         @close="action = ActionType.None"
         @send="
           (content: string) => {
@@ -221,7 +231,6 @@ import Editor from '@/components/editor/Editor.vue'
 import HistoryBlock from '@/components/floor/HistoryBlock.vue'
 import QuestionAction from '@/components/action/QuestionAction.vue'
 import { generateColor } from '@/utils'
-import { useEditor } from '@/composables/editor'
 import { computed, ref } from 'vue'
 import { DetailedFloor, Floor, FloorHistory } from '@/types'
 import {
@@ -277,7 +286,8 @@ enum ActionType {
   Division
 }
 
-const { editorData, initEditor, clearEditor } = useEditor()
+const editorData = ref('')
+
 const action = ref<ActionType>(ActionType.None)
 const computeColorClass = (str: string) => 'text-' + generateColor(str)
 
@@ -290,13 +300,13 @@ const toggleAction = async (type: ActionType) => {
 
 const edit = () => {
   specialTag.value = floor.value.specialTag
-  initEditor(floor.value.content)
+  editorData.value = floor.value.content
   toggleAction(ActionType.Edit)
 }
 
 const reply = () => {
   specialTag.value = ''
-  initEditor('')
+  editorData.value = ''
   toggleAction(ActionType.Reply)
 }
 
@@ -307,7 +317,7 @@ const sendReply = async (markdown: string) => {
     specialTag: specialTag.value
   })
   not.success('回复成功')
-  clearEditor()
+  editorData.value = ''
   specialTag.value = ''
   emit('newContent')
 }
@@ -321,7 +331,7 @@ const sendEdit = async (markdown: string) => {
     res = await addSpecialTag(floor.value.id, specialTag.value)
   }
   not.success('修改成功')
-  clearEditor()
+  editorData.value = ''
   specialTag.value = ''
   floor.value = res
 }
@@ -331,6 +341,14 @@ const sendLike = async () => {
     floor.value = await likeFloor(floor.value.id, 0)
   } else {
     floor.value = await likeFloor(floor.value.id, 1)
+  }
+}
+
+const sendDislike = async () => {
+  if (floor.value instanceof DetailedFloor && floor.value.disliked) {
+    floor.value = await likeFloor(floor.value.id, 0)
+  } else {
+    floor.value = await likeFloor(floor.value.id, -1)
   }
 }
 

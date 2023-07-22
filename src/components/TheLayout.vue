@@ -5,7 +5,7 @@
       density="compact"
     >
       <v-app-bar-title>
-        <div class="max-w-[var(--page-width)] mx-auto flex">
+        <div class="max-w-[var(--page-width)] mx-auto flex items-center">
           <v-img
             class="cursor-pointer"
             :src="Logo"
@@ -13,6 +13,7 @@
             @click="router.push('/')"
           ></v-img>
           <SearchBar></SearchBar>
+          <MessageMenu />
         </div>
       </v-app-bar-title>
     </v-app-bar>
@@ -45,7 +46,7 @@
             >
               <v-list-item-title>{{ division.name }}</v-list-item-title>
             </v-list-item>
-            <v-divider />
+            <v-divider class="border-gray-800" />
             <template v-if="userStore.isAdmin">
               <v-list-item
                 class="text-left pl-10 cursor-pointer select-none"
@@ -54,7 +55,7 @@
               >
                 <v-list-item-title>管理</v-list-item-title>
               </v-list-item>
-              <v-divider />
+              <v-divider class="border-gray-800" />
             </template>
             <v-list-item
               v-for="(r, i) in otherRoutes"
@@ -100,6 +101,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { routes } from '@/router'
 import NotificationSnackbar from './NotificationSnackbar.vue'
 import { ref } from 'vue'
+import MessageMenu from './MessageMenu.vue'
 
 const router = useRouter()
 const route = useRoute()

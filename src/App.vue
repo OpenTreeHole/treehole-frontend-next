@@ -39,10 +39,10 @@ router.beforeEach(async () => {
 
 router.beforeResolve(async (to) => {
   if (to.meta.requiresAuth) {
-    console.log('asdhasdkas')
     const promise = Promise.all([
       divisionStore.fetchDivisions(),
       userStore.fetchUser(),
+      userStore.fetchMessages(),
       tagStore.fetchTags()
     ])
     if (firstRoute.value) {

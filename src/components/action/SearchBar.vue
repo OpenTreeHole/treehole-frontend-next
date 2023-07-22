@@ -1,7 +1,7 @@
 <template>
   <div
     ref="el"
-    class="max-w-3xl ml-8 grow"
+    class="max-w-3xl mx-8 grow"
   >
     <v-autocomplete
       v-model:search="search"
@@ -123,7 +123,6 @@ watch(filterTag, (tag) => {
 })
 
 watch(result, (result) => {
-  console.log(result)
   tagStore.filterTag = null
   search.value = ''
   if (!result) return
@@ -169,7 +168,7 @@ onMounted(() => {
 
 <style lang="scss">
 .search-bar {
-  --v-input-padding-top: 6px !important;
+  --v-input-padding-top: 8px !important;
 }
 
 .search-bar .v-field {

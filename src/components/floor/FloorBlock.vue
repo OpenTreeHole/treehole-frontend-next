@@ -2,7 +2,10 @@
   <div>
     <FloorBlockHeader :floor="floor" />
 
-    <FloorBlockContent :floor="floor" />
+    <FloorBlockContent
+      :floor="floor"
+      :storey="storey"
+    />
 
     <FloorBlockAction
       v-model:floor="floor"
@@ -19,7 +22,7 @@ import FloorBlockHeader from '@/components/floor/FloorBlockHeader.vue'
 import FloorBlockContent from '@/components/floor/FloorBlockContent.vue'
 import { computed } from 'vue'
 
-const props = defineProps<{ floor: Floor }>()
+const props = defineProps<{ floor: Floor; storey?: number }>()
 const emit = defineEmits<{
   (e: 'update:floor', floor: Floor): void
   (e: 'newContent'): void

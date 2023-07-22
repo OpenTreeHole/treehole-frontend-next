@@ -1,8 +1,18 @@
-@import "katex/dist/katex";
-@import "style/github-markdown";
-@import "style/codemirror";
-@import "style/forest";
-@import "style/editor/katex";
+@use "style/easymde" as *;
+@use "style/editor/github-markdown" as *;
+@use "style/editor/codemirror" as *;
+@use "style/editor/forest" as *;
+@use "katex/dist/katex";
+
+.markdown-viewer {
+  @include github-markdown;
+  @include forest;
+  @include codemirror;
+}
+
+.editor {
+  @include easymde;
+}
 
 @tailwind base;
 @tailwind components;

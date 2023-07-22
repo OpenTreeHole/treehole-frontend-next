@@ -5,18 +5,28 @@
         <div class="border-b-sm mt-2 pb-4">
           <div class="text-3xl px-6 lg:px-10 pb-2 flex justify-between">
             <div class="flex grow-0">#{{ holeId }}</div>
-            <div class="flex space-x-4">
+            <div class="flex space-x-4 items-center">
+              <div class="flex">
+                <IconBtn
+                  class="text-lg"
+                  @click="gotoEnd"
+                >
+                  mdi-arrow-collapse-down
+                </IconBtn>
+                <IconBtn
+                  class="text-lg"
+                  :class="isFavorite ? 'text-orange-300' : 'text-gray-400'"
+                  @click="toggleFavorite"
+                >
+                  {{ isFavorite ? 'mdi-star' : 'mdi-star-outline' }}
+                </IconBtn>
+              </div>
+
               <v-btn
                 color="primary"
                 @click="comment"
-                >发表评论</v-btn
               >
-              <v-btn
-                class="self-center"
-                color="primary"
-                @click="toggleFavorite"
-              >
-                {{ isFavorite ? '已收藏' : '收藏' }}
+                发表评论
               </v-btn>
             </div>
           </div>
@@ -53,6 +63,7 @@
             <Editor
               class="mx-6"
               :data="editorData"
+              :unique-id="'editor-hole-' + props.holeId + '-reply'"
               @close="showComment = false"
               @send="sendComment"
             ></Editor>
@@ -65,10 +76,11 @@
             :id="floor.id"
             :key="`##${floor.id}, ${floor.fold}`"
             v-intersect="onIntersect(index)"
-            class="px-0 py-5 border-b-sm flex-col text-left"
+            class="px-0 pt-5 pb-3 border-b-sm flex-col text-left"
           >
             <FloorBlock
               v-model:floor="floors[index]"
+              :storey="index + 1"
               class="px-6 lg:px-10"
               @new-content="onNewContent"
             />
@@ -105,13 +117,13 @@ import { sleep } from '@/utils'
 import FloorBlock from '@/components/floor/FloorBlock.vue'
 import Editor from '@/components/editor/Editor.vue'
 import TagChip from '@/components/tag/TagChip.vue'
-import { useEditor } from '@/composables/editor'
 import { onMounted, provide, ref, computed, reactive } from 'vue'
 import { addFloor, getHole, listFloors } from '@/apis'
 import { useDivisionStore, useUserStore } from '@/store'
 import { useFloorPortal } from '@/composables/floor'
 import { useNotification } from '@/composables/notification'
 import LoadingCircular from '@/components/LoadingCircular.vue'
+import IconBtn from '@/components/button/IconBtn.vue'
 
 const props = defineProps<{ holeId: number; floorId?: number }>()
 
@@ -126,7 +138,7 @@ const userStore = useUserStore()
 
 const not = useNotification()
 
-const { editorData, initEditor, clearEditor } = useEditor()
+const editorData = ref('')
 
 const { gotoFloor } = useFloorPortal()
 
@@ -138,6 +150,11 @@ const scrollToFloor = (floor: Floor | number) => {
 }
 
 provide('scrollToFloor', scrollToFloor)
+
+const gotoEnd = async () => {
+  await loadFloorsUntil(hole.value?.reply || 0)
+  scrollToFloor(floors[floors.length - 1])
+}
 
 const isFavorite = computed(() => {
   return userStore.favorites.some((favorite) => favorite.id === props.holeId)
@@ -165,6 +182,7 @@ const loadFloorsUntil = async (length: number) => {
   while (floors.length < loadEnd.value && hasNext.value) {
     const res = await loader.value!.load(listFloors(props.holeId, 50, floors.length))
     if (res.length < 50) hasNext.value = false
+
     floors.push(...res)
   }
   loading.value = false
@@ -184,7 +202,7 @@ const onNewContent = async () => {
 const specialTag = ref('')
 const showComment = ref(false)
 const comment = () => {
-  initEditor('')
+  editorData.value = ''
   showComment.value = true
 }
 
@@ -195,7 +213,7 @@ const sendComment = async (content: string) => {
     specialTag: specialTag.value
   })
   not.success('发表成功')
-  clearEditor()
+  editorData.value = ''
   specialTag.value = ''
   onNewContent()
 }

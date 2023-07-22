@@ -19,7 +19,8 @@ import {
   Tag,
   Report,
   IDivisionModify,
-  FloorHistory
+  FloorHistory,
+  Message
 } from '@/types'
 
 const factory = <T>(TargetClass: new () => T, data: any, meta?: any): T => {
@@ -587,6 +588,27 @@ export const uploadImage = async (
 
 export const testError = async () => {
   await axios.get('/not_exist')
+}
+
+export const listMessages = async () => {
+  const response = await axios.get('/messages')
+  return arrayFactory(Message, response.data)
+}
+
+export const clearMessages = async () => {
+  await axios.post('/messages/clear')
+}
+
+export const deleteMessage = async (id: number) => {
+  await axios.delete(`/messages/${id}`)
+}
+
+export const sendMail = async (description: string, recipients: number[]) => {
+  const response = await axios.post('/messages', {
+    description,
+    recipients
+  })
+  return factory(Message, response.data)
 }
 
 export default localAxios

@@ -29,14 +29,14 @@ export class Floor {
   @Field()
   id: number
 
-  @Field()
-  storey: number
-
   @Field({ factory: (v, parent) => parent.foldV2 })
   fold: string
 
   @Field()
   like: number
+
+  @Field()
+  dislike: number
 
   @Field({ type: Date })
   timeCreated: Date
@@ -56,6 +56,9 @@ export class DetailedFloor extends Floor {
 
   @Field()
   liked?: boolean
+
+  @Field()
+  disliked?: boolean
 
   @Field({ type: Floor, array: true })
   mention: Floor[]
@@ -282,6 +285,59 @@ export class FloorHistory {
 
   @Field()
   userId: number
+
+  @Field({ type: Date })
+  timeCreated: Date
+
+  @Field({ type: Date })
+  timeUpdated: Date
+}
+
+const messageDataFactory = (data: any, parent: any) => {
+  switch (parent.code) {
+    case 'favorite':
+    case 'reply':
+    case 'mention':
+    case 'modify':
+    case 'permission':
+    case 'report':
+    case 'report_dealt':
+      return factory(Floor, data)
+    case 'mail':
+      return null
+  }
+}
+
+@Model
+export class Message {
+  @Field()
+  code:
+    | 'favorite'
+    | 'reply'
+    | 'mention'
+    | 'modify'
+    | 'permission'
+    | 'report'
+    | 'report_dealt'
+    | 'mail'
+
+  @Field({ factory: messageDataFactory })
+  data: Floor | null
+
+  @Field()
+  description: string
+
+  @Field()
+  id: number
+
+  @Field()
+  message: string
+
+  @Field()
+  url: string
+
+  @Field()
+  hasRead: boolean
 
   @Field({ type: Date })
   timeCreated: Date

@@ -48,6 +48,7 @@
             <Editor
               class="mx-6"
               :data="editorData"
+              :unique-id="'editor-division-' + props.divisionId + '-create-hole'"
               @close="showCreateHole = false"
               @send="sendCreateHole"
             ></Editor>
@@ -84,7 +85,6 @@
 import { computed, onMounted, ref } from 'vue'
 import { useDivisionStore, useHoleStore, useSettingsStore, useUserStore } from '@/store'
 import HoleBlock from '@/components/hole/HoleBlock.vue'
-import { useEditor } from '@/composables/editor'
 import { addHole } from '@/apis'
 import Editor from '@/components/editor/Editor.vue'
 import { Tag } from '@/types'
@@ -137,13 +137,13 @@ const onIntersect = (index: number) => async (isIntersecting: boolean) => {
   }
 }
 
-const { editorData, initEditor, clearEditor } = useEditor()
+const editorData = ref('')
 const showCreateHole = ref(false)
 const specialTag = ref('')
 const tags = ref<Tag[]>([])
 
 const createHole = async () => {
-  initEditor('')
+  editorData.value = ''
   showCreateHole.value = true
 }
 
@@ -155,7 +155,7 @@ const sendCreateHole = async (content: string) => {
   showCreateHole.value = false
   await addHole(props.divisionId, content, tags.value, specialTag.value)
   not.success('发布成功')
-  clearEditor()
+  editorData.value = ''
   specialTag.value = ''
   tags.value = []
   holeStore.clearHolesInDivision(props.divisionId)

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, reactive, ref, watch } from 'vue'
-import { Division, Hole, IDivisionModify, Tag, UserAuth } from '@/types'
+import { Division, Hole, IDivisionModify, Message, Tag, UserAuth } from '@/types'
 import { useTheme } from 'vuetify'
 import {
   addFavorites,
@@ -101,6 +101,19 @@ export const useUserStore = defineStore('user', () => {
     await fetchFavorites()
   }
 
+  const messages = ref<Message[]>([])
+  async function fetchMessages() {
+    messages.value = await api.listMessages()
+  }
+  async function removeMessages(...ids: number[]) {
+    const promises =
+      ids.length === messages.value.length
+        ? [api.clearMessages()]
+        : ids.map((id) => api.deleteMessage(id))
+    await Promise.all(promises)
+    await fetchMessages()
+  }
+
   return {
     user,
     isAdmin,
@@ -108,7 +121,10 @@ export const useUserStore = defineStore('user', () => {
     favorites,
     fetchFavorites,
     addFavorite,
-    removeFavorite
+    removeFavorite,
+    messages,
+    fetchMessages,
+    removeMessages
   }
 })
 

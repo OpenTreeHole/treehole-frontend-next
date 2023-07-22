@@ -1,6 +1,6 @@
 <template>
   <span :class="small ? 'px-1' : 'px-2'">
-    <span
+    <div
       :class="className"
       @click="$emit('click')"
     >
@@ -15,7 +15,7 @@
       >
         {{ text }}
       </span>
-    </span>
+    </div>
   </span>
 </template>
 
@@ -37,7 +37,7 @@ const slots = useSlots()
 const icon = computed(() => (slots['default']!()[0].children as string).trim())
 
 const className = computed(() => ({
-  'select-none': true,
+  'select-none flex': true,
   'hover:bg-neutral-300 hover:bg-opacity-50 transition cursor-pointer rounded-lg': !props.noAction,
   '-m-1 p-1': props.small,
   '-m-1.5 p-1.5': !props.small
