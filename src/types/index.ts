@@ -293,6 +293,21 @@ export class FloorHistory {
   timeUpdated: Date
 }
 
+const messageDataFactory = (data: any, parent: any) => {
+  switch (parent.code) {
+    case 'favorite':
+    case 'reply':
+    case 'mention':
+    case 'modify':
+    case 'permission':
+    case 'report':
+    case 'report_dealt':
+      return factory(Floor, data)
+    case 'mail':
+      return null
+  }
+}
+
 @Model
 export class Message {
   @Field()
@@ -306,8 +321,8 @@ export class Message {
     | 'report_dealt'
     | 'mail'
 
-  @Field()
-  data: any
+  @Field({ factory: messageDataFactory })
+  data: Floor | null
 
   @Field()
   description: string
@@ -320,6 +335,9 @@ export class Message {
 
   @Field()
   url: string
+
+  @Field()
+  hasRead: boolean
 
   @Field({ type: Date })
   timeCreated: Date

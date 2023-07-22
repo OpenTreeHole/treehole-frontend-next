@@ -105,6 +105,14 @@ export const useUserStore = defineStore('user', () => {
   async function fetchMessages() {
     messages.value = await api.listMessages()
   }
+  async function removeMessages(...ids: number[]) {
+    const promises =
+      ids.length === messages.value.length
+        ? [api.clearMessages()]
+        : ids.map((id) => api.deleteMessage(id))
+    await Promise.all(promises)
+    await fetchMessages()
+  }
 
   return {
     user,
@@ -115,7 +123,8 @@ export const useUserStore = defineStore('user', () => {
     addFavorite,
     removeFavorite,
     messages,
-    fetchMessages
+    fetchMessages,
+    removeMessages
   }
 })
 

@@ -13,53 +13,7 @@
             @click="router.push('/')"
           ></v-img>
           <SearchBar></SearchBar>
-          <div class="px-2 select-none flex relative">
-            <v-menu
-              :close-on-content-click="false"
-              location="center"
-              location-strategy="connected"
-            >
-              <template #activator="{ props }">
-                <v-icon
-                  class="text-center cursor-pointer text-xl text-[#76839b] hover:text-[#5e68a0]"
-                  v-bind="props"
-                >
-                  mdi-bell
-                </v-icon>
-              </template>
-
-              <v-card
-                width="400"
-                class="relative top-[40px]"
-              >
-                <v-list
-                  class="py-0 border-b-sm"
-                  max-height="400"
-                >
-                  <v-list-item class="mx-4 px-0 py-3 border-b-sm flex-col text-left">
-                    古河空也 邀请你回答问题
-                    男生想留长头发，刚烫完头头发太厚了，可以打薄吗（不剪短）？
-                  </v-list-item>
-                  <v-list-item class="mx-4 px-0 py-3 border-b-sm flex-col text-left">
-                    古河空也 邀请你回答问题
-                    男生想留长头发，刚烫完头头发太厚了，可以打薄吗（不剪短）？
-                  </v-list-item>
-                  <v-list-item class="mx-4 px-0 py-3 flex-col text-left">
-                    古河空也 邀请你回答问题
-                    男生想留长头发，刚烫完头头发太厚了，可以打薄吗（不剪短）？
-                  </v-list-item>
-                </v-list>
-                <div class="px-2 py-2 flex justify-end text-neutral-400">
-                  <IconBtn text="清空"> mdi-close </IconBtn>
-                </div>
-              </v-card>
-            </v-menu>
-            <div
-              class="absolute min-w-0 text-white bg-red-500 bottom-[65%] left-[42%] rounded-[20px] border-2 px-1 m-0 text-xs leading-[13.33px]"
-            >
-              <span>42</span>
-            </div>
-          </div>
+          <MessageMenu />
         </div>
       </v-app-bar-title>
     </v-app-bar>
@@ -147,7 +101,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { routes } from '@/router'
 import NotificationSnackbar from './NotificationSnackbar.vue'
 import { ref } from 'vue'
-import IconBtn from './button/IconBtn.vue'
+import MessageMenu from './MessageMenu.vue'
 
 const router = useRouter()
 const route = useRoute()
