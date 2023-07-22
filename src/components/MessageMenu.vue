@@ -61,6 +61,7 @@
                   () => {
                     if (selecting) selectMessage(message)
                     else if (message.data instanceof Floor) gotoFloor(message.data)
+                    else if (message.data instanceof Report) gotoFloor(message.data.floor)
                   }
                 "
               >
