@@ -3,6 +3,10 @@
     <p class="flex pt-2">
       <span class="font-bold min-w-max">举报理由：</span>
       <span> {{ report.reason }} </span>
+      <template v-if="report.result">
+        <span class="font-bold min-w-max ml-3">处理结果：</span>
+        <span> {{ report.result }} </span>
+      </template>
       <span class="grow"></span>
       <IconBtn @click="showContent = !showContent">
         {{ showContent ? 'mdi-chevron-down' : 'mdi-chevron-up' }}
@@ -24,6 +28,7 @@
       />
     </div>
     <ReportBlockAction
+      v-if="!props.noAction"
       v-model:report="report"
       @deal="emit('deal')"
     />
@@ -39,7 +44,7 @@ import ReportBlockAction from '@/components/floor/ReportBlockAction.vue'
 import IconBtn from '../button/IconBtn.vue'
 import { computed, ref } from 'vue'
 
-const props = defineProps<{ report: Report }>()
+const props = defineProps<{ report: Report; noAction?: boolean }>()
 const emit = defineEmits<{
   (e: 'update:report', report: Report): void
   (e: 'deal'): void

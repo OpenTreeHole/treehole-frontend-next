@@ -53,7 +53,7 @@
               <v-list-item
                 class="px-4 py-3 select-none"
                 :class="{
-                  'border-sm': i !== messages.length - 1,
+                  'border-b-sm': i !== messages.length - 1,
                   'hover:bg-neutral-100 cursor-pointer': !!message.data
                 }"
                 v-bind="props"
@@ -61,6 +61,7 @@
                   () => {
                     if (selecting) selectMessage(message)
                     else if (message.data instanceof Floor) gotoFloor(message.data)
+                    else if (message.data instanceof Report) gotoFloor(message.data.floor)
                   }
                 "
               >
@@ -68,8 +69,9 @@
                   <div class="pr-2">
                     <v-checkbox
                       v-if="selecting"
-                      :model-value="selectedMessages.includes(message.id)"
-                      color="indigo"
+                      :model-value="selectedMessages.includes(message.id) || message.hasRead"
+                      :color="message.hasRead ? 'primary' : 'indigo'"
+                      :disabled="message.hasRead"
                       hide-details
                       density="compact"
                     ></v-checkbox>
@@ -98,6 +100,16 @@
               <FloorBlockHeader :floor="message.data"></FloorBlockHeader>
               <FloorBlockContent :floor="message.data"></FloorBlockContent>
             </v-card>
+            <v-card
+              v-if="message.data instanceof Report"
+              width="400"
+              class="relative right-1 pl-4 pr-2 py-2"
+            >
+              <ReportBlock
+                :report="message.data"
+                no-action
+              ></ReportBlock>
+            </v-card>
           </v-menu>
 
           <template v-if="messages.length === 0">
@@ -125,7 +137,8 @@ import FloorBlockContent from './floor/FloorBlockContent.vue'
 import { useFloorPortal } from '@/composables/floor'
 import { useUserStore } from '@/store'
 import { computed, reactive, ref } from 'vue'
-import { Message, Floor } from '@/types'
+import { Message, Floor, Report } from '@/types'
+import ReportBlock from './floor/ReportBlock.vue'
 
 const userStore = useUserStore()
 
@@ -134,7 +147,7 @@ const { gotoFloor } = useFloorPortal()
 const selecting = ref(false)
 const selectedMessages = reactive<number[]>([])
 const selectMessage = (message: Message) => {
-  if (!selectedMessages.includes(message.id)) {
+  if (!selectedMessages.includes(message.id) && !message.hasRead) {
     selectedMessages.push(message.id)
   } else {
     selectedMessages.splice(selectedMessages.indexOf(message.id), 1)
