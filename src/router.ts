@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import DivisionPage from '@/views/DivisionPage.vue'
 import HolePage from '@/views/HolePage.vue'
 import AdminPage from '@/views/AdminPage.vue'
@@ -143,6 +143,6 @@ export const routes: RouteRecordRaw[] = [
 ]
 
 export const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
