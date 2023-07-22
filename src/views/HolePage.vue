@@ -223,10 +223,11 @@ onMounted(async () => {
   await loadFloorsUntil(50)
   divisionStore.currentDivisionId = hole.value?.divisionId || null
   if (props.floorId) {
-    while (floors.every((floor) => floor.id !== props.floorId))
+    while (floors.every((floor) => floor.id !== props.floorId) && hasNext.value)
       await loadFloorsUntil(floors.length + 50)
     await sleep(100)
-    scrollToFloor(props.floorId)
+    if (floors.some((floor) => floor.id === props.floorId)) scrollToFloor(props.floorId)
+    else not.error('楼层不存在')
   }
 })
 </script>
