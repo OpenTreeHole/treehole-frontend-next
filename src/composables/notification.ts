@@ -2,37 +2,28 @@ import { useNotificationStore } from '@/store'
 
 export const useNotification = () => {
   const notificationStore = useNotificationStore()
-  const success = (message: string, timeout?: number) => {
-    notificationStore.notification = {
-      type: 'success',
-      message,
-      timeout: timeout || 2000
+
+  const notifier =
+    (type: 'success' | 'error' | 'info' | 'warning') => (message: string, timeout?: number) => {
+      notificationStore.notification = {
+        type,
+        message,
+        timeout: timeout || 2000
+      }
     }
+
+  const notify = (
+    type: 'success' | 'error' | 'info' | 'warning',
+    message: string,
+    timeout?: number
+  ) => {
+    notifier(type)(message, timeout)
   }
 
-  const error = (message: string, timeout?: number) => {
-    notificationStore.notification = {
-      type: 'error',
-      message,
-      timeout: timeout || 2000
-    }
-  }
+  const success = notifier('success')
+  const error = notifier('error')
+  const info = notifier('info')
+  const warning = notifier('warning')
 
-  const info = (message: string, timeout?: number) => {
-    notificationStore.notification = {
-      type: 'info',
-      message,
-      timeout: timeout || 2000
-    }
-  }
-
-  const warning = (message: string, timeout?: number) => {
-    notificationStore.notification = {
-      type: 'warning',
-      message,
-      timeout: timeout || 2000
-    }
-  }
-
-  return { success, error, info, warning }
+  return { notify, success, error, info, warning }
 }
